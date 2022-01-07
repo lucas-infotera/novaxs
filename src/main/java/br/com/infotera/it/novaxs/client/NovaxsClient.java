@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,11 +25,10 @@ public class NovaxsClient {
     @Autowired
     private RESTClient restClient;
 
-    public GetProductsByDateRS[] getProductsByDateRQ(WSIntegrador integrador, GetProductsByDateRQ getProductsByDateRQ) throws ErrorException {
+    public List<GetProductsByDateRS> getProductsByDateRQ(WSIntegrador integrador, GetProductsByDateRQ getProductsByDateRQ) throws ErrorException {
 
-        GetProductsByDateRS[] result = null;
+        List<GetProductsByDateRS> result = null;
         integrador.setDsMetodo("getProductsByDate");
-
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -38,7 +38,7 @@ public class NovaxsClient {
             requestBody.add("method", getProductsByDateRQ.getMethod());
             requestBody.add("date", getProductsByDateRQ.getDate());
 
-            result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class);
+            result = Arrays.asList(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class));
 
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());

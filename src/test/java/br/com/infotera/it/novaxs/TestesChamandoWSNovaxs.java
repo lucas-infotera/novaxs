@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @Author Lucas
  **/
@@ -42,10 +45,11 @@ public class TestesChamandoWSNovaxs {
 
     @Test
     public void teste2ConversaoGetProductsByDate() throws JsonProcessingException {
-        GetProductsByDateRS[] teste = objectMapper.readValue(JsonsTeste.testeGetProductsByDateRSVazio(), GetProductsByDateRS[].class);
+        GetProductsByDateRS[] productsByDateRS = objectMapper.readValue(JsonsTeste.testeGetProductsByDateRSVazio(), GetProductsByDateRS[].class);
 
+        List<GetProductsByDateRS> testeList = Arrays.asList(productsByDateRS);
         //Faltar tratar quando vier vazio possivel solução transformar para Lista o Array
-        Assertions.assertEquals([], teste);
+        Assertions.assertEquals(testeList.isEmpty(), productsByDateRS);
     }
 
     @Test
@@ -61,7 +65,7 @@ public class TestesChamandoWSNovaxs {
 
         Assertions.assertDoesNotThrow(() -> novaxsClient.getProductsByDateRQ(integrador, teste));
 
-        GetProductsByDateRS[] productsByDateRQ = novaxsClient.getProductsByDateRQ(integrador, teste);
+        List<GetProductsByDateRS> productsByDateRQ = novaxsClient.getProductsByDateRQ(integrador, teste);
 
         Assertions.assertNotEquals(null, productsByDateRQ);
 

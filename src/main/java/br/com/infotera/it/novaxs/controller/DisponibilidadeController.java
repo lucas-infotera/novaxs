@@ -8,8 +8,8 @@ package br.com.infotera.it.novaxs.controller;
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
-import br.com.infotera.common.hotel.rqrs.WSDisponibilidadeHotelRQ;
-import br.com.infotera.common.hotel.rqrs.WSDisponibilidadeHotelRS;
+import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
+import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
 import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import com.google.gson.Gson;
@@ -34,19 +34,19 @@ public class DisponibilidadeController {
     @RequestMapping(value = "/disponibilidade", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String disponibilidade(@RequestBody String jsonRQ) {
-        WSDisponibilidadeHotelRQ wsRQ = gson.fromJson(jsonRQ, WSDisponibilidadeHotelRQ.class);
-        WSDisponibilidadeHotelRS wsRS = null;
-        Callable<WSDisponibilidadeHotelRS> task = () -> {
+        WSDisponibilidadeIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDisponibilidadeIngressoRQ.class);
+        WSDisponibilidadeIngressoRS wsRS = null;
+        Callable<WSDisponibilidadeIngressoRS> task = () -> {
             boolean stGerarErro = false;
-            WSDisponibilidadeHotelRS result = null;
+            WSDisponibilidadeIngressoRS result = null;
             try {
-                result = disponibilidadeWS.disponibilidade(wsRQ, false, false);
+                result = disponibilidadeWS.disponibilidade(wsRQ);
             } catch (ErrorException ex) {
                 stGerarErro = true;
-                result = new WSDisponibilidadeHotelRS(null, ex.getIntegrador());
+                result = new WSDisponibilidadeIngressoRS(null, ex.getIntegrador());
             } catch (Exception ex) {
                 stGerarErro = true;
-                result = new WSDisponibilidadeHotelRS(null, new ErrorException(wsRQ.getIntegrador(), DisponibilidadeController.class, "disponibilidade", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador());
+                result = new WSDisponibilidadeIngressoRS(null, new ErrorException(wsRQ.getIntegrador(), DisponibilidadeController.class, "disponibilidade", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador());
             }
             try {
                 Utils.gerarLog(result.getIntegrador(), "disponibilidade", true, jsonRQ, stGerarErro);
@@ -57,12 +57,12 @@ public class DisponibilidadeController {
             return result;
         };
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<WSDisponibilidadeHotelRS> future = executor.submit(task);
+        Future<WSDisponibilidadeIngressoRS> future = executor.submit(task);
 
         try {
             wsRS = future.get(wsRQ.getIntegrador().getTimeoutSegundos(), TimeUnit.SECONDS);
         } catch (Exception e) {
-            wsRS = new WSDisponibilidadeHotelRS(null, new ErrorException(wsRQ.getIntegrador(), DisponibilidadeController.class, "disponibilidade", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, e).getIntegrador());
+            wsRS = new WSDisponibilidadeIngressoRS(null, new ErrorException(wsRQ.getIntegrador(), DisponibilidadeController.class, "disponibilidade", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, e).getIntegrador());
         }
         return gson.toJson(wsRS);
     }

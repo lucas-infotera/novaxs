@@ -69,6 +69,12 @@ public class TestesChamandoWSNovaxs {
 
         Assertions.assertNotEquals(null, productsByDateRQ);
 
+        try {
+            System.out.println("Result teste1NovaxsClientGetProductsByDate --->" + objectMapper.writeValueAsString(productsByDateRQ));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

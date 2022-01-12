@@ -2,8 +2,14 @@ package br.com.infotera.it.novaxs.services;
 
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.WSIntegrador;
+import br.com.infotera.common.WSTarifa;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
+import br.com.infotera.common.enumerator.WSMediaCategoriaEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
+import br.com.infotera.common.enumerator.WSPagtoFornecedorTipoEnum;
+import br.com.infotera.common.media.WSMedia;
+import br.com.infotera.common.servico.WSIngresso;
+import br.com.infotera.common.servico.WSIngressoModalidade;
 import br.com.infotera.common.servico.WSIngressoPesquisa;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
@@ -11,6 +17,8 @@ import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
+import br.com.infotera.it.novaxs.model.Product;
+import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +37,11 @@ public class DisponibilidadeWS {
     private NovaxsClient novaxsClient;
 
 
-    public WSDisponibilidadeIngressoRS disponibilidade(WSDisponibilidadeIngressoRQ disponibilidadeIngressoRQ) throws ErrorException {
+    public WSDisponibilidadeIngressoRS disponibilidade(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
         WSDisponibilidadeIngressoRS result;
-        WSIntegrador integrador = disponibilidadeIngressoRQ.getIntegrador();
+        WSIntegrador integrador = dispRQ.getIntegrador();
         try {
-            List<WSIngressoPesquisa> ingressoPesquisaList = pesquisarIngresso(disponibilidadeIngressoRQ);
+            List<WSIngressoPesquisa> ingressoPesquisaList = pesquisarIngresso(dispRQ);
             result = new WSDisponibilidadeIngressoRS(ingressoPesquisaList, integrador, WSIntegracaoStatusEnum.OK);
         } catch (ErrorException ex) {
             integrador.setDsMensagem(ex.getMessage());
@@ -46,47 +54,144 @@ public class DisponibilidadeWS {
         return result;
     }
 
-    private List<WSIngressoPesquisa> pesquisarIngresso(WSDisponibilidadeIngressoRQ disponibilidadeIngressoRQ) throws ErrorException {
+    private List<WSIngressoPesquisa> pesquisarIngresso(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
         List<WSIngressoPesquisa> result = null;
-        List<GetProductsByDateRS> getProductsByDateRS = novaxsClient.getProductsByDateRQ(disponibilidadeIngressoRQ.getIntegrador(),
-                montaRequestGetProductsByDateRQ(disponibilidadeIngressoRQ));
+        List<GetProductsByDateRS> getProductsByDateRS = novaxsClient.getProductsByDateRQ(dispRQ.getIntegrador(),
+                montaRequestGetProductsByDateRQ(dispRQ));
         if (getProductsByDateRS != null) {
             if (!getProductsByDateRS.isEmpty()) {
                 result = new ArrayList<>();
-                result = montaPesquisarIngressoResult(disponibilidadeIngressoRQ, getProductsByDateRS);
+                result = montaPesquisarIngressoResult(dispRQ, getProductsByDateRS);
             }
+        } else {
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, "Nenhuma atividade retornada", WSIntegracaoStatusEnum.NEGADO, null);
         }
         return result;
     }
 
-    private List<WSIngressoPesquisa> montaPesquisarIngressoResult(WSDisponibilidadeIngressoRQ disponibilidadeIngressoRQ, List<GetProductsByDateRS> getProductsByDateRS) {
+    private List<WSIngressoPesquisa> montaPesquisarIngressoResult(WSDisponibilidadeIngressoRQ dispRQ, List<GetProductsByDateRS> getProductsByDateRS) throws ErrorException {
         List<WSIngressoPesquisa> result = new ArrayList<>();
-
-        WSIngressoPesquisa ingressoPesquisa = montaIngressoPesquisa();
-
+        int sqPesquisa = 0;
+        for (GetProductsByDateRS productsByDateRS : getProductsByDateRS) {
+            sqPesquisa++;
+            WSIngressoPesquisa ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
+            result.add(ingressoPesquisa);
+        }
 
         return null;
     }
 
-    private WSIngressoPesquisa montaIngressoPesquisa() {
-        WSIngressoPesquisa result = new WSIngressoPesquisa();
-
-
+    private WSIngressoPesquisa montaIngressoPesquisa(int sqPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
+        WSIngressoPesquisa result = new WSIngressoPesquisa(sqPesquisa,
+                montaIngresso(dispRQ, productsByDateRS),
+                montaIngressoModalidadeList(dispRQ, productsByDateRS));
         return result;
     }
 
-    public GetProductsByDateRQ montaRequestGetProductsByDateRQ(WSDisponibilidadeIngressoRQ disponibilidadeIngressoRQ) throws ErrorException {
-        Date dtFim = Optional.ofNullable(disponibilidadeIngressoRQ.getDtFim())
-                .orElseThrow(() -> new ErrorException("Data fim não informada"));
+    private List<WSIngressoModalidade> montaIngressoModalidadeList(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
+        List<WSIngressoModalidade> ingressoModalidadeList = new ArrayList<>();
+
         try {
-            return new GetProductsByDateRQ().setLogin(disponibilidadeIngressoRQ.getIntegrador().getDsCredencialList().get(0))
-                    .setPassword(disponibilidadeIngressoRQ.getIntegrador().getDsCredencialList().get(1))
-                    .setDate(Utils.formatData(dtFim, "dd-MM-yyyy"))
-                    //                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843");
-                    .setToken(disponibilidadeIngressoRQ.getIntegrador().getDsCredencialList().get(2));
+            if (productsByDateRS.getType().equals("Combo")) {
+                for (Product product : productsByDateRS.getProducts()) {
+                    ingressoModalidadeList.add(montaIngressoModalidade(montaWSTarifa(dispRQ, productsByDateRS), product));
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex);
+        }
+
+
+        return ingressoModalidadeList;
+    }
+
+    private WSTarifa montaWSTarifa(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
+        WSTarifa tarifa = null;
+        double vlNeto = montaVlNeto(productsByDateRS);
+        Integer qtPax = dispRQ.getReservaNomeList().size();
+        try {
+            tarifa = new WSTarifa(productsByDateRS.getCurrency(),
+                    vlNeto,
+                    vlNeto / (qtPax.doubleValue()),
+                    null,
+                    null,
+                    WSPagtoFornecedorTipoEnum.FATURADO,
+                    UtilsWS.montaPoliticaList(productsByDateRS));
+
+//            tarifa.setTarifaNomeList(UtilsWS.montaTarifaNome(dispRQ.getIntegrador(), m.getAmountsFrom(), ac.getCurrency()));
+
+            return tarifa;
 
         } catch (Exception ex) {
-            throw new ErrorException(disponibilidadeIngressoRQ.getIntegrador(), DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex);
+        }
+    }
+
+    private double montaVlNeto(GetProductsByDateRS productsByDateRS) throws ErrorException {
+        String strValue = Optional.ofNullable(productsByDateRS.getValue()).orElseThrow(() ->
+            new ErrorException("Erro ao calcular valores por pax"));
+        double vlNeto = Double.parseDouble(strValue) / 100;
+        return vlNeto;
+    }
+
+    private WSIngressoModalidade montaIngressoModalidade(WSTarifa tarifa, Product product) {
+        return new WSIngressoModalidade(product.getId(),
+                product.getName(),
+                tarifa);
+    }
+
+    private WSIngresso montaIngresso(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) {
+        String dsParamTarifar = dispRQ.getCdDestino() + "|#|" + Utils.formatData(dispRQ.getDtInicio(), "yyyy-MM-dd") + "|#|" + Utils.formatData(dispRQ.getDtFim(), "yyyy-MM-dd");
+        List<WSMedia> mediaList = null;
+        if (!productsByDateRS.getType().equals("Combo")) {
+            mediaList = montaMediaList(productsByDateRS);
+        } else {
+            mediaList = montaMediaList(productsByDateRS.getProducts());
+        }
+        return new WSIngresso(productsByDateRS.getPath(),
+                productsByDateRS.getName(),
+                null,
+                null,
+                null,
+                null,
+                dispRQ.getReservaNomeList(),
+                null,
+                mediaList,
+                dsParamTarifar,
+                null);
+    }
+
+    private List<WSMedia> montaMediaList(GetProductsByDateRS productsByDateRS) {
+        List<WSMedia> result = new ArrayList<>();
+        WSMedia media = new WSMedia(WSMediaCategoriaEnum.SERVICO, productsByDateRS.getImage());
+        result.add(media);
+        return result;
+    }
+
+    private List<WSMedia> montaMediaList(List<Product> products) {
+        List<WSMedia> result = new ArrayList<>();
+        WSMedia media = null;
+        for (Product product: products) {
+            media = new WSMedia(WSMediaCategoriaEnum.SERVICO, product.getImage());
+            result.add(media);
+        }
+        return result;
+    }
+
+    public GetProductsByDateRQ montaRequestGetProductsByDateRQ(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
+        Date dtFim = Optional.ofNullable(dispRQ.getDtFim())
+                .orElseThrow(() -> new ErrorException("Data fim não informada"));
+        try {
+            return new GetProductsByDateRQ().setLogin(dispRQ.getIntegrador().getDsCredencialList().get(0))
+                    .setPassword(dispRQ.getIntegrador().getDsCredencialList().get(1))
+                    .setDate(Utils.formatData(dtFim, "dd-MM-yyyy"))
+                    //                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843");
+                    .setToken(dispRQ.getIntegrador().getDsCredencialList().get(2));
+
+        } catch (Exception ex) {
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);
         }
     }
 

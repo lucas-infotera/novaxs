@@ -60,6 +60,17 @@ public class GetProductsByDateRS {
     public List<Product> products;
     @JsonProperty("umaPessoaPorCombo")
     public Boolean umaPessoaPorCombo;
+    @JsonProperty("erro")
+    public String erro;
+
+    public String getErro() {
+        return erro;
+    }
+
+    public GetProductsByDateRS setErro(String erro) {
+        this.erro = erro;
+        return this;
+    }
 
     public String getSupplierName() {
         return supplierName;

@@ -53,6 +53,7 @@ public class ApiController {
     @Autowired
     private ConfirmarWS confirmarWS;
 
+
     @Autowired
     private Gson gson;
 
@@ -135,7 +136,7 @@ public class ApiController {
 
     @RequestMapping(value = "/confirmar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String confirmar(String jsonRQ) {
+    public String confirmar(@RequestBody String jsonRQ) {
         WSReservaRS result = null;
         WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
         boolean stGerarErro = false;

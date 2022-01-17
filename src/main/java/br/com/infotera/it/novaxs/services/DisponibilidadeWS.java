@@ -20,6 +20,7 @@ import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.model.Product;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.Optional;
 /**
  * @Author Lucas
  **/
+
 @Service
 public class DisponibilidadeWS {
 
@@ -38,7 +40,7 @@ public class DisponibilidadeWS {
 
 
     public WSDisponibilidadeIngressoRS disponibilidade(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
-        WSDisponibilidadeIngressoRS result;
+        WSDisponibilidadeIngressoRS result = null;
         WSIntegrador integrador = dispRQ.getIntegrador();
         try {
             List<WSIngressoPesquisa> ingressoPesquisaList = pesquisarIngresso(dispRQ);
@@ -46,7 +48,9 @@ public class DisponibilidadeWS {
         } catch (ErrorException ex) {
             integrador.setDsMensagem(ex.getMessage());
             integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
-            ex.setIntegrador(integrador);
+            if (ex.getIntegrador() == null) {
+                ex.setIntegrador(integrador);
+            }
             throw ex;
         } catch (Exception ex) {
             throw new ErrorException(integrador, DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);
@@ -59,9 +63,14 @@ public class DisponibilidadeWS {
         List<GetProductsByDateRS> getProductsByDateRS = novaxsClient.getProductsByDateRQ(dispRQ.getIntegrador(),
                 montaRequestGetProductsByDateRQ(dispRQ));
         if (getProductsByDateRS != null) {
-            if (!getProductsByDateRS.isEmpty()) {
-                result = new ArrayList<>();
-                result = montaPesquisarIngressoResult(dispRQ, getProductsByDateRS);
+            try {
+                if (!getProductsByDateRS.isEmpty()) {
+                    result = montaPesquisarIngressoResult(dispRQ, getProductsByDateRS);
+                }
+            } catch (NullPointerException ex) {
+                throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex, true);
+            } catch (ErrorException ex) {
+                throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex, false);
             }
         } else {
             throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, "Nenhuma atividade retornada", WSIntegracaoStatusEnum.NEGADO, null);
@@ -78,7 +87,7 @@ public class DisponibilidadeWS {
             result.add(ingressoPesquisa);
         }
 
-        return null;
+        return result;
     }
 
     private WSIngressoPesquisa montaIngressoPesquisa(int sqPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
@@ -94,7 +103,9 @@ public class DisponibilidadeWS {
         try {
             if (productsByDateRS.getType().equals("Combo")) {
                 for (Product product : productsByDateRS.getProducts()) {
-                    ingressoModalidadeList.add(montaIngressoModalidade(montaWSTarifa(dispRQ, productsByDateRS), product));
+                    if (product != null) {
+                        ingressoModalidadeList.add(montaIngressoModalidade(montaWSTarifa(dispRQ, productsByDateRS), product));
+                    }
                 }
             } else {
                 return null;
@@ -131,7 +142,7 @@ public class DisponibilidadeWS {
 
     private double montaVlNeto(GetProductsByDateRS productsByDateRS) throws ErrorException {
         String strValue = Optional.ofNullable(productsByDateRS.getValue()).orElseThrow(() ->
-            new ErrorException("Erro ao calcular valores por pax"));
+                new ErrorException("Erro ao calcular valores por pax"));
         double vlNeto = Double.parseDouble(strValue) / 100;
         return vlNeto;
     }
@@ -173,7 +184,7 @@ public class DisponibilidadeWS {
     private List<WSMedia> montaMediaList(List<Product> products) {
         List<WSMedia> result = new ArrayList<>();
         WSMedia media = null;
-        for (Product product: products) {
+        for (Product product : products) {
             media = new WSMedia(WSMediaCategoriaEnum.SERVICO, product.getImage());
             result.add(media);
         }
@@ -181,13 +192,12 @@ public class DisponibilidadeWS {
     }
 
     public GetProductsByDateRQ montaRequestGetProductsByDateRQ(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
-        Date dtFim = Optional.ofNullable(dispRQ.getDtFim())
-                .orElseThrow(() -> new ErrorException("Data fim não informada"));
+        Date dtInicio = Optional.ofNullable(dispRQ.getDtInicio())
+                .orElseThrow(() -> new ErrorException("Data Inicio não informada"));
         try {
             return new GetProductsByDateRQ().setLogin(dispRQ.getIntegrador().getDsCredencialList().get(0))
                     .setPassword(dispRQ.getIntegrador().getDsCredencialList().get(1))
-                    .setDate(Utils.formatData(dtFim, "dd-MM-yyyy"))
-                    //                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843");
+                    .setDate(Utils.formatData(dtInicio, "dd/MM/yyyy"))
                     .setToken(dispRQ.getIntegrador().getDsCredencialList().get(2));
 
         } catch (Exception ex) {

@@ -32,9 +32,7 @@ public class TestesChamandoWSNovaxs {
     @Autowired
     private NovaxsClient novaxsClient;
 
-    @Test
-    void contextLoads() {
-    }
+
 
     @Test
     public void teste1ConversaoGetProductsByDate() throws JsonProcessingException {
@@ -67,7 +65,7 @@ public class TestesChamandoWSNovaxs {
 
         List<GetProductsByDateRS> productsByDateRQ = novaxsClient.getProductsByDateRQ(integrador, teste);
 
-        Assertions.assertNotEquals(null, productsByDateRQ);
+        Assertions.assertNotNull(productsByDateRQ);
 
         try {
             System.out.println("Result teste1NovaxsClientGetProductsByDate --->" + objectMapper.writeValueAsString(productsByDateRQ));

@@ -6,6 +6,7 @@ import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
+import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,7 @@ public class NovaxsClient {
             requestBody.add("date", getProductsByDateRQ.getDate());
 
             result = Arrays.asList(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class));
+            UtilsWS.verificaErro(integrador, result);
 
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());

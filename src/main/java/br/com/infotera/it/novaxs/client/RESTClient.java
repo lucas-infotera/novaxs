@@ -107,7 +107,7 @@ public class RESTClient {
 
         if (integrador != null) {
             try {
-                if (!"Hotel.svc/Search".equals(metodo) || integrador.isStGerarLog()) {
+                if (!"getProductsByDate".equals(integrador.getDsMetodo()) || integrador.isStGerarLog()) {
                     logRequest = objectMapper.writeValueAsString(request);
                     logResponse = objectMapper.writeValueAsString(response);
                 }

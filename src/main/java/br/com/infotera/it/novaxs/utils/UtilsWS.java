@@ -23,6 +23,8 @@ public class UtilsWS {
 
     private static ObjectMapper objectMapper;
 
+    public static String variavelTemporaria = "VariavelDeTeste";
+
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
         UtilsWS.objectMapper = objectMapper;

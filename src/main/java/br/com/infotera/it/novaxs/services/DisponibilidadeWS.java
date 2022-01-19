@@ -20,7 +20,6 @@ import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.model.Product;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -98,20 +97,16 @@ public class DisponibilidadeWS {
     }
 
     private List<WSIngressoModalidade> montaIngressoModalidadeList(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
-        List<WSIngressoModalidade> ingressoModalidadeList = new ArrayList<>();
+        List<WSIngressoModalidade> ingressoModalidadeList = null;
 
         try {
-            if (productsByDateRS.getType().equals("Combo")) {
-                for (Product product : productsByDateRS.getProducts()) {
-                    if (product != null) {
-                        ingressoModalidadeList.add(montaIngressoModalidade(montaWSTarifa(dispRQ, productsByDateRS), product));
-                    }
-                }
-            } else {
-                return null;
+            if (productsByDateRS.getProducts() != null) {
+                ingressoModalidadeList = montaIngressoModalidade(montaWSTarifa(dispRQ, productsByDateRS), productsByDateRS.getProducts());
             }
-        } catch (Exception ex) {
-            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex);
+        } catch (NullPointerException ex){
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade" + ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
+        } catch (ErrorException ex) {
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex, false);
         }
 
 
@@ -147,6 +142,16 @@ public class DisponibilidadeWS {
         return vlNeto;
     }
 
+    private List<WSIngressoModalidade> montaIngressoModalidade(WSTarifa tarifa, List<Product> productList) {
+        List<WSIngressoModalidade> wsIngressoModalidade = new ArrayList<>();
+        if (!Utils.isListNothing(productList)) {
+            for (Product product : productList) {
+                wsIngressoModalidade.add(montaIngressoModalidade(tarifa, product));
+            }
+        }
+        return wsIngressoModalidade;
+    }
+
     private WSIngressoModalidade montaIngressoModalidade(WSTarifa tarifa, Product product) {
         return new WSIngressoModalidade(product.getId(),
                 product.getName(),
@@ -163,7 +168,7 @@ public class DisponibilidadeWS {
         }
         return new WSIngresso(productsByDateRS.getPath(),
                 productsByDateRS.getName(),
-                null,
+                UtilsWS.variavelTemporaria,
                 null,
                 null,
                 null,

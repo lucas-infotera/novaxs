@@ -42,6 +42,17 @@ public class NovaxsClient {
             result = Arrays.asList(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class));
             UtilsWS.verificaErro(integrador, result);
 
+            if (UtilsWS.variavelTemporaria != null) {
+                result.forEach(getProductsByDateRS -> {
+                    getProductsByDateRS.setImage("https://unsplash.com/photos/_zsL306fDck");
+                    if (getProductsByDateRS.getProducts() != null) {
+                        getProductsByDateRS.getProducts().forEach(product -> {
+                            product.setImage("https://unsplash.com/photos/_zsL306fDck");
+                        });
+                    }
+                });
+            }
+
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
             integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);

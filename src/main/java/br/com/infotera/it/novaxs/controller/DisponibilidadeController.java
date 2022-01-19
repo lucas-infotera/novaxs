@@ -11,6 +11,7 @@ import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
+import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -33,6 +34,10 @@ public class DisponibilidadeController {
     public String disponibilidade(@RequestBody String jsonRQ) {
         WSDisponibilidadeIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDisponibilidadeIngressoRQ.class);
         WSDisponibilidadeIngressoRS result = null;
+
+        if (UtilsWS.variavelTemporaria != null) {
+            wsRQ.getIntegrador().setCdIntegra("B0168CE82C1B0DE0C1F8B53497E23353");
+        }
         boolean stGerarErro = false;
         try {
             result = disponibilidadeWS.disponibilidade(wsRQ);
@@ -49,7 +54,13 @@ public class DisponibilidadeController {
             ex.printStackTrace();
         }
 
-        return testeStringModelo();
+        String variavelTemporaria = UtilsWS.variavelTemporaria;
+        WSDisponibilidadeIngressoRS referencia = gson.fromJson(testeStringModelo(), WSDisponibilidadeIngressoRS.class);
+
+
+        String s = gson.toJson(result);
+        System.out.println(s);
+        return s;
     }
 
     @RequestMapping(value = "/teste", method = RequestMethod.GET)

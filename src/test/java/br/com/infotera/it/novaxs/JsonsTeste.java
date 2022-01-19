@@ -450,4 +450,30 @@ public class JsonsTeste {
                 "]";
     }
 
+    public static String testeBuytoBillForRS(){
+        return "{\n" +
+                "  \"id\": 1521701,\n" +
+                "  \"path\": \"bills/1521701\",\n" +
+                "  \"periodo\": \"04/09/2022\",\n" +
+                "  \"created\": 1642629423957,\n" +
+                "  \"dataVenda\": \"19/01/2022\",\n" +
+                "  \"descritivo\": \"1 Ingresso Individual, 1 Ingresso Individual, 1 Ingresso com Horário, 1 Combo 3 Ingressos, 1 Combo 3 Dias de Acesso\",\n" +
+                "  \"agencia\": \"Agência Teste B2B\",\n" +
+                "  \"amount\": 5,\n" +
+                "  \"usuario\": \"docuser\",\n" +
+                "  \"status\": \"Aguardando pagamento\",\n" +
+                "  \"clientId\": \"3359701\",\n" +
+                "  \"clientName\": \"Joao da Silva\",\n" +
+                "  \"email\": \"email@gmail.com.br\",\n" +
+                "  \"cancelar\": \"false\",\n" +
+                "  \"pagamento\": \"não pago\",\n" +
+                "  \"valorPago\": 0,\n" +
+                "  \"valor\": 65039,\n" +
+                "  \"currency\": \"BRL\",\n" +
+                "  \"token\": \"FBCC4D73B7FA1A78D51DFD4F183B9A5699BB1871\",\n" +
+                "  \"localizador\": \"T5NDUDIJ\"\n" +
+                "}";
+    }
+
+
 }

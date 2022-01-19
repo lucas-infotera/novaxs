@@ -4,6 +4,8 @@ import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.WSIntegrador;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
+import br.com.infotera.it.novaxs.model.BuyToBillForRQ;
+import br.com.infotera.it.novaxs.model.BuyToBillForRS;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
@@ -52,6 +54,33 @@ public class NovaxsClient {
                     }
                 });
             }
+
+        } catch (Exception ex) {
+            integrador.setDsMensagem(ex.getMessage());
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
+            throw new ErrorException(integrador, NovaxsClient.class, "getProductsByDate", WSMensagemErroEnum.SDI, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+        }
+        return result;
+    }
+
+
+    public BuyToBillForRS buyToBillForRQ(WSIntegrador integrador, BuyToBillForRQ buyToBillForRQ) throws ErrorException {
+        BuyToBillForRS result = null;
+        integrador.setDsMetodo("buyToBillFor");
+        try {
+
+            MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+            requestBody.add("token", buyToBillForRQ.getToken());
+            requestBody.add("login", buyToBillForRQ.getLogin());
+            requestBody.add("password",buyToBillForRQ.getPassword());
+            requestBody.add("method", buyToBillForRQ.getMethod());
+            requestBody.add("productsArray", buyToBillForRQ.getProductsArray());
+            requestBody.add("personAsString", buyToBillForRQ.getPersonAsString());
+            requestBody.add("customData", buyToBillForRQ.getCustomData());
+
+            result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "buyToBillFor", BuyToBillForRS.class);
+            UtilsWS.verificaErro(integrador, result);
+
 
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PreReservarWS {
-    public WSPreReservarRS preReservar(WSPreReservarRQ wsRQ, boolean b) throws ErrorException {
+    public WSPreReservarRS preReservar(WSPreReservarRQ wsRQ) throws ErrorException {
 
         return null;
     }

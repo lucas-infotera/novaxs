@@ -71,7 +71,7 @@ public class ApiController {
         WSPreReservarRS result = null;
         boolean stGerarErro = false;
         try {
-            result = preReservarWS.preReservar(wsRQ, false);
+            result = preReservarWS.preReservar(wsRQ);
         } catch (ErrorException ex) {
             stGerarErro = true;
             result = new WSPreReservarRS(null, ex.getIntegrador());

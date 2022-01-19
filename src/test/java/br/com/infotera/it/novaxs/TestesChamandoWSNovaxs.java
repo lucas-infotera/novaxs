@@ -3,8 +3,10 @@ package br.com.infotera.it.novaxs;
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.WSIntegrador;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
+import br.com.infotera.it.novaxs.model.BuyToBillForRS;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
+import br.com.infotera.it.novaxs.model.Product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -31,7 +33,6 @@ public class TestesChamandoWSNovaxs {
 
     @Autowired
     private NovaxsClient novaxsClient;
-
 
 
     @Test
@@ -75,6 +76,28 @@ public class TestesChamandoWSNovaxs {
 
     }
 
+
+    @Test
+    public void teste1ConversaoBuyToBillForRS() throws JsonProcessingException {
+        BuyToBillForRS teste = objectMapper.readValue(JsonsTeste.testeBuytoBillForRS(), BuyToBillForRS.class);
+
+        Assertions.assertNotNull(teste);
+
+        System.out.println(teste);
+    }
+
+    @Test
+    public void testeProductsToStringJSON() {
+        Product teste = new Product();
+
+        teste.setImage("teste")
+                .setAmount("dfad")
+                .setCurrency("brl");
+
+        Assertions.assertNotNull(teste.toString());
+
+        System.out.println("Converter para JSON -> \n" + teste.toString());
+    }
 
 
 }

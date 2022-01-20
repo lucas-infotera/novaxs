@@ -59,12 +59,12 @@ public class DisponibilidadeWS {
 
     private List<WSIngressoPesquisa> pesquisarIngresso(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
         List<WSIngressoPesquisa> result = null;
-        List<GetProductsByDateRS> getProductsByDateRS = novaxsClient.getProductsByDateRQ(dispRQ.getIntegrador(),
+        List<GetProductsByDateRS> getProductsByDateRSList = novaxsClient.getProductsByDateRQ(dispRQ.getIntegrador(),
                 montaRequestGetProductsByDateRQ(dispRQ));
-        if (getProductsByDateRS != null) {
+        if (getProductsByDateRSList != null) {
             try {
-                if (!getProductsByDateRS.isEmpty()) {
-                    result = montaPesquisarIngressoResult(dispRQ, getProductsByDateRS);
+                if (!getProductsByDateRSList.isEmpty()) {
+                    result = montaPesquisarIngressoResult(dispRQ, getProductsByDateRSList);
                 }
             } catch (NullPointerException ex) {
                 throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex, true);
@@ -77,10 +77,10 @@ public class DisponibilidadeWS {
         return result;
     }
 
-    private List<WSIngressoPesquisa> montaPesquisarIngressoResult(WSDisponibilidadeIngressoRQ dispRQ, List<GetProductsByDateRS> getProductsByDateRS) throws ErrorException {
+    private List<WSIngressoPesquisa> montaPesquisarIngressoResult(WSDisponibilidadeIngressoRQ dispRQ, List<GetProductsByDateRS> getProductsByDateRSList) throws ErrorException {
         List<WSIngressoPesquisa> result = new ArrayList<>();
         int sqPesquisa = 0;
-        for (GetProductsByDateRS productsByDateRS : getProductsByDateRS) {
+        for (GetProductsByDateRS productsByDateRS : getProductsByDateRSList) {
             sqPesquisa++;
             WSIngressoPesquisa ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
             result.add(ingressoPesquisa);
@@ -93,6 +93,7 @@ public class DisponibilidadeWS {
         WSIngressoPesquisa result = new WSIngressoPesquisa(sqPesquisa,
                 montaIngresso(dispRQ, productsByDateRS),
                 montaIngressoModalidadeList(dispRQ, productsByDateRS));
+
         return result;
     }
 
@@ -166,7 +167,7 @@ public class DisponibilidadeWS {
         } else {
             mediaList = montaMediaList(productsByDateRS.getProducts());
         }
-        return new WSIngresso(productsByDateRS.getPath(),
+        WSIngresso wsIngresso = new WSIngresso(productsByDateRS.getPath(),
                 productsByDateRS.getName(),
                 UtilsWS.variavelTemporaria,
                 null,
@@ -177,6 +178,10 @@ public class DisponibilidadeWS {
                 mediaList,
                 dsParamTarifar,
                 null);
+
+//        wsIngresso.setDsParametro(productsByDateRS.toString());
+
+        return wsIngresso;
     }
 
     private List<WSMedia> montaMediaList(GetProductsByDateRS productsByDateRS) {

@@ -89,6 +89,7 @@ public class TestesChamandoWSNovaxs {
     @Test
     public void testeProductsToStringJSON() {
         Product teste = new Product();
+        String jsonTeste = null;
 
         teste.setImage("teste")
                 .setAmount("dfad")
@@ -96,8 +97,60 @@ public class TestesChamandoWSNovaxs {
 
         Assertions.assertNotNull(teste.toString());
 
-        System.out.println("Converter para JSON -> \n" + teste.toString());
+        try {
+            jsonTeste = objectMapper.writeValueAsString(teste);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println("Converter para JSON usando o toString  -> \n" + teste.toString());
+        System.out.println("Converter para JSON usando o mapper  -> \n" + jsonTeste);
     }
 
+
+    @Test
+    public void testeBuytoBillForRSJSON() {
+        BuyToBillForRS teste = new BuyToBillForRS();
+        String jsonTeste = null;
+
+        teste.setAgencia("teste")
+                .setAmount(200)
+                .setCurrency("brl");
+
+        Assertions.assertNotNull(teste.toString());
+
+        try {
+            jsonTeste = objectMapper.writeValueAsString(teste);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println("Converter para JSON usando o toString  -> \n" + teste.toString());
+        System.out.println("Converter para JSON usando o mapper  -> \n" + jsonTeste);
+    }
+
+    @Test
+    public void testeGetProductsByDateToStringJSON() {
+        GetProductsByDateRS teste = new GetProductsByDateRS();
+        String jsonTeste = null;
+
+        teste.setImage("teste")
+                .setAvailable("dafdfadfa")
+                .setCurrency("brl");
+
+        Assertions.assertNotNull(teste.toString());
+
+        try {
+            jsonTeste = objectMapper.writeValueAsString(teste);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println("Converter para JSON usando o toString  -> \n" + teste.toString());
+        System.out.println("Converter para JSON usando o mapper  -> \n" + jsonTeste);
+    }
 
 }

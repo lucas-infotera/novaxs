@@ -37,7 +37,7 @@ public class NovaxsClient {
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
             requestBody.add("token", getProductsByDateRQ.getToken());
             requestBody.add("login", getProductsByDateRQ.getLogin());
-            requestBody.add("password",getProductsByDateRQ.getPassword());
+            requestBody.add("password", getProductsByDateRQ.getPassword());
             requestBody.add("method", getProductsByDateRQ.getMethod());
             requestBody.add("date", getProductsByDateRQ.getDate());
 
@@ -46,15 +46,17 @@ public class NovaxsClient {
 
             if (UtilsWS.variavelTemporaria != null) {
                 result.forEach(getProductsByDateRS -> {
-                    getProductsByDateRS.setImage("https://unsplash.com/photos/_zsL306fDck");
+                    getProductsByDateRS.setImage("https://www.ifrr.edu.br/midia/teste/image");
                     if (getProductsByDateRS.getProducts() != null) {
                         getProductsByDateRS.getProducts().forEach(product -> {
-                            product.setImage("https://unsplash.com/photos/_zsL306fDck");
+                            product.setImage("https://www.ifrr.edu.br/midia/teste/image");
                         });
                     }
                 });
             }
 
+        } catch (ErrorException ex) {
+            throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
             integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
@@ -72,7 +74,7 @@ public class NovaxsClient {
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
             requestBody.add("token", buyToBillForRQ.getToken());
             requestBody.add("login", buyToBillForRQ.getLogin());
-            requestBody.add("password",buyToBillForRQ.getPassword());
+            requestBody.add("password", buyToBillForRQ.getPassword());
             requestBody.add("method", buyToBillForRQ.getMethod());
             requestBody.add("productsArray", buyToBillForRQ.getProductsArray());
             requestBody.add("personAsString", buyToBillForRQ.getPersonAsString());
@@ -82,6 +84,8 @@ public class NovaxsClient {
             UtilsWS.verificaErro(integrador, result);
 
 
+        } catch (ErrorException ex) {
+            throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
             integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);

@@ -6,12 +6,15 @@ import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.politica.WSPolitica;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
+import br.com.infotera.it.novaxs.model.BuyToBillForRS;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -75,6 +78,12 @@ public class UtilsWS {
                 GetProductsByDateRS getProductsByDateRS = (GetProductsByDateRS) errorResponse;
                 if (getProductsByDateRS.getErro() != null) {
                     errorsType = getProductsByDateRS.getErro();
+                }
+            }
+            if (errorResponse instanceof BuyToBillForRS) {
+                BuyToBillForRS buyToBillForRS = (BuyToBillForRS) errorResponse;
+                if (buyToBillForRS.getErro() != null) {
+                    errorsType = buyToBillForRS.getErro();
                 }
             }
         } catch (Exception e) {

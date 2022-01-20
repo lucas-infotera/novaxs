@@ -16,6 +16,8 @@ import br.com.infotera.common.reserva.rqrs.WSReservaRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservaRS;
 import br.com.infotera.common.reserva.rqrs.WSReservarRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservarRS;
+import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRQ;
+import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRS;
 import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.NovaxsApplication;
 import br.com.infotera.it.novaxs.services.*;
@@ -52,7 +54,8 @@ public class ApiController {
     private TarifarWS tarifaWS;
     @Autowired
     private ConfirmarWS confirmarWS;
-
+    @Autowired
+    private DetalheIngressoWS detalheIngressoWS;
 
     @Autowired
     private Gson gson;
@@ -61,6 +64,31 @@ public class ApiController {
     @ResponseBody
     public String ola() {
         return "Ola NovaXS" + (NovaxsApplication.nrVersao != null ? NovaxsApplication.nrVersao : "");
+    }
+
+
+    @RequestMapping(value = "/detalheIngresso", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String detalheIngresso(@RequestBody String jsonRQ) {
+
+        WSDetalheIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDetalheIngressoRQ.class);
+        WSDetalheIngressoRS result = null;
+        boolean stGerarErro = false;
+        try {
+            result = detalheIngressoWS.detalheIngresso(wsRQ);
+        } catch (ErrorException ex) {
+            stGerarErro = true;
+            result = new WSDetalheIngressoRS(ex.getIntegrador(), null);
+        } catch (Exception ex) {
+            stGerarErro = true;
+            result = new WSDetalheIngressoRS(new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preReservar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador(), null);
+        }
+        try {
+            Utils.gerarLog(result.getIntegrador(), "detalheIngresso", true, jsonRQ, stGerarErro);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (gson.toJson(result));
     }
 
     @RequestMapping(value = "/preReservar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

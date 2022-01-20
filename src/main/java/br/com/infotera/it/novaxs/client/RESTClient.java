@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,9 +48,31 @@ public class RESTClient {
 
 
         } catch (RestClientException ex) {
-            integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
-            throw new ErrorException(integrador, RESTClient.class, "Erro no envio da Requisição HTTP", WSMensagemErroEnum.GENENDPOINT, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
+            if (ex instanceof HttpStatusCodeException) {
+                try {
+                    HttpStatusCodeException error = (HttpClientErrorException) ex;
+                    if (error != null) {
+                        responseEntity = new ResponseEntity<>(error.getResponseBodyAsString().replaceAll("\n", ""), error.getStatusCode());
+                        integrador.setDsMensagem("Erro : " + error.getStatusCode().toString());
+                        integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
+                        throw new ErrorException(integrador, RESTClient.class, "Erro no envio da Requisição HTTP", WSMensagemErroEnum.GENENDPOINT, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex, false);
+                    }
+                } catch (ClassCastException e) {
+                    HttpStatusCodeException error = (HttpStatusCodeException) ex;
+                    responseEntity = new ResponseEntity<>(error.getResponseBodyAsString().replaceAll("\n", ""), error.getStatusCode());
+                    integrador.setDsMensagem("Erro : " + error.getStatusCode().toString());
+                    integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
+                    throw new ErrorException(integrador, RESTClient.class, "Erro no envio da Requisição HTTP", WSMensagemErroEnum.GENENDPOINT, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex, false);
+                }
+            } else {
+                if (responseEntity != null) {
+                    integrador.setDsMensagem("Erro : " + responseEntity.getStatusCode().toString());
+                } else {
+                    integrador.setDsMensagem("Erro : Erro no connector");
+                }
+                integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
+                throw new ErrorException(integrador, RESTClient.class, "Erro no envio da Requisição HTTP", WSMensagemErroEnum.GENENDPOINT, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex, false);
+            }
         } catch (ErrorException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -118,8 +142,8 @@ public class RESTClient {
                 Utils.adicionaIntegradorLog(integrador,
                         WSIntegradorLogTipoEnum.JSON,
                         metodo,
-                        logRequest,
-                        logResponse,
+                        (logRequest != null ? logRequest.replaceAll("\n", "") : ""),
+                        (logResponse != null ? logResponse.replaceAll("\n", "") : ""),
                         Utils.tempoExecucaoSeg(tempoInicio));
             } catch (Exception ex) {
                 throw new ErrorException(integrador, RESTClient.class, "montaLog", WSMensagemErroEnum.GENNULO, "Erro a o montar Log", WSIntegracaoStatusEnum.INCONSISTENTE, ex);

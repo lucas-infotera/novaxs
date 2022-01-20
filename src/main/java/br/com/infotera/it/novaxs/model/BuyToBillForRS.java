@@ -50,6 +50,17 @@ public class BuyToBillForRS {
     public String token;
     @JsonProperty("localizador")
     public String localizador;
+    @JsonProperty("erro")
+    public String erro;
+
+    public String getErro() {
+        return erro;
+    }
+
+    public BuyToBillForRS setErro(String erro) {
+        this.erro = erro;
+        return this;
+    }
 
     public Integer getId() {
         return id;

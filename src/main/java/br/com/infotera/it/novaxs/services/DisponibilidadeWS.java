@@ -179,7 +179,7 @@ public class DisponibilidadeWS {
                 dsParamTarifar,
                 null);
 
-//        wsIngresso.setDsParametro(productsByDateRS.toString());
+        wsIngresso.setDsParametro(productsByDateRS.toString());
 
         return wsIngresso;
     }
@@ -210,7 +210,7 @@ public class DisponibilidadeWS {
                     .setDate(Utils.formatData(dtInicio, "dd/MM/yyyy"))
                     .setToken(dispRQ.getIntegrador().getDsCredencialList().get(2));
 
-        } catch (Exception ex) {
+        } catch (NullPointerException ex) {
             throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);
         }
     }

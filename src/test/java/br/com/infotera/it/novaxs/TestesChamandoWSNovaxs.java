@@ -2,18 +2,22 @@ package br.com.infotera.it.novaxs;
 
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.WSIntegrador;
+import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
+import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.*;
+import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @Author Lucas
@@ -31,6 +35,8 @@ public class TestesChamandoWSNovaxs {
     @Autowired
     private NovaxsClient novaxsClient;
 
+    @Autowired
+    DisponibilidadeWS disponibilidadeWS;
 
     @Test
     public void teste1ConversaoGetProductsByDate() throws JsonProcessingException {
@@ -45,7 +51,7 @@ public class TestesChamandoWSNovaxs {
 
         List<GetProductsByDateRS> testeList = Arrays.asList(productsByDateRS);
         //Faltar tratar quando vier vazio possivel solução transformar para Lista o Array
-        Assertions.assertEquals(testeList.isEmpty(), productsByDateRS);
+        assertEquals(testeList.isEmpty(), productsByDateRS);
     }
 
     @Test
@@ -59,9 +65,9 @@ public class TestesChamandoWSNovaxs {
                 .setDate("05/02/2022")
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843");
 
-        List<GetProductsByDateRS> getProductsByDateRS = Assertions.assertDoesNotThrow(() -> novaxsClient.getProductsByDateRQ(integrador, teste));
+        List<GetProductsByDateRS> getProductsByDateRS = assertDoesNotThrow(() -> novaxsClient.getProductsByDateRQ(integrador, teste));
 
-        Assertions.assertNotNull(getProductsByDateRS);
+        assertNotNull(getProductsByDateRS);
 
         try {
             System.out.println("Result teste1NovaxsClientGetProductsByDate --->" + objectMapper.writeValueAsString(getProductsByDateRS));
@@ -76,7 +82,7 @@ public class TestesChamandoWSNovaxs {
     public void teste1ConversaoBuyToBillForRS() throws JsonProcessingException {
         BuyToBillForRS teste = objectMapper.readValue(JsonsTeste.testeBuytoBillForRS(), BuyToBillForRS.class);
 
-        Assertions.assertNotNull(teste);
+        assertNotNull(teste);
 
         System.out.println(teste);
     }
@@ -90,7 +96,7 @@ public class TestesChamandoWSNovaxs {
                 .setAmount("dfad")
                 .setCurrency("brl");
 
-        Assertions.assertNotNull(teste.toString());
+        assertNotNull(teste.toString());
 
         try {
             jsonTeste = objectMapper.writeValueAsString(teste);
@@ -113,7 +119,7 @@ public class TestesChamandoWSNovaxs {
                 .setAmount(200)
                 .setCurrency("brl");
 
-        Assertions.assertNotNull(teste.toString());
+        assertNotNull(teste.toString());
 
         try {
             jsonTeste = objectMapper.writeValueAsString(teste);
@@ -135,7 +141,7 @@ public class TestesChamandoWSNovaxs {
                 .setAvailable("dafdfadfa")
                 .setCurrency("brl");
 
-        Assertions.assertNotNull(teste.toString());
+        assertNotNull(teste.toString());
 
         try {
             jsonTeste = objectMapper.writeValueAsString(teste);
@@ -159,9 +165,9 @@ public class TestesChamandoWSNovaxs {
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843");
 
 
-        BuyToBillForRS buyToBillForRS = Assertions.assertDoesNotThrow(() -> novaxsClient.buyToBillForRQ(integrador, teste));
+        BuyToBillForRS buyToBillForRS = assertDoesNotThrow(() -> novaxsClient.buyToBillForRQ(integrador, teste));
 
-        Assertions.assertNotNull(buyToBillForRS);
+        assertNotNull(buyToBillForRS);
 
         try {
             System.out.println("Result teste1NovaxsClientBuytoBillRQ --->" + objectMapper.writeValueAsString(teste));
@@ -171,5 +177,19 @@ public class TestesChamandoWSNovaxs {
     }
 
 
+    @Test
+    public void testeDsParametroDisponibilidade(){
+        WSDisponibilidadeIngressoRQ wsDisponibilidadeIngressoRQ = gson.fromJson(JsonsTeste.jsonDisponibilidade(), WSDisponibilidadeIngressoRQ.class);
+        assertNotNull(wsDisponibilidadeIngressoRQ);
+        try {
+            WSDisponibilidadeIngressoRS disponibilidade = disponibilidadeWS.disponibilidade(wsDisponibilidadeIngressoRQ);
+            String dsParametro = disponibilidade.getIngressoPesquisaList().get(0).getIngresso().getDsParametro();
+            assertNotNull(dsParametro);
+            System.out.println("DsParametro -----> " + dsParametro);
+        } catch (ErrorException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

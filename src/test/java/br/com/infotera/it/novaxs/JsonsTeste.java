@@ -5,7 +5,7 @@ package br.com.infotera.it.novaxs;
  **/
 public class JsonsTeste {
 
-    public static String testeGetProductsByDateRS(){
+    public static String testeGetProductsByDateRS() {
         return "[\n" +
                 "  {\n" +
                 "    \"supplierName\": \"NXS - Operadora Demo\",\n" +
@@ -444,13 +444,13 @@ public class JsonsTeste {
                 "    }";
     }
 
-    public static String testeGetProductsByDateRSVazio(){
+    public static String testeGetProductsByDateRSVazio() {
         return "[\n" +
                 "  \n" +
                 "]";
     }
 
-    public static String testeBuytoBillForRS(){
+    public static String testeBuytoBillForRS() {
         return "{\n" +
                 "  \"id\": 1521701,\n" +
                 "  \"path\": \"bills/1521701\",\n" +
@@ -475,5 +475,8 @@ public class JsonsTeste {
                 "}";
     }
 
+    public static String jsonDisponibilidade() {
+        return "{\"integrador\":{\"integradorEnum\":\"NOVAXS\",\"id\":6231,\"nmIntegrador\":\"Beach Park\",\"ambiente\":\"PRODUCAO\",\"timeoutSegundos\":30,\"idParceiro\":\"100\",\"ativo\":true,\"qtMaximaSessao\":2,\"dsUrl\":\"http://192.168.15.114:8090/novaxs/\",\"stLocal\":false,\"dsCredencialList\":[\"docuser\",\"abc1234\",\"E1D779DB5D11E4C6EED41B418B53C2AC4205B843\",null],\"stSelecionado\":false,\"idFornecedor\":22635,\"idEmpresa\":1,\"sgEmpresa\":\"ORITEST\",\"nmUsuarioEmpresa\":\"Infotera\",\"sgNacionalidade\":\"BR\",\"stErro\":false,\"stGerarLog\":false,\"transStMarkupTaxa\":false,\"transStComissaoTaxa\":false,\"idiomaEnum\":\"PT_BR\"},\"reservaNomeList\":[{\"documento\":{\"stObrigatorio\":false},\"paxTipo\":\"ADT\",\"qtIdade\":30,\"stPrincipal\":false,\"stSelecionado\":false,\"stAplicado\":false},{\"documento\":{\"stObrigatorio\":false},\"paxTipo\":\"ADT\",\"qtIdade\":30,\"stPrincipal\":false,\"stSelecionado\":false,\"stAplicado\":false}],\"cdDestino\":\"141231\",\"dtInicio\":\"2022-02-20T00:00:00Z\",\"dtFim\":\"2022-02-26T23:59:00Z\"}";
+    }
 
 }

@@ -2,6 +2,7 @@ package br.com.infotera.it.novaxs.config;
 
 import br.com.infotera.common.util.Utils;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -39,6 +40,7 @@ public class NovaxsConfiguration {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 //        mapper.setTimeZone(TimeZone.getDefault());
+        mapper.deactivateDefaultTyping();
         return mapper;
     }
 

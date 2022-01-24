@@ -35,7 +35,7 @@ public class DetalheIngressoWS {
         if (wsRQ != null) {
             result = new WSDetalheIngressoRS();
             result.setIntegrador(integrador);
-            WSIngresso ingresso = Optional.ofNullable(wsRQ.getIngressoDetalhe().getIngresso()).orElseThrow(() -> new ErrorException("Ingresso vazio, erro no info"));
+            WSIngresso ingresso = Optional.ofNullable(wsRQ.getIngressoDetalhe().getIngresso()).orElseThrow(() -> new ErrorException("Ingresso vazio em detalhe ingresso"));
             result.setDetalheIngresso(
                     montaDetalheIngresso(integrador, ingresso.getReservaNomeList(), Optional.ofNullable(ingresso.getDsParametro())
                     .orElseGet(() -> {

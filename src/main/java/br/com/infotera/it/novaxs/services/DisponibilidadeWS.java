@@ -2,11 +2,8 @@ package br.com.infotera.it.novaxs.services;
 
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.WSIntegrador;
-import br.com.infotera.common.WSTarifa;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
-import br.com.infotera.common.enumerator.WSPagtoFornecedorTipoEnum;
-import br.com.infotera.common.servico.WSIngressoModalidade;
 import br.com.infotera.common.servico.WSIngressoPesquisa;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
@@ -14,8 +11,6 @@ import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
-import br.com.infotera.it.novaxs.model.Product;
-import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,10 +52,10 @@ public class DisponibilidadeWS {
         return result;
     }
 
-    private List<WSIngressoPesquisa> pesquisarIngresso(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
+    public List<WSIngressoPesquisa> pesquisarIngresso(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
         List<WSIngressoPesquisa> result = null;
         List<GetProductsByDateRS> getProductsByDateRSList = novaxsClient.getProductsByDateRQ(dispRQ.getIntegrador(),
-                montaRequestGetProductsByDateRQ(dispRQ));
+                montaRequestGetProductsByDateRQ(dispRQ.getIntegrador(), dispRQ.getDtInicio()));
         if (getProductsByDateRSList != null) {
             try {
                 if (!getProductsByDateRSList.isEmpty()) {
@@ -96,17 +91,17 @@ public class DisponibilidadeWS {
         return result;
     }
 
-    public GetProductsByDateRQ montaRequestGetProductsByDateRQ(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
-        Date dtInicio = Optional.ofNullable(dispRQ.getDtInicio())
+    public GetProductsByDateRQ montaRequestGetProductsByDateRQ(WSIntegrador integrador, Date dtInicialIngresso) throws ErrorException {
+        Date dtInicio = Optional.ofNullable(dtInicialIngresso)
                 .orElseThrow(() -> new ErrorException("Data Inicio não informada"));
         try {
-            return new GetProductsByDateRQ().setLogin(dispRQ.getIntegrador().getDsCredencialList().get(0))
-                    .setPassword(dispRQ.getIntegrador().getDsCredencialList().get(1))
+            return new GetProductsByDateRQ().setLogin(integrador.getDsCredencialList().get(0))
+                    .setPassword(integrador.getDsCredencialList().get(1))
                     .setDate(Utils.formatData(dtInicio, "dd/MM/yyyy"))
-                    .setToken(dispRQ.getIntegrador().getDsCredencialList().get(2));
+                    .setToken(integrador.getDsCredencialList().get(2));
 
         } catch (NullPointerException ex) {
-            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);
+            throw new ErrorException(integrador, DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);
         }
     }
 

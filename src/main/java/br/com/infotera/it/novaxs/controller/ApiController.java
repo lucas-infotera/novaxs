@@ -18,6 +18,8 @@ import br.com.infotera.common.reserva.rqrs.WSReservarRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservarRS;
 import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRS;
+import br.com.infotera.common.servico.rqrs.WSTarifarServicoRQ;
+import br.com.infotera.common.servico.rqrs.WSTarifarServicoRS;
 import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.NovaxsApplication;
 import br.com.infotera.it.novaxs.services.*;
@@ -118,17 +120,17 @@ public class ApiController {
     @RequestMapping(value = "/tarifar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String tarifar(@RequestBody String jsonRQ) {
-        WSTarifarHotelRS result = null;
-        WSTarifarHotelRQ wsRQ = gson.fromJson(jsonRQ, WSTarifarHotelRQ.class);
+        WSTarifarServicoRS result = null;
+        WSTarifarServicoRQ wsRQ = gson.fromJson(jsonRQ, WSTarifarServicoRQ.class);
         boolean stGerarErro = false;
         try {
             result = tarifaWS.tarifar(wsRQ);
         } catch (ErrorException ex) {
             stGerarErro = true;
-            result = new WSTarifarHotelRS(null, ex.getIntegrador());
+            result = new WSTarifarServicoRS(null, ex.getIntegrador());
         } catch (Exception ex) {
             stGerarErro = true;
-            result = new WSTarifarHotelRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "tarifar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
+            result = new WSTarifarServicoRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "tarifar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         }
         try {
             Utils.gerarLog(result.getIntegrador(), "tarifar", true, jsonRQ, stGerarErro);

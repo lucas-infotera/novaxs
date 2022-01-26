@@ -313,8 +313,9 @@ public class GetProductsByDateRS {
     public String toString() {
         try {
             return new ObjectMapper()
-                    .setSerializationInclusion(JsonInclude.Include.NON_NULL).
-                    writeValueAsString(this);
+                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .deactivateDefaultTyping()
+                    .writeValueAsString(this);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

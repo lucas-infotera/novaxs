@@ -136,7 +136,7 @@ public class RESTClient {
                     logResponse = objectMapper.writeValueAsString(response);
                 }
                 if (Utils.tpAmbiente.equals("H")) {
-                    System.out.println(metodo + " --> " + logRequest);
+                    System.out.println(metodo + " Request --> " + logRequest);
                     System.out.println(metodo + " Response --> " + logResponse);
                 }
                 Utils.adicionaIntegradorLog(integrador,

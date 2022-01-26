@@ -479,4 +479,14 @@ public class JsonsTeste {
         return "{\"integrador\":{\"integradorEnum\":\"NOVAXS\",\"id\":6231,\"nmIntegrador\":\"Beach Park\",\"ambiente\":\"PRODUCAO\",\"timeoutSegundos\":30,\"idParceiro\":\"100\",\"ativo\":true,\"qtMaximaSessao\":2,\"dsUrl\":\"http://192.168.15.114:8090/novaxs/\",\"stLocal\":false,\"dsCredencialList\":[\"docuser\",\"abc1234\",\"E1D779DB5D11E4C6EED41B418B53C2AC4205B843\",null],\"stSelecionado\":false,\"idFornecedor\":22635,\"idEmpresa\":1,\"sgEmpresa\":\"ORITEST\",\"nmUsuarioEmpresa\":\"Infotera\",\"sgNacionalidade\":\"BR\",\"stErro\":false,\"stGerarLog\":false,\"transStMarkupTaxa\":false,\"transStComissaoTaxa\":false,\"idiomaEnum\":\"PT_BR\"},\"reservaNomeList\":[{\"documento\":{\"stObrigatorio\":false},\"paxTipo\":\"ADT\",\"qtIdade\":30,\"stPrincipal\":false,\"stSelecionado\":false,\"stAplicado\":false},{\"documento\":{\"stObrigatorio\":false},\"paxTipo\":\"ADT\",\"qtIdade\":30,\"stPrincipal\":false,\"stSelecionado\":false,\"stAplicado\":false}],\"cdDestino\":\"141231\",\"dtInicio\":\"2022-02-20T00:00:00Z\",\"dtFim\":\"2022-02-26T23:59:00Z\"}";
     }
 
+
+    public static String jsonPerson(){
+        return "{\n" +
+                "  \"name\":\"Joao da Silva\",\n" +
+                "  \"cpf\":\"26029143123\",\n" +
+                "  \"homePhone\":\"06434534044\",\n" +
+                "  \"cellPhone\":\"6434536100\",\n" +
+                "  \"email\":\"email@gmail.com.br\"\n" +
+                "}";
+    }
 }

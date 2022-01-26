@@ -12,21 +12,19 @@ import br.com.infotera.common.media.WSMedia;
 import br.com.infotera.common.politica.WSPolitica;
 import br.com.infotera.common.servico.WSIngresso;
 import br.com.infotera.common.servico.WSIngressoModalidade;
-import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.BuyToBillForRS;
-import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.model.Product;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -204,6 +202,28 @@ public class UtilsWS {
     public static List<WSPolitica> montaPoliticaList(GetProductsByDateRS productsByDateRS) throws ErrorException {
         return null;
     }
+
+
+    public static GetProductsByDateRS converterDSParametro(String dsParametro) throws ErrorException {
+        GetProductsByDateRS result = null;
+        try {
+            result = montaRetorno(dsParametro, GetProductsByDateRS.class);
+        } catch (ErrorException ex) {
+            throw ex;
+        }
+        return result;
+    }
+
+    private static <T> T montaRetorno(String dsParametro, Class<T> retorno) throws ErrorException {
+        Object objResponse = null;
+        try {
+            objResponse = objectMapper.readValue(dsParametro, retorno);
+        } catch (JsonProcessingException ex) {
+            throw new ErrorException("Erro a o converter dsParametro");
+        }
+        return retorno.cast(objResponse);
+    }
+
 
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {

@@ -5,28 +5,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Child {
+/**
+ * @Author Lucas
+ **/
 
-    @JsonProperty("path")
-    public String path;
-    @JsonProperty("date")
-    public String date;
+public class SetAccessListRS {
 
-    public String getDate() {
-        return date;
+    @JsonProperty("erro")
+    public String erro;
+
+    public String getErro() {
+        return erro;
     }
 
-    public Child setDate(String date) {
-        this.date = date;
-        return this;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public Child setPath(String path) {
-        this.path = path;
+    public SetAccessListRS setErro(String erro) {
+        this.erro = erro;
         return this;
     }
 

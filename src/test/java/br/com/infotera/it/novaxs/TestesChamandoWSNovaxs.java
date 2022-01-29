@@ -2,22 +2,21 @@ package br.com.infotera.it.novaxs;
 
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.WSIntegrador;
-import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
-import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.*;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @Author Lucas
@@ -27,18 +26,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestesChamandoWSNovaxs {
 
     @Autowired
+    DisponibilidadeWS disponibilidadeWS;
+    @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private Gson gson;
-
     @Autowired
     private NovaxsClient novaxsClient;
-
-    @Autowired
-    DisponibilidadeWS disponibilidadeWS;
-
-
 
     @Test
     public void teste1NovaxsClientGetProductsByDate() throws ErrorException {
@@ -69,20 +63,30 @@ public class TestesChamandoWSNovaxs {
         GetProductsByDateRS[] productsByDateRS = new GetProductsByDateRS[8];
         List<GetProductsByDateRS> testeList;
         Person person = null;
+        CustomData customData;
+        Product[] products = null;
+        ProductsArray productsArray = new ProductsArray();
         try {
             productsByDateRS = objectMapper.readValue(JsonsTeste.testeGetProductsByDateRS(), GetProductsByDateRS[].class);
             person = objectMapper.readValue(JsonsTeste.jsonPerson(), Person.class);
+            products = objectMapper.readValue(JsonsTeste.jsonProductArray(), Product[].class);
+            productsArray.setProductsArray(products);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
+        customData = new CustomData()
+                .setObs("26029143123")
+                .setIdExterno("Joao da Silva");
 
         BuyToBillForRQ teste = new BuyToBillForRQ();
 
         teste.setLogin("docuser")
                 .setPassword("abc1234")
-                .setCustomData("05/02/2022")
+                .setCustomData(null)
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
-                .setProductsArray("{\"path\":\"products/46700\",\"amount\":\"2\",\"date\":\"04/09/2022\"},{\"path\":\"products/46701\",\"amount\":\"1\",\"date\":\"04/09/2022\",\"schedule\":\"13:00\"},{\"path\":\"productCombos/2111\",\"amount\":\"1\",\"date\":\"04/09/2022\"},{\"path\":\"productCombos/2112\",\"amount\":\"1\",\"date\":\"04/09/2022\",\"children\":[{\"path\":\"products/46700\",\"date\":\"04/09/2022\"},{\"path\":\"products/46700\",\"date\":\"05/09/2022\"},{\"path\":\"products/46700\",\"date\":\"06/09/2022\"}]}")
+                .setProductsArray(productsArray.toString())
                 .setPersonAsString(person.toString());
 
 
@@ -98,6 +102,121 @@ public class TestesChamandoWSNovaxs {
         }
     }
 
+    @Test
+    public void teste1NovaxsClientBillForRQ() throws ErrorException {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+        BillForRQ teste = new BillForRQ();
 
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
+                .setBill("1273105");
+
+        BillForRS billForRS = assertDoesNotThrow(() -> novaxsClient.billForRQ(integrador, teste));
+
+        assertNotNull(billForRS);
+
+        try {
+            System.out.println("Result teste1NovaxsClientBillRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsClientBillRS ---> \n" + objectMapper.writeValueAsString(billForRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void teste1NovaxscreateBillPaymentLinkRQ() throws ErrorException {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+        CreateBillPaymentLinkRQ teste = new CreateBillPaymentLinkRQ();
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
+                .setBill("1273105");
+
+        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.createBillPaymentLinkRQ(integrador, teste));
+        CreateBillPaymentLinkRS createBillPaymentLinkRS = null;
+
+        createBillPaymentLinkRS = assertDoesNotThrow(() -> novaxsClient.createBillPaymentLinkRQ(integrador, teste));
+
+
+        assertNotNull(createBillPaymentLinkRS);
+
+        try {
+            System.out.println("Result teste1NovaxsClientBillRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsClientBillRS ---> \n" + objectMapper.writeValueAsString(createBillPaymentLinkRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void teste1NovaxsGetAccessListRQ() {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+        GetAccessListRQ teste = new GetAccessListRQ();
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
+                .setBill("1273105");
+
+        List<GetAccessListRS> getAccessListRS = null;
+
+        getAccessListRS = assertDoesNotThrow(() -> novaxsClient.getAccessListRQ(integrador, teste));
+
+//        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.getAccessListRQ(integrador, teste));
+
+
+        assertNotNull(getAccessListRS);
+
+        try {
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(getAccessListRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void teste1NovaxsSetAccessListRQ() {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+        SetAccessListRQ teste = new SetAccessListRQ();
+
+        ListAccessPerson[] accessPersonArray = null;
+
+        try {
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ListAccessPerson[].class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        ListSetAccessListRQ listSetAccessListRQ = new ListSetAccessListRQ();
+
+        listSetAccessListRQ.setAccessPersonList(accessPersonArray);
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
+                .setBill("1273105")
+                .setList(listSetAccessListRQ.toString());
+
+
+        SetAccessListRS setAccessListRS = null;
+
+        setAccessListRS = assertDoesNotThrow(() -> novaxsClient.setAccessListRQ(integrador, teste));
+
+//        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.setAccessListRQ(integrador, teste));
+
+
+        assertNotNull(setAccessListRS);
+
+        try {
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(setAccessListRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

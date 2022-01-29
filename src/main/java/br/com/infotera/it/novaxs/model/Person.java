@@ -23,17 +23,7 @@ public class Person {
     @JsonProperty("email")
     public String email;
 
-    @Override
-    public String toString() {
-        try {
-            return new ObjectMapper()
-                    .setSerializationInclusion(JsonInclude.Include.NON_NULL).
-                    writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
     public String getName() {
         return name;
@@ -78,6 +68,19 @@ public class Person {
     public Person setEmail(String email) {
         this.email = email;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return new ObjectMapper()
+                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .deactivateDefaultTyping()
+                    .writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

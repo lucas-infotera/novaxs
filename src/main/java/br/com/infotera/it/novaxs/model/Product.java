@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Product {
@@ -51,6 +52,28 @@ public class Product {
     public String shortName;
     @JsonProperty("dates")
     public List<String> dates;
+    @JsonProperty("date")
+    public String date;
+    @JsonProperty("children")
+    public ArrayList<Child> children;
+
+    public String getDate() {
+        return date;
+    }
+
+    public Product setDate(String date) {
+        this.date = date;
+        return this;
+    }
+
+    public ArrayList<Child> getChildren() {
+        return children;
+    }
+
+    public Product setChildren(ArrayList<Child> children) {
+        this.children = children;
+        return this;
+    }
 
     public String getSupplierName() {
         return supplierName;
@@ -245,12 +268,12 @@ public class Product {
     public String toString() {
         try {
             return new ObjectMapper()
-                    .setSerializationInclusion(JsonInclude.Include.NON_NULL).
-                    writeValueAsString(this);
+                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .deactivateDefaultTyping()
+                    .writeValueAsString(this);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;
     }
-
 }

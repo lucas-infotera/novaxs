@@ -3,10 +3,7 @@ package br.com.infotera.it.novaxs;
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
-import br.com.infotera.it.novaxs.model.BuyToBillForRS;
-import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
-import br.com.infotera.it.novaxs.model.Person;
-import br.com.infotera.it.novaxs.model.Product;
+import br.com.infotera.it.novaxs.model.*;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,13 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class TestesDeConvercao {
 
     @Autowired
+    DisponibilidadeWS disponibilidadeWS;
+    @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private Gson gson;
-
-    @Autowired
-    DisponibilidadeWS disponibilidadeWS;
 
     @Test
     public void teste1ConversaoGetProductsByDate() throws JsonProcessingException {
@@ -132,7 +127,7 @@ public class TestesDeConvercao {
 
 
     @Test
-    public void testeDsParametroDisponibilidade(){
+    public void testeDsParametroDisponibilidade() {
         WSDisponibilidadeIngressoRQ wsDisponibilidadeIngressoRQ = gson.fromJson(JsonsTeste.jsonDisponibilidade(), WSDisponibilidadeIngressoRQ.class);
         assertNotNull(wsDisponibilidadeIngressoRQ);
         try {
@@ -147,7 +142,7 @@ public class TestesDeConvercao {
     }
 
     @Test
-    public void testeConverterJsonParaPerson(){
+    public void testeConverterJsonParaPerson() {
         Person person;
         try {
             person = objectMapper.readValue(JsonsTeste.jsonPerson(), Person.class);
@@ -164,5 +159,118 @@ public class TestesDeConvercao {
 
 
     }
+
+
+    @Test
+    public void testeConverterProductsArray() {
+        Product[] products = null;
+        ProductsArray productsArray = new ProductsArray();
+
+        try {
+            products = objectMapper.readValue(JsonsTeste.jsonProductArray(), Product[].class);
+            productsArray.setProductsArray(products);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("testeConverterProductsArray ----> \n" + productsArray.toString());
+
+        assertNotNull(products);
+
+    }
+
+    @Test
+    public void testeConverterBillForRS() {
+
+        BillForRS billRS = null;
+
+        try {
+            billRS = objectMapper.readValue(JsonsTeste.jsonBillForRS(), BillForRS.class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("testeConverterBillForRS ----> \n" + billRS.toString());
+
+        assertNotNull(billRS);
+
+    }
+
+    @Test
+    public void testeConverterCreateBillPaymentLinkRS() {
+
+        CreateBillPaymentLinkRS createBillPaymentLinkRS = null;
+
+        try {
+            createBillPaymentLinkRS = objectMapper.readValue(JsonsTeste.jsonCreateBillPaymentLinkRS(), CreateBillPaymentLinkRS.class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("testeCreateBillPaymentLinkRS ----> \n" + createBillPaymentLinkRS.toString());
+
+        assertNotNull(createBillPaymentLinkRS);
+
+    }
+
+    @Test
+    public void testeConverterGetAcessListRS() {
+        GetAccessListRS[] getAccessListRS = null;
+
+        try {
+            getAccessListRS = objectMapper.readValue(JsonsTeste.jsonGetAcessListRS(), GetAccessListRS[].class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        for (GetAccessListRS rs : getAccessListRS) {
+            System.out.println("testeGetAcessListRS ----> \n" + rs.toString());
+        }
+
+        assertNotNull(getAccessListRS);
+
+    }
+
+    @Test
+    public void testeConverterListAccessPerson() {
+        ListAccessPerson[] accessPersonArray = null;
+
+        try {
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ListAccessPerson[].class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        for (ListAccessPerson person : accessPersonArray) {
+            System.out.println("testeConverterListAccessPerson ----> \n" + person.toString());
+            assertNotNull(person.toString());
+        }
+
+        ListSetAccessListRQ listSetAccessListRQ = new ListSetAccessListRQ();
+
+        listSetAccessListRQ.setAccessPersonList(accessPersonArray);
+
+        System.out.println("List ------->> \n" + listSetAccessListRQ.toString() + "\n Teste");
+
+
+        assertNotNull(accessPersonArray);
+
+
+    }
+
+
+    @Test
+    public void testeImplementandoAbstractClass(){
+
+        Teste teste = new Teste();
+
+        System.out.println("Teste abstract ------>" + teste.toString());
+
+    }
+
 
 }

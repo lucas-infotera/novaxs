@@ -8,8 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
-
-public class GetProductsByDateRQ {
+public class SetAccessListRQ {
 
     @JsonProperty("token")
     String token;
@@ -18,15 +17,26 @@ public class GetProductsByDateRQ {
     @JsonProperty("password")
     String password;
     @JsonProperty("method")
-    String method = "getProductsByDate";
-    @JsonProperty("date")
-    String date;
+    String method = "setAccessList";
+    @JsonProperty("bill")
+    String bill;
+    @JsonProperty("list")
+    String list;
+
+    public String getList() {
+        return list;
+    }
+
+    public SetAccessListRQ setList(String list) {
+        this.list = list;
+        return this;
+    }
 
     public String getToken() {
         return token;
     }
 
-    public GetProductsByDateRQ setToken(String token) {
+    public SetAccessListRQ setToken(String token) {
         this.token = token;
         return this;
     }
@@ -35,7 +45,7 @@ public class GetProductsByDateRQ {
         return login;
     }
 
-    public GetProductsByDateRQ setLogin(String login) {
+    public SetAccessListRQ setLogin(String login) {
         this.login = login;
         return this;
     }
@@ -44,7 +54,7 @@ public class GetProductsByDateRQ {
         return password;
     }
 
-    public GetProductsByDateRQ setPassword(String password) {
+    public SetAccessListRQ setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -53,12 +63,17 @@ public class GetProductsByDateRQ {
         return method;
     }
 
-    public String getDate() {
-        return date;
+    public SetAccessListRQ setMethod(String method) {
+        this.method = method;
+        return this;
     }
 
-    public GetProductsByDateRQ setDate(String date) {
-        this.date = date;
+    public String getBill() {
+        return bill;
+    }
+
+    public SetAccessListRQ setBill(String bill) {
+        this.bill = bill;
         return this;
     }
 
@@ -74,5 +89,6 @@ public class GetProductsByDateRQ {
         }
         return null;
     }
+
 
 }

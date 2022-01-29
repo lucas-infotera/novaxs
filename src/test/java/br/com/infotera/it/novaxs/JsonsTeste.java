@@ -480,7 +480,7 @@ public class JsonsTeste {
     }
 
 
-    public static String jsonPerson(){
+    public static String jsonPerson() {
         return "{\n" +
                 "  \"name\":\"Joao da Silva\",\n" +
                 "  \"cpf\":\"26029143123\",\n" +
@@ -488,5 +488,196 @@ public class JsonsTeste {
                 "  \"cellPhone\":\"6434536100\",\n" +
                 "  \"email\":\"email@gmail.com.br\"\n" +
                 "}";
+    }
+
+    public static String jsonProductArray() {
+        return "[{\"path\":\"products/46700\",\"amount\":\"2\",\"date\":\"04/09/2022\"},{\"path\":\"products/46701\",\"amount\":\"1\",\"date\":\"04/09/2022\",\"schedule\":\"13:00\"},{\"path\":\"productCombos/2111\",\"amount\":\"1\",\"date\":\"04/09/2022\"},{\"path\":\"productCombos/2112\",\"amount\":\"1\",\"date\":\"04/09/2022\",\"children\":[{\"path\":\"products/46700\",\"date\":\"04/09/2022\"},{\"path\":\"products/46700\",\"date\":\"05/09/2022\"},{\"path\":\"products/46700\",\"date\":\"06/09/2022\"}]}]";
+    }
+
+    public static String jsonBillForRS() {
+        return "{\n" +
+                "  \"valorFaturado\": \"88990\",\n" +
+                "  \"voucher\": \"2365964\",\n" +
+                "  \"localizador\": \"9E0483A0\",\n" +
+                "  \"token\": \"4457E78C002DC76B887589137702E39769B4CFE6\"\n" +
+                "}";
+    }
+
+    public static String jsonCreateBillPaymentLinkRS() {
+        return "{\n" +
+                "  \"id\":\"1234\",\n" +
+                "  \"url\":\"URL_DE_PAGAMENTO\",\n" +
+                "  \"valor\":\"50.00\"\n" +
+                "}";
+    }
+
+    public static String jsonGetAcessListRS() {
+        return "[\n" +
+                "  {\n" +
+                "    \"accessPersons\": [\n" +
+                "      {\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"name\": \"Joao da Silva\",\n" +
+                "        \"document\": \"26029143123\",\n" +
+                "        \"birth\": \"\",\n" +
+                "        \"itemIdentificator\": \"46700\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"id\": 0,\n" +
+                "    \"internalId\": 0,\n" +
+                "    \"trash\": false,\n" +
+                "    \"frozen\": false,\n" +
+                "    \"inHistory\": false,\n" +
+                "    \"lastVersion\": true,\n" +
+                "    \"customData\": {\n" +
+                "      \"ProductName\": \"Ingresso Individual\",\n" +
+                "      \"productId\": 46700,\n" +
+                "      \"entryId\": \"37622991\"\n" +
+                "    },\n" +
+                "    \"lazy\": false\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"accessPersons\": [\n" +
+                "      {\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"name\": \"\",\n" +
+                "        \"document\": \"\",\n" +
+                "        \"birth\": \"\",\n" +
+                "        \"itemIdentificator\": \"46700\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"id\": 0,\n" +
+                "    \"internalId\": 0,\n" +
+                "    \"trash\": false,\n" +
+                "    \"frozen\": false,\n" +
+                "    \"inHistory\": false,\n" +
+                "    \"lastVersion\": true,\n" +
+                "    \"customData\": {\n" +
+                "      \"ProductName\": \"Ingresso Individual\",\n" +
+                "      \"productId\": 46700,\n" +
+                "      \"entryId\": \"37623552\"\n" +
+                "    },\n" +
+                "    \"lazy\": false\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"accessPersons\": [\n" +
+                "      {\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"name\": \"\",\n" +
+                "        \"document\": \"\",\n" +
+                "        \"birth\": \"\",\n" +
+                "        \"itemIdentificator\": \"46701\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"id\": 0,\n" +
+                "    \"internalId\": 0,\n" +
+                "    \"trash\": false,\n" +
+                "    \"frozen\": false,\n" +
+                "    \"inHistory\": false,\n" +
+                "    \"lastVersion\": true,\n" +
+                "    \"customData\": {\n" +
+                "      \"ProductName\": \"Ingresso com Horário\",\n" +
+                "      \"productId\": 46701,\n" +
+                "      \"entryId\": \"37623553\"\n" +
+                "    },\n" +
+                "    \"lazy\": false\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"accessPersons\": [\n" +
+                "      {\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"name\": \"\",\n" +
+                "        \"document\": \"\",\n" +
+                "        \"birth\": \"\",\n" +
+                "        \"itemIdentificator\": \"2111\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"id\": 0,\n" +
+                "    \"internalId\": 0,\n" +
+                "    \"trash\": false,\n" +
+                "    \"frozen\": false,\n" +
+                "    \"inHistory\": false,\n" +
+                "    \"lastVersion\": true,\n" +
+                "    \"customData\": {\n" +
+                "      \"ProductName\": \"Combo 3 Ingressos\",\n" +
+                "      \"productId\": 2111,\n" +
+                "      \"entryId\": \"37623555\"\n" +
+                "    },\n" +
+                "    \"lazy\": false\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"accessPersons\": [\n" +
+                "      {\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"name\": \"\",\n" +
+                "        \"document\": \"\",\n" +
+                "        \"birth\": \"\",\n" +
+                "        \"itemIdentificator\": \"2111\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"id\": 0,\n" +
+                "    \"internalId\": 0,\n" +
+                "    \"trash\": false,\n" +
+                "    \"frozen\": false,\n" +
+                "    \"inHistory\": false,\n" +
+                "    \"lastVersion\": true,\n" +
+                "    \"customData\": {\n" +
+                "      \"ProductName\": \"Combo 3 Ingressos\",\n" +
+                "      \"productId\": 2111,\n" +
+                "      \"entryId\": \"37623556\"\n" +
+                "    },\n" +
+                "    \"lazy\": false\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"accessPersons\": [\n" +
+                "      {\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"name\": \"\",\n" +
+                "        \"document\": \"\",\n" +
+                "        \"birth\": \"\",\n" +
+                "        \"itemIdentificator\": \"2111\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"id\": 0,\n" +
+                "    \"internalId\": 0,\n" +
+                "    \"trash\": false,\n" +
+                "    \"frozen\": false,\n" +
+                "    \"inHistory\": false,\n" +
+                "    \"lastVersion\": true,\n" +
+                "    \"customData\": {\n" +
+                "      \"ProductName\": \"Combo 3 Ingressos\",\n" +
+                "      \"productId\": 2111,\n" +
+                "      \"entryId\": \"37623557\"\n" +
+                "    },\n" +
+                "    \"lazy\": false\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"accessPersons\": [\n" +
+                "      {\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"name\": \"\",\n" +
+                "        \"document\": \"\",\n" +
+                "        \"birth\": \"\",\n" +
+                "        \"itemIdentificator\": \"46700,46700,46700\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"id\": 0,\n" +
+                "    \"internalId\": 0,\n" +
+                "    \"trash\": false,\n" +
+                "    \"frozen\": false,\n" +
+                "    \"inHistory\": false,\n" +
+                "    \"lastVersion\": true,\n" +
+                "    \"customData\": {\n" +
+                "      \"ProductName\": \"Combo 3 Dias de Acesso\",\n" +
+                "      \"productId\": 2112,\n" +
+                "      \"entryId\": \"37623558\"\n" +
+                "    },\n" +
+                "    \"lazy\": false\n" +
+                "  }\n" +
+                "]";
+    }
+
+    public static String jsonListAcessPerson() {
+        return "[{\"accessPersons\": [{\"name\": \"Joao da Silva\",\"document\": \"26029143123\",\"birth\": \"01/01/1976\",\"itemIdentificator\": \"46700\"}],\"customData\": {\"ProductName\": \"Ingresso Individual\",\"productId\": 46700,\"entryId\": \"37623029\"}},{\"accessPersons\": [{\"name\": \"maria da silva\",\"document\": \"123456\",\"birth\": \"01/01/1980\",\"itemIdentificator\": \"46700\"}],\"customData\": {\"ProductName\": \"Ingresso Individual\",\"productId\": 46700,\"entryId\": \"37623030\"}},{\"accessPersons\": [{\"name\": \"antonio da silva\",\"document\": \"444444\",\"birth\": \"\",\"itemIdentificator\": \"46701\"}],\"customData\": {\"ProductName\": \"Ingresso com Horário\",\"productId\": 46701,\"entryId\": \"37623031\"}},{\"accessPersons\": [{\"name\": \"pedro da silva\",\"document\": \"4292829\",\"birth\": \"\",\"itemIdentificator\": \"2111\"}],\"customData\": {\"ProductName\": \"Combo 3 Ingressos\",\"productId\": 2111,\"entryId\": \"37623293\"}},{\"accessPersons\": [{\"name\": \"joaquina da silva\",\"document\": \"3210292\",\"birth\": \"\",\"itemIdentificator\": \"2111\"}],\"customData\": {\"ProductName\": \"Combo 3 Ingressos\",\"productId\": 2111,\"entryId\": \"37623294\"}},{\"accessPersons\": [{\"name\": \"sebastiana da silva\",\"document\": \"1928292\",\"birth\": \"\",\"itemIdentificator\": \"2111\"}],\"customData\": {\"ProductName\": \"Combo 3 Ingressos\",\"productId\": 2111,\"entryId\": \"37623295\"}},{\"accessPersons\": [{\"name\": \"astolfo da silva\",\"document\": \"28901282\",\"birth\": \"\",\"itemIdentificator\": \"46700,46700,46700\"}],\"customData\": {\"ProductName\": \"Combo 3 Dias de Acesso\",\"productId\": 2112,\"entryId\": \"37623296\"}}]";
     }
 }

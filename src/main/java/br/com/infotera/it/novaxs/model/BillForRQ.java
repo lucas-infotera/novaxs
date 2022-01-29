@@ -9,24 +9,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @Author Lucas
  **/
 
-public class GetProductsByDateRQ {
+public class BillForRQ {
+
 
     @JsonProperty("token")
     String token;
+
     @JsonProperty("login")
     String login;
+
     @JsonProperty("password")
     String password;
     @JsonProperty("method")
-    String method = "getProductsByDate";
-    @JsonProperty("date")
-    String date;
+    String method = "billFor";
+
+    @JsonProperty("bill")
+    String bill;
 
     public String getToken() {
         return token;
     }
 
-    public GetProductsByDateRQ setToken(String token) {
+    public BillForRQ setToken(String token) {
         this.token = token;
         return this;
     }
@@ -35,7 +39,7 @@ public class GetProductsByDateRQ {
         return login;
     }
 
-    public GetProductsByDateRQ setLogin(String login) {
+    public BillForRQ setLogin(String login) {
         this.login = login;
         return this;
     }
@@ -44,7 +48,7 @@ public class GetProductsByDateRQ {
         return password;
     }
 
-    public GetProductsByDateRQ setPassword(String password) {
+    public BillForRQ setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -53,15 +57,14 @@ public class GetProductsByDateRQ {
         return method;
     }
 
-    public String getDate() {
-        return date;
+    public String getBill() {
+        return bill;
     }
 
-    public GetProductsByDateRQ setDate(String date) {
-        this.date = date;
+    public BillForRQ setBill(String bill) {
+        this.bill = bill;
         return this;
     }
-
     @Override
     public String toString() {
         try {
@@ -74,5 +77,6 @@ public class GetProductsByDateRQ {
         }
         return null;
     }
+
 
 }

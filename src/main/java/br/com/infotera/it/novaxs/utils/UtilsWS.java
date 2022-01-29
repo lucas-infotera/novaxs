@@ -14,9 +14,7 @@ import br.com.infotera.common.servico.WSIngresso;
 import br.com.infotera.common.servico.WSIngressoModalidade;
 import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
-import br.com.infotera.it.novaxs.model.BuyToBillForRS;
-import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
-import br.com.infotera.it.novaxs.model.Product;
+import br.com.infotera.it.novaxs.model.*;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,6 +89,31 @@ public class UtilsWS {
                     errorsType = buyToBillForRS.getErro();
                 }
             }
+            if (errorResponse instanceof BillForRS) {
+                BillForRS billForRS = (BillForRS) errorResponse;
+                if (billForRS.getErro() != null) {
+                    errorsType = billForRS.getErro();
+                }
+            }
+            if (errorResponse instanceof CreateBillPaymentLinkRS) {
+                CreateBillPaymentLinkRS billPaymentLinkRS = (CreateBillPaymentLinkRS) errorResponse;
+                if (billPaymentLinkRS.getErro() != null) {
+                    errorsType = billPaymentLinkRS.getErro();
+                }
+            }
+
+            if (errorResponse instanceof GetAccessListRS) {
+                GetAccessListRS getAccessListRS = (GetAccessListRS) errorResponse;
+                if (getAccessListRS.getErro() != null) {
+                    errorsType = getAccessListRS.getErro();
+                }
+            }
+            if (errorResponse instanceof SetAccessListRS) {
+                SetAccessListRS setAccessListRS = (SetAccessListRS) errorResponse;
+                if (setAccessListRS.getErro() != null) {
+                    errorsType = setAccessListRS.getErro();
+                }
+            }
         } catch (Exception e) {
             throw new ErrorException("Erro a o montar ErrorResponse");
         }
@@ -99,25 +122,18 @@ public class UtilsWS {
     }
 
     private static double montaVlNeto(GetProductsByDateRS productsByDateRS) throws ErrorException {
-        String strValue = Optional.ofNullable(productsByDateRS.getValue()).orElseThrow(() ->
-                new ErrorException("Erro ao calcular valores por pax"));
+        String strValue = Optional.ofNullable(productsByDateRS.getValue()).orElseThrow(() -> new ErrorException("Erro ao calcular valores por pax"));
         double vlNeto = Double.parseDouble(strValue) / 100;
         return vlNeto;
     }
 
 
-    private static WSTarifa montaWSTarifa(WSIntegrador integrador, List<WSReservaNome>  reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
+    private static WSTarifa montaWSTarifa(WSIntegrador integrador, List<WSReservaNome> reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
         WSTarifa tarifa = null;
         double vlNeto = montaVlNeto(productsByDateRS);
         Integer qtPax = reservaNomeList.size();
         try {
-            tarifa = new WSTarifa(productsByDateRS.getCurrency(),
-                    vlNeto,
-                    vlNeto / (qtPax.doubleValue()),
-                    null,
-                    null,
-                    WSPagtoFornecedorTipoEnum.FATURADO,
-                    UtilsWS.montaPoliticaList(productsByDateRS));
+            tarifa = new WSTarifa(productsByDateRS.getCurrency(), vlNeto, vlNeto / (qtPax.doubleValue()), null, null, WSPagtoFornecedorTipoEnum.FATURADO, UtilsWS.montaPoliticaList(productsByDateRS));
 
 //            tarifa.setTarifaNomeList(UtilsWS.montaTarifaNome(integrador, m.getAmountsFrom(), ac.getCurrency()));
 
@@ -127,19 +143,18 @@ public class UtilsWS {
             throw new ErrorException(integrador, DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex);
         }
     }
+
     private static WSIngressoModalidade montaIngressoModalidade(WSTarifa tarifa, Product product) {
-        return new WSIngressoModalidade(product.getId(),
-                product.getName(),
-                tarifa);
+        return new WSIngressoModalidade(product.getId(), product.getName(), tarifa);
     }
 
-    public static List<WSIngressoModalidade> montaIngressoModalidadeList(WSIntegrador integrador, List<WSReservaNome>  reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
+    public static List<WSIngressoModalidade> montaIngressoModalidadeList(WSIntegrador integrador, List<WSReservaNome> reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
         List<WSIngressoModalidade> ingressoModalidadeList = null;
         try {
             if (productsByDateRS.getProducts() != null) {
                 ingressoModalidadeList = montaIngressoModalidade(montaWSTarifa(integrador, reservaNomeList, productsByDateRS), productsByDateRS.getProducts());
             }
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             throw new ErrorException(integrador, DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade" + ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         } catch (ErrorException ex) {
             throw new ErrorException(integrador, DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex, false);
@@ -165,17 +180,7 @@ public class UtilsWS {
         } else {
             mediaList = montaMediaList(productsByDateRS.getProducts());
         }
-        WSIngresso result = new WSIngresso(productsByDateRS.getPath(),
-                productsByDateRS.getName(),
-                UtilsWS.variavelTemporaria,
-                null,
-                null,
-                null,
-                reservaNomeList,
-                null,
-                mediaList,
-                dsParamTarifar,
-                null);
+        WSIngresso result = new WSIngresso(productsByDateRS.getPath(), productsByDateRS.getName(), UtilsWS.variavelTemporaria, null, null, null, reservaNomeList, null, mediaList, dsParamTarifar, null);
 
         result.setDsParametro(productsByDateRS.toString());
 

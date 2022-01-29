@@ -5,30 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Child {
+/**
+ * @Author Lucas
+ **/
+public class Teste extends TesteMoldeNovaxsModel{
 
-    @JsonProperty("path")
-    public String path;
-    @JsonProperty("date")
-    public String date;
-
-    public String getDate() {
-        return date;
-    }
-
-    public Child setDate(String date) {
-        this.date = date;
-        return this;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public Child setPath(String path) {
-        this.path = path;
-        return this;
-    }
+    @JsonProperty("nome")
+    String nome = "Lucas";
+    @JsonProperty("sobreNome")
+    String sobreNome = "Alves";
 
     @Override
     public String toString() {
@@ -42,5 +27,4 @@ public class Child {
         }
         return null;
     }
-
 }

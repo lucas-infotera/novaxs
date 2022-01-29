@@ -1,33 +1,31 @@
 package br.com.infotera.it.novaxs.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @Author Lucas
+ **/
 
-public class ProductsArray {
+public class ListSetAccessListRQ {
 
-    List<Product> productsArray;
+    List<ListAccessPerson> accessPersonList;
 
-    public List<Product> getProductsArray() {
-        if (this.productsArray == null){
-            this.productsArray = new ArrayList<>();
-        }
-        return productsArray;
+    public List<ListAccessPerson> getAccessPersonList() {
+        return accessPersonList;
     }
 
-    public ProductsArray setProductsArray(List<Product> productsArray) {
-        this.productsArray = productsArray;
+    public ListSetAccessListRQ setAccessPersonList(List<ListAccessPerson> accessPersonList) {
+        this.accessPersonList = accessPersonList;
         return this;
     }
 
-    public ProductsArray setProductsArray(Product[] productsArray) {
-        setProductsArray(Arrays.asList(productsArray));
+    public ListSetAccessListRQ setAccessPersonList(ListAccessPerson[] accessPersonList) {
+        this.accessPersonList = Arrays.asList(accessPersonList);
         return this;
     }
 
@@ -37,12 +35,10 @@ public class ProductsArray {
             return new ObjectMapper()
                     .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                     .deactivateDefaultTyping()
-                    .writeValueAsString(getProductsArray());
+                    .writeValueAsString(getAccessPersonList());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-
 }

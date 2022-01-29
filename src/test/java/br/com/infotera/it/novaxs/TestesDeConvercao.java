@@ -263,14 +263,4 @@ public class TestesDeConvercao {
     }
 
 
-    @Test
-    public void testeImplementandoAbstractClass(){
-
-        Teste teste = new Teste();
-
-        System.out.println("Teste abstract ------>" + teste.toString());
-
-    }
-
-
 }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
-public class Form {
+public class Form extends NovaxsTemplateforModels{
 
     @JsonProperty("name")
     public String name;

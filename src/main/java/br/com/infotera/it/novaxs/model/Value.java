@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Value {
+public class Value extends NovaxsTemplateforModels{
 
     @JsonProperty("first")
     public String first;
@@ -13,6 +13,28 @@ public class Value {
     public String second;
     @JsonProperty("hashCode")
     public Integer hashCode;
+    @JsonProperty("show")
+    public String show;
+    @JsonProperty("value")
+    public String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public Value setValue(String value) {
+        this.value = value;
+        return this;
+    }
+
+    public String getShow() {
+        return show;
+    }
+
+    public Value setShow(String show) {
+        this.show = show;
+        return this;
+    }
 
     public String getFirst() {
         return first;

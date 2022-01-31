@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ProductsArray {
+public class ProductsArray extends NovaxsTemplateforModels{
 
     List<Product> productsArray;
 

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
-public class CustomData {
+public class CustomData extends NovaxsTemplateforModels{
 
     @JsonProperty("IdExterno")
     public String idExterno;

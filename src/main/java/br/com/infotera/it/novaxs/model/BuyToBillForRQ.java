@@ -75,8 +75,8 @@ public class BuyToBillForRQ {
         return personAsString;
     }
 
-    public BuyToBillForRQ setPersonAsString(String personAsString) {
-        this.personAsString = personAsString;
+    public BuyToBillForRQ setPersonAsString(Person personAsString) {
+        this.personAsString = personAsString.toString();
         return this;
     }
 
@@ -84,8 +84,8 @@ public class BuyToBillForRQ {
         return productsArray;
     }
 
-    public BuyToBillForRQ setProductsArray(String productsArray) {
-        this.productsArray = productsArray;
+    public BuyToBillForRQ setProductsArray(ProductsArray productsArray) {
+        this.productsArray = productsArray.toString();
         return this;
     }
 

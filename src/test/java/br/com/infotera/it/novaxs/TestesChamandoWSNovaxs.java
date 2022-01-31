@@ -86,8 +86,8 @@ public class TestesChamandoWSNovaxs {
                 .setPassword("abc1234")
                 .setCustomData(null)
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
-                .setProductsArray(productsArray.toString())
-                .setPersonAsString(person.toString());
+                .setProductsArray(productsArray)
+                .setPersonAsString(person);
 
 
         BuyToBillForRS buyToBillForRS = assertDoesNotThrow(() -> novaxsClient.buyToBillForRQ(integrador, teste));
@@ -199,7 +199,7 @@ public class TestesChamandoWSNovaxs {
                 .setPassword("abc1234")
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
                 .setBill("1273105")
-                .setList(listSetAccessListRQ.toString());
+                .setList(listSetAccessListRQ);
 
 
         SetAccessListRS setAccessListRS = null;
@@ -214,6 +214,33 @@ public class TestesChamandoWSNovaxs {
         try {
             System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(teste));
             System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(setAccessListRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void teste1NovaxsVoucherRQ() {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+
+        VoucherRQ teste = new VoucherRQ();
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+                .setToken("52F38AEB90C4CC484D8CCB322BB978E718B42D87")
+                .setVoucher("827858");
+
+
+        VoucherRS voucherRS = assertDoesNotThrow(() -> novaxsClient.voucherRQ(integrador, teste));
+
+//        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.setAccessListRQ(integrador, teste));
+
+
+        assertNotNull(voucherRS);
+
+        try {
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(voucherRS));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

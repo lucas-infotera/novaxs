@@ -13,7 +13,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Lucas
@@ -177,7 +179,7 @@ public class NovaxsClient {
             requestBody.add("token", setAccessListRQ.getToken());
             requestBody.add("login", setAccessListRQ.getLogin());
             requestBody.add("password", setAccessListRQ.getPassword());
-            requestBody.add("method", setAccessListRQ.getMethod()) ;
+            requestBody.add("method", setAccessListRQ.getMethod());
             requestBody.add("bill", setAccessListRQ.getBill());
             requestBody.add("list", setAccessListRQ.getList());
 
@@ -195,6 +197,31 @@ public class NovaxsClient {
         return result;
     }
 
+    public VoucherRS voucherRQ(WSIntegrador integrador, VoucherRQ voucherRQ) throws ErrorException {
+        VoucherRS result;
+        integrador.setDsMetodo("voucherRQ");
+        try {
+
+            result = restClient.sendReceive(integrador, voucherRQ, HttpMethod.GET,
+                    "voucher?" +
+                            "login=" + voucherRQ.getLogin() +
+                            "&password=" + voucherRQ.getPassword() +
+                            "&voucher=" + voucherRQ.getVoucher() +
+                            "&token=" + voucherRQ.getToken() +
+                            "&method=" + voucherRQ.getMethod()
+                    , VoucherRS.class);
+            UtilsWS.verificaErro(integrador, result);
+
+        } catch (ErrorException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            integrador.setDsMensagem(ex.getMessage());
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
+            throw new ErrorException(integrador, NovaxsClient.class, "voucherRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+        }
+        return result;
+
+    }
 
 
 }

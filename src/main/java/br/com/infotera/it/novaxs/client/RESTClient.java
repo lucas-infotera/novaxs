@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
@@ -39,13 +40,19 @@ public class RESTClient {
         ResponseEntity<String> responseEntity = null;
         Long tempoInicio = System.currentTimeMillis();
         ((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setReadTimeout((integrador.getTimeoutSegundos() * 1000));
+        HttpEntity<String> entity;
 
         try {
 
-            auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
-            HttpEntity<String> entity = new HttpEntity(request, montaHeader());
-            responseEntity = restTemplate.exchange(auxEndpoint, httpMethod, entity, String.class);
-
+            if (httpMethod.equals(HttpMethod.GET)) {
+                auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
+                entity = new HttpEntity(montaHeaderGET());
+                responseEntity = restTemplate.exchange(auxEndpoint, httpMethod, entity, String.class);
+            } else {
+                auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
+                entity = new HttpEntity(request, montaHeader());
+                responseEntity = restTemplate.exchange(auxEndpoint, httpMethod, entity, String.class);
+            }
 
         } catch (RestClientException ex) {
             if (ex instanceof HttpStatusCodeException) {
@@ -90,6 +97,12 @@ public class RESTClient {
         return montaRetorno(integrador, responseEntity, retorno);
     }
 
+    private MultiValueMap<String, String> montaHeaderGET() {
+        HttpHeaders result = new HttpHeaders();
+        result.setAccept(Arrays.asList(MediaType.APPLICATION_PDF));
+        return result;
+    }
+
     private HttpHeaders montaHeader() {
         HttpHeaders result = new HttpHeaders();
         result.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -113,9 +126,13 @@ public class RESTClient {
             try {
                 if (integrador.getDsCredencialList().get(2) != null) {
                     if (WSAmbienteEnum.PRODUCAO.equals(integrador.getAmbiente())) {
-                        result = "https://travel3.novaxs.com.br/api/v1/2059/";
+                        if (integrador.getDsMetodo().equals("voucherRQ")) {
+                            result = "https://travel3.novaxs.com.br/api";
+                        } else {
+                            result = "https://travel3.novaxs.com.br/api/v1/2059";
+                        }
                     } else {
-                        result = "https://travel3.novaxs.com.br/api/v1/2059/";
+                        result = "https://travel3.novaxs.com.br/api/v1/2059";
                     }
                 }
             } catch (Exception ex) {

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
-public class Person {
+public class Person extends NovaxsTemplateforModels{
 
     @JsonProperty("name")
     public String name;

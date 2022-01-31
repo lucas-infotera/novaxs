@@ -6,13 +6,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * @Author Lucas
  **/
-public class ListAccessPerson {
+
+public class ListAccessPerson extends NovaxsTemplateforModels{
 
     @JsonProperty("accessPersons")
     ArrayList<AccessPerson> accessPersonList;

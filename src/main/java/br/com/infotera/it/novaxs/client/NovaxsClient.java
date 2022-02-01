@@ -223,5 +223,31 @@ public class NovaxsClient {
 
     }
 
+    public CancelBillRS cancelBillRQ(WSIntegrador integrador, CancelBillRQ cancelRQ) throws ErrorException {
+        CancelBillRS result;
+        integrador.setDsMetodo("cancelBillRQ");
+        try {
+
+            MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+            requestBody.add("token", cancelRQ.getToken());
+            requestBody.add("login", cancelRQ.getLogin());
+            requestBody.add("password", cancelRQ.getPassword());
+            requestBody.add("method", cancelRQ.getMethod());
+            requestBody.add("bill", cancelRQ.getBill());
+
+            result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "cancelBill", CancelBillRS.class);
+            UtilsWS.verificaErro(integrador, result);
+
+        } catch (ErrorException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            integrador.setDsMensagem(ex.getMessage());
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
+            throw new ErrorException(integrador, NovaxsClient.class, "cancelBillRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+        }
+        return result;
+
+    }
+
 
 }

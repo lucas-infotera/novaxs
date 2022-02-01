@@ -132,7 +132,7 @@ public class TestesChamandoWSNovaxs {
         teste.setLogin("docuser")
                 .setPassword("abc1234")
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
-                .setBill("1273105");
+                .setBill("1546690");
 
         ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.createBillPaymentLinkRQ(integrador, teste));
         CreateBillPaymentLinkRS createBillPaymentLinkRS = null;
@@ -158,7 +158,7 @@ public class TestesChamandoWSNovaxs {
         teste.setLogin("docuser")
                 .setPassword("abc1234")
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
-                .setBill("1273105");
+                .setBill("1546690");
 
         List<GetAccessListRS> getAccessListRS = null;
 
@@ -198,7 +198,49 @@ public class TestesChamandoWSNovaxs {
         teste.setLogin("docuser")
                 .setPassword("abc1234")
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
-                .setBill("1273105")
+                .setBill("1546690")
+                .setList(listSetAccessListRQ);
+
+
+        SetAccessListRS setAccessListRS = null;
+
+        setAccessListRS = assertDoesNotThrow(() -> novaxsClient.setAccessListRQ(integrador, teste));
+
+//        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.setAccessListRQ(integrador, teste));
+
+
+        assertNotNull(setAccessListRS);
+
+        try {
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(setAccessListRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void teste2NovaxsSetAccessListRQ() {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+        SetAccessListRQ teste = new SetAccessListRQ();
+
+        ListAccessPerson[] accessPersonArray = null;
+
+        try {
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ListAccessPerson[].class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        ListSetAccessListRQ listSetAccessListRQ = new ListSetAccessListRQ();
+
+        listSetAccessListRQ.setAccessPersonList(accessPersonArray);
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
+                .setBill("1546690")
                 .setList(listSetAccessListRQ);
 
 
@@ -233,14 +275,95 @@ public class TestesChamandoWSNovaxs {
 
         VoucherRS voucherRS = assertDoesNotThrow(() -> novaxsClient.voucherRQ(integrador, teste));
 
-//        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.setAccessListRQ(integrador, teste));
+//        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.voucherRQ(integrador, teste));
 
 
         assertNotNull(voucherRS);
 
         try {
-            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(teste));
-            System.out.println("Result teste1NovaxsgetAccessListRQ ---> \n" + objectMapper.writeValueAsString(voucherRS));
+            System.out.println("Result teste1NovaxsVoucherRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsVoucherRQ ---> \n" + objectMapper.writeValueAsString(voucherRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void teste2NovaxsVoucherRQ() {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+
+        VoucherRQ teste = new VoucherRQ();
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+//                .setToken("52F38AEB90C4CC484D8CCB322BB978E718B42D87")
+                .setVoucher("827858");
+
+
+//        VoucherRS voucherRS = assertDoesNotThrow(() -> novaxsClient.voucherRQ(integrador, teste));
+
+        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.voucherRQ(integrador, teste));
+
+
+//        assertNotNull(voucherRS);
+
+        try {
+            System.out.println("Result teste1NovaxsVoucherRQ ---> \n" + objectMapper.writeValueAsString(teste));
+//            System.out.println("Result teste1NovaxsVoucherRQ ---> \n" + objectMapper.writeValueAsString(voucherRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void teste1NovaxsCancelBillRQ() {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+
+        CancelBillRQ teste = new CancelBillRQ();
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
+                .setBill("1546679");
+
+
+        CancelBillRS cancelBillRS = assertDoesNotThrow(() -> novaxsClient.cancelBillRQ(integrador, teste));
+
+
+
+        assertNotNull(cancelBillRS);
+
+        try {
+            System.out.println("Result teste1NovaxsCancelBillRQ ---> \n" + objectMapper.writeValueAsString(teste));
+            System.out.println("Result teste1NovaxsCancelBillRQ ---> \n" + objectMapper.writeValueAsString(cancelBillRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void teste2NovaxsCancelBillRQ() {
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+
+        CancelBillRQ teste = new CancelBillRQ();
+
+        teste.setLogin("docuser")
+                .setPassword("abc1234")
+//                .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
+                .setBill("1546679");
+
+
+//        CancelBillRS cancelBillRS = assertDoesNotThrow(() -> novaxsClient.cancelBillRQ(integrador, teste));
+
+        ErrorException throwsErrorException = Assertions.assertThrows(ErrorException.class, () -> novaxsClient.cancelBillRQ(integrador, teste));
+
+
+//        assertNotNull(cancelBillRS);
+
+        try {
+            System.out.println("Result teste1NovaxsCancelBillRQ ---> \n" + objectMapper.writeValueAsString(teste));
+//            System.out.println("Result teste1NovaxsCancelBillRQ ---> \n" + objectMapper.writeValueAsString(cancelBillRS));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

@@ -12,13 +12,89 @@ import java.util.List;
  * @Author Lucas
  **/
 
-public class ListAccessPerson extends NovaxsTemplateforModels{
+public class ListAccessPerson extends NovaxsTemplateforModels {
 
     @JsonProperty("accessPersons")
-    ArrayList<AccessPerson> accessPersonList;
-
+    public ArrayList<AccessPerson> accessPersonList;
     @JsonProperty("customData")
-    CustomData customData;
+    public CustomData customData;
+    @JsonProperty("id")
+    public int id;
+    @JsonProperty("internalId")
+    public int internalId;
+    @JsonProperty("trash")
+    public boolean trash;
+    @JsonProperty("frozen")
+    public boolean frozen;
+    @JsonProperty("inHistory")
+    public boolean inHistory;
+    @JsonProperty("lastVersion")
+    public boolean lastVersion;
+    @JsonProperty("lazy")
+    public boolean lazy;
+
+    public int getId() {
+        return id;
+    }
+
+    public ListAccessPerson setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public int getInternalId() {
+        return internalId;
+    }
+
+    public ListAccessPerson setInternalId(int internalId) {
+        this.internalId = internalId;
+        return this;
+    }
+
+    public boolean isTrash() {
+        return trash;
+    }
+
+    public ListAccessPerson setTrash(boolean trash) {
+        this.trash = trash;
+        return this;
+    }
+
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    public ListAccessPerson setFrozen(boolean frozen) {
+        this.frozen = frozen;
+        return this;
+    }
+
+    public boolean isInHistory() {
+        return inHistory;
+    }
+
+    public ListAccessPerson setInHistory(boolean inHistory) {
+        this.inHistory = inHistory;
+        return this;
+    }
+
+    public boolean isLastVersion() {
+        return lastVersion;
+    }
+
+    public ListAccessPerson setLastVersion(boolean lastVersion) {
+        this.lastVersion = lastVersion;
+        return this;
+    }
+
+    public boolean isLazy() {
+        return lazy;
+    }
+
+    public ListAccessPerson setLazy(boolean lazy) {
+        this.lazy = lazy;
+        return this;
+    }
 
     public List<AccessPerson> getAccessPersonList() {
         if (this.accessPersonList == null) {

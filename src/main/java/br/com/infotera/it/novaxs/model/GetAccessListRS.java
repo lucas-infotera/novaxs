@@ -27,9 +27,19 @@ public class GetAccessListRS {
     public CustomData customData;
     @JsonProperty("lazy")
     public Boolean lazy;
-
+    @JsonProperty("caminho")
+    public String caminho;
     @JsonProperty("erro")
     public String erro;
+
+    public String getCaminho() {
+        return caminho;
+    }
+
+    public GetAccessListRS setCaminho(String caminho) {
+        this.caminho = caminho;
+        return this;
+    }
 
     public String getErro() {
         return erro;

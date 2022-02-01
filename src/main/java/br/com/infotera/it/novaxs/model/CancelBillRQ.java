@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
+public class CancelBillRQ {
 
-public class CreateBillPaymentLinkRQ {
 
     @JsonProperty("token")
     String token;
@@ -18,7 +18,7 @@ public class CreateBillPaymentLinkRQ {
     @JsonProperty("password")
     String password;
     @JsonProperty("method")
-    String method = "createBillPaymentLink";
+    String method = "cancelBill";
     @JsonProperty("bill")
     String bill;
 
@@ -26,7 +26,7 @@ public class CreateBillPaymentLinkRQ {
         return token;
     }
 
-    public CreateBillPaymentLinkRQ setToken(String token) {
+    public CancelBillRQ setToken(String token) {
         this.token = token;
         return this;
     }
@@ -35,7 +35,7 @@ public class CreateBillPaymentLinkRQ {
         return login;
     }
 
-    public CreateBillPaymentLinkRQ setLogin(String login) {
+    public CancelBillRQ setLogin(String login) {
         this.login = login;
         return this;
     }
@@ -44,7 +44,7 @@ public class CreateBillPaymentLinkRQ {
         return password;
     }
 
-    public CreateBillPaymentLinkRQ setPassword(String password) {
+    public CancelBillRQ setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -53,12 +53,11 @@ public class CreateBillPaymentLinkRQ {
         return method;
     }
 
-
     public String getBill() {
         return bill;
     }
 
-    public CreateBillPaymentLinkRQ setBill(String bill) {
+    public CancelBillRQ setBill(String bill) {
         this.bill = bill;
         return this;
     }

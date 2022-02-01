@@ -7,6 +7,8 @@ import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSIntegradorLogTipoEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.util.Utils;
+import br.com.infotera.it.novaxs.model.CancelBillRS;
+import br.com.infotera.it.novaxs.model.VoucherRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,17 +45,23 @@ public class RESTClient {
         HttpEntity<String> entity;
 
         try {
-
-            if (httpMethod.equals(HttpMethod.GET)) {
+            if (httpMethod.equals(HttpMethod.GET) && integrador.getDsMetodo().equals("voucherRQ")) {
+                ResponseEntity<byte[]> voucherNovaXSResponse = null;
                 auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
                 entity = new HttpEntity(montaHeaderGET());
-                responseEntity = restTemplate.exchange(auxEndpoint, httpMethod, entity, String.class);
+                voucherNovaXSResponse = restTemplate.exchange(auxEndpoint, httpMethod, entity, byte[].class);
+
+                return (T) new VoucherRS()
+                        .setVoucher(voucherNovaXSResponse.getBody());
             } else {
                 auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
                 entity = new HttpEntity(request, montaHeader());
                 responseEntity = restTemplate.exchange(auxEndpoint, httpMethod, entity, String.class);
             }
-
+            if (responseEntity.getBody().equals("true") && integrador.getDsMetodo().equals("cancelBillRQ")) {
+                return (T) new CancelBillRS()
+                        .setSuccess(Boolean.TRUE);
+            }
         } catch (RestClientException ex) {
             if (ex instanceof HttpStatusCodeException) {
                 try {

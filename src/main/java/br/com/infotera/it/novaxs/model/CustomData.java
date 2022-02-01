@@ -23,6 +23,7 @@ public class CustomData extends NovaxsTemplateforModels{
 
 
 
+
     public String getProductName() {
         return productName;
     }

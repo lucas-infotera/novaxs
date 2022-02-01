@@ -8,31 +8,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
+public class CancelBillRS {
 
-
-public class VoucherRS {
-
-
-    public byte[] voucher;
+    Boolean success;
 
     @JsonProperty("erro")
     String erro;
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public CancelBillRS setSuccess(Boolean success) {
+        this.success = success;
+        return this;
+    }
 
     public String getErro() {
         return erro;
     }
 
-    public VoucherRS setErro(String erro) {
+    public CancelBillRS setErro(String erro) {
         this.erro = erro;
-        return this;
-    }
-
-    public byte[] getVoucher() {
-        return voucher;
-    }
-
-    public VoucherRS setVoucher(byte[] voucher) {
-        this.voucher = voucher;
         return this;
     }
 
@@ -48,5 +45,4 @@ public class VoucherRS {
         }
         return null;
     }
-
 }

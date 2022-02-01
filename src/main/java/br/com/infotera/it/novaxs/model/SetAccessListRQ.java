@@ -63,11 +63,6 @@ public class SetAccessListRQ {
         return method;
     }
 
-    public SetAccessListRQ setMethod(String method) {
-        this.method = method;
-        return this;
-    }
-
     public String getBill() {
         return bill;
     }

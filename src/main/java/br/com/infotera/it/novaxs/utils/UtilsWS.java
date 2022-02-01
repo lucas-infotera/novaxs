@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -114,6 +115,22 @@ public class UtilsWS {
                     errorsType = setAccessListRS.getErro();
                 }
             }
+            if (errorResponse instanceof CancelBillRS) {
+                CancelBillRS cancelBillRS = (CancelBillRS) errorResponse;
+                if (cancelBillRS.getErro() != null) {
+                    errorsType = cancelBillRS.getErro();
+                }
+            }
+            if (errorResponse instanceof VoucherRS) {
+                VoucherRS voucherRS = (VoucherRS) errorResponse;
+                if (voucherRS.getVoucher() != null) {
+                    String s = new String(voucherRS.getVoucher(), StandardCharsets.UTF_8);
+                    if (s.contains("erro")){
+                        errorsType = montaRetorno(s, VoucherRS.class).getErro();
+                    }
+                }
+            }
+
         } catch (Exception e) {
             throw new ErrorException("Erro a o montar ErrorResponse");
         }

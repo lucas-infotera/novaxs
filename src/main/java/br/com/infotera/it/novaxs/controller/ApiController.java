@@ -10,8 +10,6 @@ import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.hotel.WSAlteraReservaRQ;
 import br.com.infotera.common.hotel.WSAlteraReservaRS;
-import br.com.infotera.common.hotel.rqrs.WSTarifarHotelRQ;
-import br.com.infotera.common.hotel.rqrs.WSTarifarHotelRS;
 import br.com.infotera.common.reserva.rqrs.WSReservaRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservaRS;
 import br.com.infotera.common.reserva.rqrs.WSReservarRQ;

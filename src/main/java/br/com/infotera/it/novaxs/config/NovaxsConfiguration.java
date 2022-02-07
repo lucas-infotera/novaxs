@@ -2,8 +2,6 @@ package br.com.infotera.it.novaxs.config;
 
 import br.com.infotera.common.util.Utils;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.PrettyPrinter;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
@@ -43,8 +41,6 @@ public class NovaxsConfiguration {
         mapper.deactivateDefaultTyping();
         return mapper;
     }
-
-
 
 
 }

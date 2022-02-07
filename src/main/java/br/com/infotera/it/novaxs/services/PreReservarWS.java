@@ -25,8 +25,8 @@ public class PreReservarWS {
 
 
     public WSPreReservarRS preReservar(WSPreReservarRQ preReservarRQ) throws ErrorException {
-        
-        WSIntegrador integrador =  preReservarRQ.getIntegrador();
+
+        WSIntegrador integrador = preReservarRQ.getIntegrador();
 
         List<WSReservaServico> reservaServicoList = montaReservaServicoList(preReservarRQ, integrador);
 
@@ -36,7 +36,7 @@ public class PreReservarWS {
     private List<WSReservaServico> montaReservaServicoList(WSPreReservarRQ preReservarRQ, WSIntegrador integrador) throws ErrorException {
         List<WSReservaServico> reservaServicoList = new ArrayList();
 
-        for (WSReservaServico reservaServico : preReservarRQ.getReserva().getTransReservaServicoList()){
+        for (WSReservaServico reservaServico : preReservarRQ.getReserva().getTransReservaServicoList()) {
             WSTarifarServicoRQ tarifarServicoRQ = new WSTarifarServicoRQ(integrador, reservaServico);
 
             WSTarifarServicoRS tarifar = tarifarWS.tarifar(tarifarServicoRQ);

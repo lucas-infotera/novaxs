@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
-public class Person extends NovaxsTemplateforModels{
+public class Person extends NovaxsTemplateforModels {
 
     @JsonProperty("name")
     public String name;
@@ -22,7 +22,6 @@ public class Person extends NovaxsTemplateforModels{
     public String cellPhone;
     @JsonProperty("email")
     public String email;
-
 
 
     public String getName() {

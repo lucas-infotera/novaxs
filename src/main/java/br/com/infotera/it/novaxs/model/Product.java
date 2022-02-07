@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product extends NovaxsTemplateforModels{
+public class Product extends NovaxsTemplateforModels {
 
     @JsonProperty("supplierName")
     public String supplierName;
@@ -54,6 +54,10 @@ public class Product extends NovaxsTemplateforModels{
     public String shortName;
     @JsonProperty("dates")
     public List<String> dates;
+    @JsonProperty("date")
+    public String date;
+    @JsonProperty("children")
+    public ArrayList<Child> children;
 
     public String getSchedule() {
         return schedule;
@@ -63,11 +67,6 @@ public class Product extends NovaxsTemplateforModels{
         this.schedule = schedule;
         return this;
     }
-
-    @JsonProperty("date")
-    public String date;
-    @JsonProperty("children")
-    public ArrayList<Child> children;
 
     public String getDate() {
         return date;

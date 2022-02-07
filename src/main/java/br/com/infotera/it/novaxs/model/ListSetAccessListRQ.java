@@ -11,7 +11,7 @@ import java.util.List;
  * @Author Lucas
  **/
 
-public class ListSetAccessListRQ extends NovaxsTemplateforModels{
+public class ListSetAccessListRQ extends NovaxsTemplateforModels {
 
     List<ListAccessPerson> accessPersonList;
 

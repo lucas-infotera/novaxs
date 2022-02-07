@@ -1,7 +1,6 @@
 package br.com.infotera.it.novaxs.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,12 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ProductsArray extends NovaxsTemplateforModels{
+public class ProductsArray extends NovaxsTemplateforModels {
 
     List<Product> productsArray;
 
     public List<Product> getProductsArray() {
-        if (this.productsArray == null){
+        if (this.productsArray == null) {
             this.productsArray = new ArrayList<>();
         }
         return productsArray;

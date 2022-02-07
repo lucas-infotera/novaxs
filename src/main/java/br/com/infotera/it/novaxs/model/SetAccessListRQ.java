@@ -27,6 +27,11 @@ public class SetAccessListRQ {
         return list;
     }
 
+    public SetAccessListRQ setList(String list) {
+        this.list = list;
+        return this;
+    }
+
     public SetAccessListRQ setList(ListSetAccessListRQ list) {
         this.list = list.toString();
         return this;

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @Author Lucas
  **/
 
-public class BillForRQ extends NovaxsTemplateforModels{
+public class BillForRQ extends NovaxsTemplateforModels {
 
 
     @JsonProperty("token")
@@ -65,6 +65,7 @@ public class BillForRQ extends NovaxsTemplateforModels{
         this.bill = bill;
         return this;
     }
+
     @Override
     public String toString() {
         try {

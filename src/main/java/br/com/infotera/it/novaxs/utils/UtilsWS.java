@@ -125,7 +125,7 @@ public class UtilsWS {
                 VoucherRS voucherRS = (VoucherRS) errorResponse;
                 if (voucherRS.getVoucher() != null) {
                     String s = new String(voucherRS.getVoucher(), StandardCharsets.UTF_8);
-                    if (s.contains("erro")){
+                    if (s.contains("erro")) {
                         errorsType = montaRetorno(s, VoucherRS.class).getErro();
                     }
                 }

@@ -24,10 +24,8 @@ public class BuyToBillForRQ {
 
     @JsonProperty("customData")
     String customData;
-
     @JsonProperty("personAsString")
     String personAsString;
-
     @JsonProperty("productsArray")
     String productsArray;
 
@@ -75,6 +73,11 @@ public class BuyToBillForRQ {
         return personAsString;
     }
 
+    public BuyToBillForRQ setPersonAsString(String personAsString) {
+        this.personAsString = personAsString;
+        return this;
+    }
+
     public BuyToBillForRQ setPersonAsString(Person personAsString) {
         this.personAsString = personAsString.toString();
         return this;
@@ -82,6 +85,11 @@ public class BuyToBillForRQ {
 
     public String getProductsArray() {
         return productsArray;
+    }
+
+    public BuyToBillForRQ setProductsArray(String productsArray) {
+        this.productsArray = productsArray;
+        return this;
     }
 
     public BuyToBillForRQ setProductsArray(ProductsArray productsArray) {

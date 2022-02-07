@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Value extends NovaxsTemplateforModels{
+public class Value extends NovaxsTemplateforModels {
 
     @JsonProperty("first")
     public String first;

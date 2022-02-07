@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
-public class CustomData extends NovaxsTemplateforModels{
+public class CustomData extends NovaxsTemplateforModels {
 
     @JsonProperty("IdExterno")
     public String idExterno;
@@ -20,8 +20,6 @@ public class CustomData extends NovaxsTemplateforModels{
     public int productId;
     @JsonProperty("entryId")
     public String entryId;
-
-
 
 
     public String getProductName() {

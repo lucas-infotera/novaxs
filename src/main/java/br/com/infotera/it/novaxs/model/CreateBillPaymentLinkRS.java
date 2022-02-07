@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @Author Lucas
  **/
-public class CreateBillPaymentLinkRS extends NovaxsTemplateforModels{
+public class CreateBillPaymentLinkRS extends NovaxsTemplateforModels {
 
     @JsonProperty("id")
     public String id;

@@ -49,7 +49,6 @@ public class TarifarWS {
             tarifarServicoRQ.getIntegrador().setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
             tarifarServicoRQ.getIntegrador().setDsMensagem(ex.getMessage());
             ex.setIntegrador(tarifarServicoRQ.getIntegrador());
-            ex.setStEmail(false);
             throw ex;
         } catch (NullPointerException ex) {
             throw new ErrorException(tarifarServicoRQ.getIntegrador(), TarifarWS.class, "tarifar", WSMensagemErroEnum.SPR, "Erro no processo de tarifar : NullpointerException " + ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);

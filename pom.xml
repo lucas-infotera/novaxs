@@ -15,6 +15,7 @@
 	<description>API em Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<maven.jaxb2.plugin.version>0.14.0</maven.jaxb2.plugin.version>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
@@ -47,7 +48,7 @@
 		<dependency>
 			<groupId>br.com.infotera.it</groupId>
 			<artifactId>it-common</artifactId>
-			<version>1.9.13.0-SNAPSHOT</version>
+			<version>1.9.14.0-SNAPSHOT</version>
 			<type>jar</type>
 			<exclusions>
 				<exclusion>

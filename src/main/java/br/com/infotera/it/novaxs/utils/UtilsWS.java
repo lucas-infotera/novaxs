@@ -38,37 +38,10 @@ public class UtilsWS {
     private static ObjectMapper objectMapper;
 
     public static void verificaErro(WSIntegrador integrador, Object errorResponse) throws ErrorException {
-
         String dsErro = "";
-
         if (errorResponse != null) {
             dsErro = montaMensagemDeErro(errorResponse);
-            if (errorResponse instanceof ResponseEntity) {
-                ResponseEntity<String> response = (ResponseEntity<String>) errorResponse;
-                if (response.getStatusCodeValue() != 200) {
-                    switch (response.getStatusCodeValue()) {
-                        case 400:
-                            throw new ErrorException(integrador, NovaxsClient.class, "verificaErro", WSMensagemErroEnum.GENCONEC, response.getStatusCode() + " - " + response.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.INCONSISTENTE, null);
-                        case 403:
-                            throw new ErrorException(integrador, NovaxsClient.class, "verificaErro", WSMensagemErroEnum.GENCONEC, response.getStatusCode() + " - " + response.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.INCONSISTENTE, null);
-                        case 404:
-                            throw new ErrorException(integrador, NovaxsClient.class, "verificaErro", WSMensagemErroEnum.GENCONEC, response.getStatusCode() + " - " + response.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.INCONSISTENTE, null);
-                        case 500:
-                            throw new ErrorException(integrador, NovaxsClient.class, "verificaErro", WSMensagemErroEnum.GENCONEC, response.getStatusCode() + " - " + response.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.NEGADO, null);
-                        case 504:
-                            String dsMensagem = response.getStatusCode().getReasonPhrase();
-                            if (dsMensagem.contains("Timeout")) {
-                                throw new ErrorException(integrador, NovaxsClient.class, "verificaErro", WSMensagemErroEnum.GENCONEC, response.getStatusCode() + " - " + dsMensagem + " Favor consultar o fornecedor", WSIntegracaoStatusEnum.INCONSISTENTE, null);
-                            } else {
-                                throw new ErrorException(integrador, NovaxsClient.class, "verificaErro", WSMensagemErroEnum.GENCONEC, response.getStatusCode() + " - " + dsMensagem, WSIntegracaoStatusEnum.NEGADO, null);
-                            }
-                        default:
-                            throw new ErrorException(integrador, NovaxsClient.class, "verificaErro", WSMensagemErroEnum.GENCONEC, response.getStatusCode() + " - " + response.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.INCONSISTENTE, null);
-                    }
-                }
-            }
         }
-
         if (!dsErro.equals("")) {
             throw new ErrorException(integrador, NovaxsClient.class, "VerificaErro", WSMensagemErroEnum.GENCONEC, dsErro, WSIntegracaoStatusEnum.NEGADO, null);
         }

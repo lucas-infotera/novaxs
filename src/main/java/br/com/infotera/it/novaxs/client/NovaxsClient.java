@@ -28,7 +28,7 @@ public class NovaxsClient {
     public List<GetProductsByDateRS> getProductsByDateRQ(WSIntegrador integrador, GetProductsByDateRQ getProductsByDateRQ) throws ErrorException {
 
         List<GetProductsByDateRS> result = null;
-        integrador.setDsMetodo("getProductsByDateRQ");
+        integrador.setDsAction("getProductsByDateRQ");
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -65,7 +65,7 @@ public class NovaxsClient {
 
     public BuyToBillForRS buyToBillForRQ(WSIntegrador integrador, BuyToBillForRQ buyToBillForRQ) throws ErrorException {
         BuyToBillForRS result = null;
-        integrador.setDsMetodo("buyToBillForRQ");
+        integrador.setDsAction("buyToBillForRQ");
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -92,7 +92,7 @@ public class NovaxsClient {
 
     public BillForRS billForRQ(WSIntegrador integrador, BillForRQ billRQ) throws ErrorException {
         BillForRS result = null;
-        integrador.setDsMetodo("billForRQ");
+        integrador.setDsAction("billForRQ");
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -118,7 +118,7 @@ public class NovaxsClient {
 
     public CreateBillPaymentLinkRS createBillPaymentLinkRQ(WSIntegrador integrador, CreateBillPaymentLinkRQ createPaymentLinkRQ) throws ErrorException {
         CreateBillPaymentLinkRS result = null;
-        integrador.setDsMetodo("createBillPaymentLinkRQ");
+        integrador.setDsAction("createBillPaymentLinkRQ");
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -144,7 +144,7 @@ public class NovaxsClient {
 
     public List<GetAccessListRS> getAccessListRQ(WSIntegrador integrador, GetAccessListRQ getAccessListRQ) throws ErrorException {
         List<GetAccessListRS> result = null;
-        integrador.setDsMetodo("getAccessListRQ");
+        integrador.setDsAction("getAccessListRQ");
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -170,7 +170,7 @@ public class NovaxsClient {
 
     public SetAccessListRS setAccessListRQ(WSIntegrador integrador, SetAccessListRQ setAccessListRQ) throws ErrorException {
         SetAccessListRS result = null;
-        integrador.setDsMetodo("setAccessListRQ");
+        integrador.setDsAction("setAccessListRQ");
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -197,7 +197,7 @@ public class NovaxsClient {
 
     public VoucherRS voucherRQ(WSIntegrador integrador, VoucherRQ voucherRQ) throws ErrorException {
         VoucherRS result;
-        integrador.setDsMetodo("voucherRQ");
+        integrador.setDsAction("voucherRQ");
         try {
 
             result = restClient.sendReceive(integrador, voucherRQ, HttpMethod.GET,
@@ -223,7 +223,7 @@ public class NovaxsClient {
 
     public CancelBillRS cancelBillRQ(WSIntegrador integrador, CancelBillRQ cancelRQ) throws ErrorException {
         CancelBillRS result;
-        integrador.setDsMetodo("cancelBillRQ");
+        integrador.setDsAction("cancelBillRQ");
         try {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();

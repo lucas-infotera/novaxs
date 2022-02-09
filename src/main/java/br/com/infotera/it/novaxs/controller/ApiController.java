@@ -18,7 +18,7 @@ import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRS;
 import br.com.infotera.common.servico.rqrs.WSTarifarServicoRQ;
 import br.com.infotera.common.servico.rqrs.WSTarifarServicoRS;
-import br.com.infotera.common.util.Utils;
+import br.com.infotera.common.util.LogWS;
 import br.com.infotera.it.novaxs.NovaxsApplication;
 import br.com.infotera.it.novaxs.services.*;
 import com.google.gson.Gson;
@@ -70,23 +70,17 @@ public class ApiController {
     @RequestMapping(value = "/detalheIngresso", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String detalheIngresso(@RequestBody String jsonRQ) {
-
         WSDetalheIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDetalheIngressoRQ.class);
         WSDetalheIngressoRS result = null;
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("detalheIngresso");
         try {
             result = detalheIngressoWS.detalheIngresso(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
             result = new WSDetalheIngressoRS(ex.getIntegrador(), null);
         } catch (Exception ex) {
-            stGerarErro = true;
             result = new WSDetalheIngressoRS(new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preReservar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador(), null);
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "detalheIngresso", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
         return (gson.toJson(result));
     }
@@ -94,23 +88,17 @@ public class ApiController {
     @RequestMapping(value = "/preReservar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String preReservar(@RequestBody String jsonRQ) {
-
         WSPreReservarRQ wsRQ = gson.fromJson(jsonRQ, WSPreReservarRQ.class);
         WSPreReservarRS result = null;
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("preReservar");
         try {
             result = preReservarWS.preReservar(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
             result = new WSPreReservarRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
             result = new WSPreReservarRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preReservar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "preReservar", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
         return (gson.toJson(result));
     }
@@ -120,20 +108,15 @@ public class ApiController {
     public String tarifar(@RequestBody String jsonRQ) {
         WSTarifarServicoRS result = null;
         WSTarifarServicoRQ wsRQ = gson.fromJson(jsonRQ, WSTarifarServicoRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("tarifar");
         try {
             result = tarifaWS.tarifar(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
             result = new WSTarifarServicoRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
             result = new WSTarifarServicoRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "tarifar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "tarifar", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
         return (gson.toJson(result));
     }
@@ -143,20 +126,15 @@ public class ApiController {
     public String reservar(@RequestBody String jsonRQ) {
         WSReservarRS result = null;
         WSReservarRQ wsRQ = gson.fromJson(jsonRQ, WSReservarRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("reservar");
         try {
             result = reservaWS.reservar(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
             result = new WSReservarRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
             result = new WSReservarRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "reservar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "reservar", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
 
         return (gson.toJson(result));
@@ -167,20 +145,15 @@ public class ApiController {
     public String confirmar(@RequestBody String jsonRQ) {
         WSReservaRS result = null;
         WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("confirmar");
         try {
             result = confirmarWS.confirmar(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
             result = new WSReservaRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "confirmar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "confirmar", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
         return gson.toJson(result);
     }
@@ -190,20 +163,17 @@ public class ApiController {
     public String consultar(@RequestBody String jsonRQ) {
         WSReservaRS result = null;
         WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("consultar");
         try {
             result = consultarWS.consultar(wsRQ, false);
         } catch (ErrorException ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "consultar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "consultar", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
 
         return (gson.toJson(result));
@@ -214,22 +184,18 @@ public class ApiController {
     public String preCancelar(@RequestBody String jsonRQ) {
         WSReservaRS result = null;
         WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("preCancelar");
         try {
             result = preCancelarWS.preCancelar(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preCancelar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "preCancelar", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return (gson.toJson(result));
     }
 
@@ -238,20 +204,17 @@ public class ApiController {
     public String cancelar(@RequestBody String jsonRQ) {
         WSReservaRS result = null;
         WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("cancelar");
         try {
             result = cancelarWS.cancelar(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "cancelar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "cancelar", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
 
         return (gson.toJson(result));
@@ -262,20 +225,17 @@ public class ApiController {
     public String relatorio(@RequestBody String jsonRQ) {
         WSReservaRelatorioRS result = null;
         WSReservaRelatorioRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRelatorioRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("relatorio");
         try {
             result = relatorioWS.relatorio(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRelatorioRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
+            
             result = new WSReservaRelatorioRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "relatorio", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "relatorio", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
         return (gson.toJson(result));
     }
@@ -285,20 +245,15 @@ public class ApiController {
     public String preAlterarReserva(@RequestBody String jsonRQ) {
         WSPreAlterarRS result = null;
         WSPreAlterarRQ wsRQ = gson.fromJson(jsonRQ, WSPreAlterarRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("preAlterarReserva");
         try {
             result = preAlterarReservaWS.preAlterarReserva(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
             result = new WSPreAlterarRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
             result = new WSPreAlterarRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preAlterarReserva", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "preAlterarReserva", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
 
         return (gson.toJson(result));
@@ -309,20 +264,15 @@ public class ApiController {
     public String alterarReserva(@RequestBody String jsonRQ) {
         WSAlteraReservaRS result = null;
         WSAlteraReservaRQ wsRQ = gson.fromJson(jsonRQ, WSAlteraReservaRQ.class);
-        boolean stGerarErro = false;
+        wsRQ.getIntegrador().setDsMetodo("alterarReserva");
         try {
             result = alterarReservaWS.alterarReserva(wsRQ);
         } catch (ErrorException ex) {
-            stGerarErro = true;
             result = new WSAlteraReservaRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            stGerarErro = true;
             result = new WSAlteraReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "alterarReserva", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        }
-        try {
-            Utils.gerarLog(result.getIntegrador(), "alterarReserva", true, jsonRQ, stGerarErro);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
         }
 
         return (gson.toJson(result));

@@ -14,6 +14,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author Lucas
@@ -38,7 +39,7 @@ public class NovaxsClient {
             requestBody.add("method", getProductsByDateRQ.getMethod());
             requestBody.add("date", getProductsByDateRQ.getDate());
 
-            result = Arrays.asList(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class));
+            result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class)).orElseThrow(()-> new ErrorException("Nenhum Ingresso encontrado")));
             UtilsWS.verificaErro(integrador, result);
 
             if (UtilsWS.variavelTemporaria != null) {
@@ -53,6 +54,8 @@ public class NovaxsClient {
             }
 
         } catch (ErrorException ex) {
+            integrador.setDsMensagem(ex.getMessage());
+            ex.setIntegrador(integrador);
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());

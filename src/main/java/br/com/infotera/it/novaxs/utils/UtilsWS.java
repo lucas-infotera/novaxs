@@ -19,7 +19,6 @@ import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -117,7 +116,6 @@ public class UtilsWS {
         return vlNeto;
     }
 
-
     private static WSTarifa montaWSTarifa(WSIntegrador integrador, List<WSReservaNome> reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
         WSTarifa tarifa = null;
         double vlNeto = montaVlNeto(productsByDateRS);
@@ -198,7 +196,6 @@ public class UtilsWS {
         return null;
     }
 
-
     public static GetProductsByDateRS converterDSParametro(String dsParametro) throws ErrorException {
         GetProductsByDateRS result = null;
         try {
@@ -219,6 +216,13 @@ public class UtilsWS {
         return retorno.cast(objResponse);
     }
 
+    public static CredenciaisNovaxsRQ montaCredenciaisNovaXS(WSIntegrador integrador) {
+        return new CredenciaisNovaxsRQ(integrador.getDsCredencialList().get(0), integrador.getDsCredencialList().get(1), integrador.getDsCredencialList().get(2));
+    }
+
+    public static CredenciaisNovaxsRQ montaCredenciaisNovaXS(WSIntegrador integrador, String token) {
+        return new CredenciaisNovaxsRQ(integrador.getDsCredencialList().get(0), integrador.getDsCredencialList().get(1), token);
+    }
 
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {

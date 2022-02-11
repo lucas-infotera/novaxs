@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @Author Lucas
  **/
@@ -22,6 +24,16 @@ public class SetAccessListRQ {
     String bill;
     @JsonProperty("list")
     String list;
+
+
+    public SetAccessListRQ() {
+    }
+
+    public SetAccessListRQ(@NotNull CredenciaisNovaxsRQ credenciaisNovaXS) {
+        this.setLogin(credenciaisNovaXS.getLogin());
+        this.setPassword(credenciaisNovaXS.getPassword());
+        this.setToken(credenciaisNovaXS.getToken());
+    }
 
     public String getList() {
         return list;

@@ -42,8 +42,8 @@ public class ApiController {
     private ConsultarWS consultarWS;
     @Autowired
     private PreCancelarWS preCancelarWS;
-    @Autowired
-    private CancelarWS cancelarWS;
+//    @Autowired
+//    private CancelarWS cancelarWS;
     @Autowired
     private RelatorioWS relatorioWS;
     @Autowired
@@ -52,8 +52,8 @@ public class ApiController {
     private AlterarReservaWS alterarReservaWS;
     @Autowired
     private TarifarWS tarifaWS;
-    @Autowired
-    private ConfirmarWS confirmarWS;
+//    @Autowired
+//    private ConfirmarWS confirmarWS;
     @Autowired
     private DetalheIngressoWS detalheIngressoWS;
 
@@ -140,23 +140,23 @@ public class ApiController {
         return (gson.toJson(result));
     }
 
-    @RequestMapping(value = "/confirmar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String confirmar(@RequestBody String jsonRQ) {
-        WSReservaRS result = null;
-        WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
-        wsRQ.getIntegrador().setDsMetodo("confirmar");
-        try {
-            result = confirmarWS.confirmar(wsRQ);
-        } catch (ErrorException ex) {
-            result = new WSReservaRS(null, ex.getIntegrador());
-        } catch (Exception ex) {
-            result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "confirmar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
-        }
-        return gson.toJson(result);
-    }
+//    @RequestMapping(value = "/confirmar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public String confirmar(@RequestBody String jsonRQ) {
+//        WSReservaRS result = null;
+//        WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
+//        wsRQ.getIntegrador().setDsMetodo("confirmar");
+//        try {
+//            result = confirmarWS.confirmar(wsRQ);
+//        } catch (ErrorException ex) {
+//            result = new WSReservaRS(null, ex.getIntegrador());
+//        } catch (Exception ex) {
+//            result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "confirmar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
+//        } finally {
+//            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+//        }
+//        return gson.toJson(result);
+//    }
 
     @RequestMapping(value = "/consultar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -199,26 +199,26 @@ public class ApiController {
         return (gson.toJson(result));
     }
 
-    @RequestMapping(value = "/cancelar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String cancelar(@RequestBody String jsonRQ) {
-        WSReservaRS result = null;
-        WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
-        wsRQ.getIntegrador().setDsMetodo("cancelar");
-        try {
-            result = cancelarWS.cancelar(wsRQ);
-        } catch (ErrorException ex) {
-            
-            result = new WSReservaRS(null, ex.getIntegrador());
-        } catch (Exception ex) {
-            
-            result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "cancelar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
-        }
-
-        return (gson.toJson(result));
-    }
+//    @RequestMapping(value = "/cancelar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public String cancelar(@RequestBody String jsonRQ) {
+//        WSReservaRS result = null;
+//        WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
+//        wsRQ.getIntegrador().setDsMetodo("cancelar");
+//        try {
+//            result = cancelarWS.cancelar(wsRQ);
+//        } catch (ErrorException ex) {
+//
+//            result = new WSReservaRS(null, ex.getIntegrador());
+//        } catch (Exception ex) {
+//
+//            result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "cancelar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
+//        } finally {
+//            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+//        }
+//
+//        return (gson.toJson(result));
+//    }
 
     @RequestMapping(value = "/relatorio", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

@@ -5,6 +5,7 @@ import br.com.infotera.common.WSIntegrador;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.*;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
+import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -42,8 +43,31 @@ public class TestesChamandoWSNovaxs {
         GetProductsByDateRQ teste = new GetProductsByDateRQ();
         teste.setLogin("docuser")
                 .setPassword("abc1234")
-                .setDate("05/02/2022")
+                .setDate("06/12/2022")
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843");
+
+        List<GetProductsByDateRS> getProductsByDateRS = assertDoesNotThrow(() -> novaxsClient.getProductsByDateRQ(integrador, teste));
+
+        assertNotNull(getProductsByDateRS);
+
+        try {
+            System.out.println("Result teste1NovaxsClientGetProductsByDate --->" + objectMapper.writeValueAsString(getProductsByDateRS));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void teste1NovaxsClientGetProductsByDateMontaCredencial() throws ErrorException {
+
+        WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+
+
+        GetProductsByDateRQ teste = new GetProductsByDateRQ(UtilsWS.montaCredenciaisNovaXS(integrador));
+
+        teste.setDate("06/12/2022");
+
 
         List<GetProductsByDateRS> getProductsByDateRS = assertDoesNotThrow(() -> novaxsClient.getProductsByDateRQ(integrador, teste));
 
@@ -180,12 +204,13 @@ public class TestesChamandoWSNovaxs {
     @Test
     public void teste1NovaxsSetAccessListRQ() {
         WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
+
         SetAccessListRQ teste = new SetAccessListRQ();
 
-        ListAccessPerson[] accessPersonArray = null;
+        ArrayListAccessPerson[] accessPersonArray = null;
 
         try {
-            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ListAccessPerson[].class);
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ArrayListAccessPerson[].class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -224,10 +249,10 @@ public class TestesChamandoWSNovaxs {
         WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
         SetAccessListRQ teste = new SetAccessListRQ();
 
-        ListAccessPerson[] accessPersonArray = null;
+        ArrayListAccessPerson[] accessPersonArray = null;
 
         try {
-            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ListAccessPerson[].class);
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ArrayListAccessPerson[].class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -328,7 +353,6 @@ public class TestesChamandoWSNovaxs {
 
 
         CancelBillRS cancelBillRS = assertDoesNotThrow(() -> novaxsClient.cancelBillRQ(integrador, teste));
-
 
 
         assertNotNull(cancelBillRS);

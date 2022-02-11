@@ -12,7 +12,7 @@ import java.util.List;
  * @Author Lucas
  **/
 
-public class ListAccessPerson extends NovaxsTemplateforModels {
+public class ArrayListAccessPerson extends NovaxsTemplateforModels {
 
     @JsonProperty("accessPersons")
     public ArrayList<AccessPerson> accessPersonList;
@@ -37,7 +37,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return id;
     }
 
-    public ListAccessPerson setId(int id) {
+    public ArrayListAccessPerson setId(int id) {
         this.id = id;
         return this;
     }
@@ -46,7 +46,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return internalId;
     }
 
-    public ListAccessPerson setInternalId(int internalId) {
+    public ArrayListAccessPerson setInternalId(int internalId) {
         this.internalId = internalId;
         return this;
     }
@@ -55,7 +55,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return trash;
     }
 
-    public ListAccessPerson setTrash(boolean trash) {
+    public ArrayListAccessPerson setTrash(boolean trash) {
         this.trash = trash;
         return this;
     }
@@ -64,7 +64,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return frozen;
     }
 
-    public ListAccessPerson setFrozen(boolean frozen) {
+    public ArrayListAccessPerson setFrozen(boolean frozen) {
         this.frozen = frozen;
         return this;
     }
@@ -73,7 +73,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return inHistory;
     }
 
-    public ListAccessPerson setInHistory(boolean inHistory) {
+    public ArrayListAccessPerson setInHistory(boolean inHistory) {
         this.inHistory = inHistory;
         return this;
     }
@@ -82,7 +82,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return lastVersion;
     }
 
-    public ListAccessPerson setLastVersion(boolean lastVersion) {
+    public ArrayListAccessPerson setLastVersion(boolean lastVersion) {
         this.lastVersion = lastVersion;
         return this;
     }
@@ -91,7 +91,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return lazy;
     }
 
-    public ListAccessPerson setLazy(boolean lazy) {
+    public ArrayListAccessPerson setLazy(boolean lazy) {
         this.lazy = lazy;
         return this;
     }
@@ -103,7 +103,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return accessPersonList;
     }
 
-    public ListAccessPerson setAccessPersonList(ArrayList<AccessPerson> accessPersonList) {
+    public ArrayListAccessPerson setAccessPersonList(ArrayList<AccessPerson> accessPersonList) {
         this.accessPersonList = accessPersonList;
         return this;
     }
@@ -112,7 +112,7 @@ public class ListAccessPerson extends NovaxsTemplateforModels {
         return customData;
     }
 
-    public ListAccessPerson setCustomData(CustomData customData) {
+    public ArrayListAccessPerson setCustomData(CustomData customData) {
         this.customData = customData;
         return this;
     }

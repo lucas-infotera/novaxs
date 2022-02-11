@@ -2,6 +2,8 @@ package br.com.infotera.it.novaxs.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @Author Lucas
  **/
@@ -16,6 +18,15 @@ public class VoucherRQ {
     String voucher;
     @JsonProperty("method")
     String method = "receiptAsByte";
+
+    public VoucherRQ() {
+    }
+
+    public VoucherRQ(@NotNull CredenciaisNovaxsRQ credenciaisNovaXS) {
+        this.setLogin(credenciaisNovaXS.getLogin());
+        this.setPassword(credenciaisNovaXS.getPassword());
+        this.setToken(credenciaisNovaXS.getToken());
+    }
 
     public String getVoucher() {
         return voucher;

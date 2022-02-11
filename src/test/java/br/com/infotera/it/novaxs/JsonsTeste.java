@@ -411,35 +411,33 @@ public class JsonsTeste {
 
     public static String montaIntegrador() {
         return "{\n" +
-                "        \"integradorEnum\": \"CANGOOROO\",\n" +
-                "        \"id\": 23,\n" +
-                "        \"nmIntegrador\": \"CANGOOROO\",\n" +
+                "        \"integradorEnum\": \"NOVAXS\",\n" +
+                "        \"id\": 6231,\n" +
+                "        \"nmIntegrador\": \"Beach Park\",\n" +
                 "        \"ambiente\": \"PRODUCAO\",\n" +
-                "        \"timeoutSegundos\": 240,\n" +
-                "        \"idParceiro\": \"7\",\n" +
+                "        \"timeoutSegundos\": 40,\n" +
+                "        \"idParceiro\": \"113\",\n" +
                 "        \"ativo\": true,\n" +
                 "        \"qtMaximaSessao\": 2,\n" +
-                "        \"dsUrl\": \"http://192.168.15.114:8090/cangooroov2\",\n" +
+                "        \"dsUrl\": \"http://10.0.0.28:8070/novaxs\",\n" +
                 "        \"stLocal\": false,\n" +
                 "        \"dsCredencialList\": [\n" +
-                "            \"ws_infotera\",\n" +
-                "            \"1v\\u0026g\\u003cw#SdNOT)1d\",\n" +
-                "            \"http://ws-orinter.cangooroo.net\",\n" +
-                "            \"infotera.backoffice\",\n" +
-                "            \"infotera@19\",\n" +
-                "            \"Própria\"\n" +
+                "            \"docuser\",\n" +
+                "            \"abc1234\",\n" +
+                "            \"E1D779DB5D11E4C6EED41B418B53C2AC4205B843\",\n" +
+                "            null\n" +
                 "        ],\n" +
                 "        \"stSelecionado\": false,\n" +
-                "        \"idFornecedor\": 29660,\n" +
+                "        \"idFornecedor\": 22635,\n" +
                 "        \"idEmpresa\": 1,\n" +
-                "        \"cdIntegra\": \"662322B6A18625C58DE3D60FDCC5FDC7\",\n" +
                 "        \"sgEmpresa\": \"ORITEST\",\n" +
                 "        \"nmUsuarioEmpresa\": \"Infotera\",\n" +
                 "        \"sgNacionalidade\": \"BR\",\n" +
                 "        \"stErro\": false,\n" +
-                "        \"stGerarLog\": true,\n" +
-                "        \"transStMarkupTaxa\": true,\n" +
+                "        \"stGerarLog\": false,\n" +
+                "        \"transStMarkupTaxa\": false,\n" +
                 "        \"transStComissaoTaxa\": false,\n" +
+                "        \"dsMetodo\":  \"disponibilidadeIngresso\",\n" +
                 "        \"idiomaEnum\": \"PT_BR\"\n" +
                 "    }";
     }

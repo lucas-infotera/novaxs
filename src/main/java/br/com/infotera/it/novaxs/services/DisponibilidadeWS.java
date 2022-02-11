@@ -11,6 +11,7 @@ import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
+import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,10 +96,8 @@ public class DisponibilidadeWS {
         Date dtInicio = Optional.ofNullable(dtInicialIngresso)
                 .orElseThrow(() -> new ErrorException("Data Inicio não informada"));
         try {
-            return new GetProductsByDateRQ().setLogin(integrador.getDsCredencialList().get(0))
-                    .setPassword(integrador.getDsCredencialList().get(1))
-                    .setDate(Utils.formatData(dtInicio, "dd/MM/yyyy"))
-                    .setToken(integrador.getDsCredencialList().get(2));
+            return new GetProductsByDateRQ(UtilsWS.montaCredenciaisNovaXS(integrador))
+                    .setDate(Utils.formatData(dtInicio, "dd/MM/yyyy"));
 
         } catch (NullPointerException ex) {
             throw new ErrorException(integrador, DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);

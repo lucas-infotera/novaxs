@@ -8,19 +8,15 @@ import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSIntegradorLogTipoEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.util.LogWS;
-import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.model.CancelBillRS;
 import br.com.infotera.it.novaxs.model.VoucherRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -52,7 +48,7 @@ public class RESTClient {
             if (httpMethod.equals(HttpMethod.GET) && integrador.getDsMetodo().equals("voucherRQ")) {
                 ResponseEntity<byte[]> voucherNovaXSResponse = null;
                 auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
-                entity = new HttpEntity(montaHeaderGET());
+                entity = new HttpEntity(montaHeaderGET_PDF());
                 voucherNovaXSResponse = restTemplate.exchange(auxEndpoint, httpMethod, entity, byte[].class);
 
                 VoucherRS voucherRS = new VoucherRS()
@@ -89,7 +85,7 @@ public class RESTClient {
         return (T) result;
     }
 
-    private MultiValueMap<String, String> montaHeaderGET() {
+    private MultiValueMap<String, String> montaHeaderGET_PDF() {
         HttpHeaders result = new HttpHeaders();
         result.setAccept(Arrays.asList(MediaType.APPLICATION_PDF));
         return result;

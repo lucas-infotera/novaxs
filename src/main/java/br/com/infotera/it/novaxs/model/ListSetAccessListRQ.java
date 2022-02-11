@@ -13,18 +13,18 @@ import java.util.List;
 
 public class ListSetAccessListRQ extends NovaxsTemplateforModels {
 
-    List<ListAccessPerson> accessPersonList;
+    List<ArrayListAccessPerson> accessPersonList;
 
-    public List<ListAccessPerson> getAccessPersonList() {
+    public List<ArrayListAccessPerson> getAccessPersonList() {
         return accessPersonList;
     }
 
-    public ListSetAccessListRQ setAccessPersonList(List<ListAccessPerson> accessPersonList) {
+    public ListSetAccessListRQ setAccessPersonList(List<ArrayListAccessPerson> accessPersonList) {
         this.accessPersonList = accessPersonList;
         return this;
     }
 
-    public ListSetAccessListRQ setAccessPersonList(ListAccessPerson[] accessPersonList) {
+    public ListSetAccessListRQ setAccessPersonList(ArrayListAccessPerson[] accessPersonList) {
         this.accessPersonList = Arrays.asList(accessPersonList);
         return this;
     }

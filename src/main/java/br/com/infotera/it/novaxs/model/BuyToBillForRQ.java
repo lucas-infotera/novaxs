@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @Author Lucas
  **/
@@ -28,6 +30,16 @@ public class BuyToBillForRQ {
     String personAsString;
     @JsonProperty("productsArray")
     String productsArray;
+
+    public BuyToBillForRQ() {
+    }
+
+
+    public BuyToBillForRQ(@NotNull CredenciaisNovaxsRQ credenciaisNovaXS) {
+        this.setLogin(credenciaisNovaXS.getLogin());
+        this.setPassword(credenciaisNovaXS.getPassword());
+        this.setToken(credenciaisNovaXS.getToken());
+    }
 
     public String getToken() {
         return token;

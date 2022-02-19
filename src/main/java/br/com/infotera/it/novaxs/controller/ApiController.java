@@ -80,7 +80,7 @@ public class ApiController {
         } catch (Exception ex) {
             result = new WSDetalheIngressoRS(new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preReservar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador(), null);
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
         return (gson.toJson(result));
     }
@@ -98,7 +98,7 @@ public class ApiController {
         } catch (Exception ex) {
             result = new WSPreReservarRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preReservar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
         return (gson.toJson(result));
     }
@@ -116,7 +116,7 @@ public class ApiController {
         } catch (Exception ex) {
             result = new WSTarifarServicoRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "tarifar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
         return (gson.toJson(result));
     }
@@ -134,7 +134,7 @@ public class ApiController {
         } catch (Exception ex) {
             result = new WSReservarRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "reservar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
 
         return (gson.toJson(result));
@@ -153,7 +153,7 @@ public class ApiController {
 //        } catch (Exception ex) {
 //            result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "confirmar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
 //        } finally {
-//            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+//            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
 //        }
 //        return gson.toJson(result);
 //    }
@@ -173,7 +173,7 @@ public class ApiController {
             
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "consultar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
 
         return (gson.toJson(result));
@@ -194,7 +194,7 @@ public class ApiController {
             
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preCancelar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
         return (gson.toJson(result));
     }
@@ -214,7 +214,7 @@ public class ApiController {
 //
 //            result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "cancelar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
 //        } finally {
-//            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+//            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
 //        }
 //
 //        return (gson.toJson(result));
@@ -235,7 +235,7 @@ public class ApiController {
             
             result = new WSReservaRelatorioRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "relatorio", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
         return (gson.toJson(result));
     }
@@ -253,7 +253,7 @@ public class ApiController {
         } catch (Exception ex) {
             result = new WSPreAlterarRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preAlterarReserva", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
 
         return (gson.toJson(result));
@@ -272,7 +272,7 @@ public class ApiController {
         } catch (Exception ex) {
             result = new WSAlteraReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "alterarReserva", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
 
         return (gson.toJson(result));

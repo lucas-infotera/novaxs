@@ -20,8 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static br.com.infotera.it.novaxs.utils.UtilsWS.montaIngresso;
-import static br.com.infotera.it.novaxs.utils.UtilsWS.montaIngressoModalidadeList;
+import static br.com.infotera.it.novaxs.utils.UtilsWS.*;
 
 /**
  * @Author Lucas
@@ -97,7 +96,7 @@ public class DisponibilidadeWS {
                 .orElseThrow(() -> new ErrorException("Data Inicio não informada"));
         try {
             return new GetProductsByDateRQ(UtilsWS.montaCredenciaisNovaXS(integrador))
-                    .setDate(Utils.formatData(dtInicio, "dd/MM/yyyy"));
+                    .setDate(UtilsWS.montaDataNovaxs(dtInicio));
 
         } catch (NullPointerException ex) {
             throw new ErrorException(integrador, DisponibilidadeWS.class, "disponibilidade", WSMensagemErroEnum.SDI, "Erro ao pesquisar atividades", WSIntegracaoStatusEnum.NEGADO, ex);

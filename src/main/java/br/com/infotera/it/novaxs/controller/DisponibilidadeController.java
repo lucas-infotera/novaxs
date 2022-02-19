@@ -46,7 +46,7 @@ public class DisponibilidadeController {
         } catch (Exception ex) {
             result = new WSDisponibilidadeIngressoRS(null, new ErrorException(wsRQ.getIntegrador(), DisponibilidadeController.class, "disponibilidade", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
 
         String variavelTemporaria = UtilsWS.variavelTemporaria;

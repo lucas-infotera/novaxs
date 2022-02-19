@@ -1,13 +1,7 @@
 package br.com.infotera.it.novaxs.utils;
 
-import br.com.infotera.common.ErrorException;
-import br.com.infotera.common.WSIntegrador;
-import br.com.infotera.common.WSReservaNome;
-import br.com.infotera.common.WSTarifa;
-import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
-import br.com.infotera.common.enumerator.WSMediaCategoriaEnum;
-import br.com.infotera.common.enumerator.WSMensagemErroEnum;
-import br.com.infotera.common.enumerator.WSPagtoFornecedorTipoEnum;
+import br.com.infotera.common.*;
+import br.com.infotera.common.enumerator.*;
 import br.com.infotera.common.media.WSMedia;
 import br.com.infotera.common.politica.WSPolitica;
 import br.com.infotera.common.servico.WSIngresso;
@@ -21,10 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @Author Lucas
@@ -35,6 +30,7 @@ public class UtilsWS {
 
     public static String variavelTemporaria = "VariavelDeTeste";
     private static ObjectMapper objectMapper;
+    private static Validator validator;
 
     public static void verificaErro(WSIntegrador integrador, Object errorResponse) throws ErrorException {
         String dsErro = "";
@@ -216,12 +212,119 @@ public class UtilsWS {
         return retorno.cast(objResponse);
     }
 
-    public static CredenciaisNovaxsRQ montaCredenciaisNovaXS(WSIntegrador integrador) {
-        return new CredenciaisNovaxsRQ(integrador.getDsCredencialList().get(0), integrador.getDsCredencialList().get(1), integrador.getDsCredencialList().get(2));
+    public static CredenciaisNovaxsRQ montaCredenciaisNovaXS(WSIntegrador integrador) throws ErrorException {
+        CredenciaisNovaxsRQ credenciaisNovaxsRQ = null;
+        try {
+            credenciaisNovaxsRQ = new CredenciaisNovaxsRQ(integrador.getDsCredencialList().get(0), integrador.getDsCredencialList().get(1), integrador.getDsCredencialList().get(2));
+            validator(credenciaisNovaxsRQ);
+        } catch (ConstraintViolationException ex) {
+            throw new ErrorException(ex.getMessage());
+        }
+        return credenciaisNovaxsRQ;
     }
 
-    public static CredenciaisNovaxsRQ montaCredenciaisNovaXS(WSIntegrador integrador, String token) {
-        return new CredenciaisNovaxsRQ(integrador.getDsCredencialList().get(0), integrador.getDsCredencialList().get(1), token);
+    public static CredenciaisNovaxsRQ montaCredenciaisNovaXS(WSIntegrador integrador, String token) throws ErrorException {
+        CredenciaisNovaxsRQ credenciaisNovaxsRQ = null;
+        try {
+            credenciaisNovaxsRQ = new CredenciaisNovaxsRQ(integrador.getDsCredencialList().get(0), integrador.getDsCredencialList().get(1), token);
+            validator(credenciaisNovaxsRQ);
+        } catch (ConstraintViolationException ex) {
+            throw new ErrorException(ex.getMessage());
+        }
+        return credenciaisNovaxsRQ;
+    }
+
+
+    public static Person montaPersonAsStringDadosDoComprador(WSContato contato) throws ErrorException {
+        Person result = null;
+        try {
+            result = new Person()
+                    .setName(contato.getNome())
+                    .setCellPhone(contato.getTelefone().getTransNrTelefone())
+                    .setHomePhone(contato.getTelefone().getNrTelefone())
+                    .setEmail(contato.getEmail());
+
+            if (contato.getDocumento().getDocumentoTipo().equals(WSDocumentoTipoEnum.CPF)) {
+                result.setCpf(contato.getDocumento().getNrDocumento());
+            } else {
+                throw new ErrorException("CPF é obrigatorio !");
+            }
+            validator(result);
+        } catch (ErrorException ex) {
+            throw ex;
+        } catch (ConstraintViolationException ex) {
+            throw new ErrorException(ex.getMessage());
+        }
+        return result;
+    }
+
+    public static <T> void validator(Object objeto) {
+
+        Set<ConstraintViolation<Object>> violations = validator.validate(objeto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
+
+    public static ProductsArray montaProductsArray(WSReserva reserva) throws ErrorException {
+        ProductsArray result = null;
+        GetProductsByDateRS getProductsByDateRS;
+        List<Product> products = new ArrayList<>();
+
+        if (reserva != null) {
+            result = new ProductsArray();
+            if (reserva.getReservaServicoList() != null) {
+                if (!Utils.isListNothing(reserva.getReservaServicoList())) {
+                    for (WSReservaServico reservaServico : reserva.getReservaServicoList()) {
+                        if (reservaServico.getDsParametro() != null) {
+                            try {
+                                getProductsByDateRS = Optional.ofNullable(converterDSParametro(reservaServico.getServico().getDsParametro())).
+                                        orElseThrow(() -> new ErrorException("DsParametro com GetProductsByDate esta nulo !"));
+                                Product product = montaProductBuytoBillForRQ(getProductsByDateRS, reservaServico);
+                            } catch (NullPointerException ex) {
+                                throw ex;
+                            } catch (ErrorException ex) {
+                                throw ex;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return result;
+    }
+
+    private static Product montaProductBuytoBillForRQ(GetProductsByDateRS productsByDateRS, WSReservaServico reservaServico) throws ErrorException {
+
+        Product product = new Product()
+                .setPath(productsByDateRS.getPath())
+                .setAmount(productsByDateRS.getMinAmount())
+                .setDate(montaDataNovaxs(reservaServico.getServico().getDtServico()));
+
+        if (productsByDateRS.getSchedules() != null) {
+            product.setSchedule(productsByDateRS.getSchedules().get(0).getSchedule());
+        }
+
+/*
+        if () {
+            product.setChildren()
+
+            Child child = new Child();
+            child.set
+        }
+*/
+        return null;
+    }
+
+    public static String montaDataNovaxs(Date dtInicio) {
+        return Utils.formatData(dtInicio, "dd/MM/yyyy");
+    }
+
+    @Autowired
+    public void setValidator(Validator validator) {
+        UtilsWS.validator = validator;
     }
 
     @Autowired

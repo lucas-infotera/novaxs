@@ -9,21 +9,24 @@ import javax.validation.constraints.NotNull;
  **/
 public class CredenciaisNovaxsRQ {
 
-
+    @NotNull(message = "token é obrigatorio")
     @JsonProperty("token")
     String token;
 
+    @NotNull(message = "login é obrigatorio")
     @JsonProperty("login")
     String login;
+
+    @NotNull(message = "password é obrigatório")
     @JsonProperty("password")
     String password;
 
-    public CredenciaisNovaxsRQ(@NotNull String login, @NotNull String password) {
+    public CredenciaisNovaxsRQ(String login,  String password) {
         this.login = login;
         this.password = password;
     }
 
-    public CredenciaisNovaxsRQ(@NotNull String login, @NotNull String password, String token) {
+    public CredenciaisNovaxsRQ(String login,  String password, String token) {
         this.token = token;
         this.login = login;
         this.password = password;

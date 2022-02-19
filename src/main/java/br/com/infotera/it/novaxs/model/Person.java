@@ -5,21 +5,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+import javax.validation.constraints.NotNull;
+
 /**
  * @Author Lucas
  **/
 public class Person extends NovaxsTemplateforModels {
 
+    @NotNull(message = "Nome é obrigatório")
     @JsonProperty("name")
     public String name;
 
+    @NotNull(message = "cpf é obrigatório")
     @JsonProperty("cpf")
     public String cpf;
 
     @JsonProperty("homePhone")
     public String homePhone;
+
+    @NotNull(message = "cellPhone é obrigatório")
     @JsonProperty("cellPhone")
     public String cellPhone;
+
+    @NotNull(message = "email é obrigatório")
     @JsonProperty("email")
     public String email;
 
@@ -28,7 +37,7 @@ public class Person extends NovaxsTemplateforModels {
         return name;
     }
 
-    public Person setName(String name) {
+    public Person setName( String name) {
         this.name = name;
         return this;
     }
@@ -55,7 +64,7 @@ public class Person extends NovaxsTemplateforModels {
         return cellPhone;
     }
 
-    public Person setCellPhone(String cellPhone) {
+    public Person setCellPhone( String cellPhone) {
         this.cellPhone = cellPhone;
         return this;
     }

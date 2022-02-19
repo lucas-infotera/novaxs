@@ -58,6 +58,17 @@ public class Product extends NovaxsTemplateforModels {
     public String date;
     @JsonProperty("children")
     public ArrayList<Child> children;
+    @JsonProperty("travelertype")
+    public String travelertype;
+
+    public String getTravelertype() {
+        return travelertype;
+    }
+
+    public Product setTravelertype(String travelertype) {
+        this.travelertype = travelertype;
+        return this;
+    }
 
     public String getSchedule() {
         return schedule;

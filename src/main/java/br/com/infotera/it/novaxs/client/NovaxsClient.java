@@ -40,7 +40,7 @@ public class NovaxsClient {
             requestBody.add("date", getProductsByDateRQ.getDate());
 
             result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class)).orElseThrow(()-> new ErrorException("Nenhum Ingresso encontrado")));
-            UtilsWS.verificaErro(integrador, result);
+            
 
             if (UtilsWS.variavelTemporaria != null) {
                 result.forEach(getProductsByDateRS -> {
@@ -81,7 +81,7 @@ public class NovaxsClient {
             requestBody.add("customData", buyToBillForRQ.getCustomData());
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "buyToBillFor", BuyToBillForRS.class);
-            UtilsWS.verificaErro(integrador, result);
+            
 
         } catch (ErrorException ex) {
             throw ex;
@@ -107,7 +107,7 @@ public class NovaxsClient {
 
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "billFor", BillForRS.class);
-            UtilsWS.verificaErro(integrador, result);
+            
 
         } catch (ErrorException ex) {
             throw ex;
@@ -133,7 +133,7 @@ public class NovaxsClient {
 
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "createBillPaymentLink", CreateBillPaymentLinkRS.class);
-            UtilsWS.verificaErro(integrador, result);
+            
 
         } catch (ErrorException ex) {
             throw ex;
@@ -159,7 +159,7 @@ public class NovaxsClient {
 
 
             result = Arrays.asList(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getAccessList", GetAccessListRS[].class));
-            UtilsWS.verificaErro(integrador, result);
+            
 
         } catch (ErrorException ex) {
             throw ex;
@@ -186,7 +186,7 @@ public class NovaxsClient {
 
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "setAccessList", SetAccessListRS.class);
-            UtilsWS.verificaErro(integrador, result);
+            
 
         } catch (ErrorException ex) {
             throw ex;
@@ -211,7 +211,7 @@ public class NovaxsClient {
                             "&token=" + voucherRQ.getToken() +
                             "&method=" + voucherRQ.getMethod()
                     , VoucherRS.class);
-            UtilsWS.verificaErro(integrador, result);
+            
 
         } catch (ErrorException ex) {
             throw ex;
@@ -237,7 +237,7 @@ public class NovaxsClient {
             requestBody.add("bill", cancelRQ.getBill());
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "cancelBill", CancelBillRS.class);
-            UtilsWS.verificaErro(integrador, result);
+            
 
         } catch (ErrorException ex) {
             throw ex;

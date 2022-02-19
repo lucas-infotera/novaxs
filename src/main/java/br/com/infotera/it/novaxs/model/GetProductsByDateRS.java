@@ -11,6 +11,7 @@ import java.util.List;
  * @Author Lucas
  **/
 public class GetProductsByDateRS {
+
     @JsonProperty("supplierName")
     public String supplierName;
     @JsonProperty("image")
@@ -65,6 +66,17 @@ public class GetProductsByDateRS {
     public Boolean umaPessoaPorCombo;
     @JsonProperty("erro")
     public String erro;
+    @JsonProperty("travelertype")
+    public String travelertype;
+
+    public String getTravelertype() {
+        return travelertype;
+    }
+
+    public GetProductsByDateRS setTravelertype(String travelertype) {
+        this.travelertype = travelertype;
+        return this;
+    }
 
     public String getErro() {
         return erro;

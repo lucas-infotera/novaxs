@@ -8,7 +8,13 @@ import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.validation.beanvalidation.CustomValidatorBean;
 import org.springframework.web.client.RestTemplate;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 
 /**
  * @Author Lucas
@@ -40,6 +46,14 @@ public class NovaxsConfiguration {
 //        mapper.setTimeZone(TimeZone.getDefault());
         mapper.deactivateDefaultTyping();
         return mapper;
+    }
+
+
+    @Bean
+    public Validator validator(){
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        return validator;
     }
 
 

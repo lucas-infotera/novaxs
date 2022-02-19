@@ -8,6 +8,7 @@ import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSIntegradorLogTipoEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.util.LogWS;
+import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.model.CancelBillRS;
 import br.com.infotera.it.novaxs.model.VoucherRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
@@ -84,6 +85,7 @@ public class RESTClient {
         }
         return (T) result;
     }
+
 
     private MultiValueMap<String, String> montaHeaderGET_PDF() {
         HttpHeaders result = new HttpHeaders();

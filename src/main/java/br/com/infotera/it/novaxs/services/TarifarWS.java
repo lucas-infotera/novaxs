@@ -44,7 +44,9 @@ public class TarifarWS {
 
             product = montaProdutoTarifado(tarifarServicoRQ, produtoReferencia);
 
-            reservaServico = montaWSReservaServico(tarifarServicoRQ, product);
+            reservaServico = montaWSReservaServico(tarifarServicoRQ, product
+                    .orElseThrow(() -> new ErrorException("Product não encontrado")));
+
         } catch (ErrorException ex) {
             tarifarServicoRQ.getIntegrador().setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
             tarifarServicoRQ.getIntegrador().setDsMensagem(ex.getMessage());
@@ -57,11 +59,10 @@ public class TarifarWS {
         return new WSTarifarServicoRS(reservaServico, tarifarServicoRQ.getIntegrador(), WSIntegracaoStatusEnum.OK);
     }
 
-    private WSReservaServico montaWSReservaServico(WSTarifarServicoRQ tarifarServicoRQ, Optional<GetProductsByDateRS> product) throws ErrorException {
+    private WSReservaServico montaWSReservaServico(WSTarifarServicoRQ tarifarServicoRQ, GetProductsByDateRS product) throws ErrorException {
         WSReservaServico reservaServico = new WSReservaServico(tarifarServicoRQ.getIntegrador(),
                 WSServicoTipoEnum.INGRESSO,
-                UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList(), product.
-                        orElseThrow(() -> new ErrorException("Product não encontrado"))),
+                UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList(), product),
                 null,
                 null,
                 tarifarServicoRQ.getReservaServico().getDsParametro());

@@ -56,6 +56,7 @@ public class DisponibilidadeWS {
         List<WSIngressoPesquisa> result = null;
         List<GetProductsByDateRS> getProductsByDateRSList = novaxsClient.getProductsByDateRQ(dispRQ.getIntegrador(),
                 montaRequestGetProductsByDateRQ(dispRQ.getIntegrador(), dispRQ.getDtInicio()));
+
         if (getProductsByDateRSList != null) {
             try {
                 if (!getProductsByDateRSList.isEmpty()) {
@@ -74,10 +75,12 @@ public class DisponibilidadeWS {
 
     private List<WSIngressoPesquisa> montaPesquisarIngressoResult(WSDisponibilidadeIngressoRQ dispRQ, List<GetProductsByDateRS> getProductsByDateRSList) throws ErrorException {
         List<WSIngressoPesquisa> result = new ArrayList<>();
+        WSIngressoPesquisa ingressoPesquisa;
         int sqPesquisa = 0;
+
         for (GetProductsByDateRS productsByDateRS : getProductsByDateRSList) {
             sqPesquisa++;
-            WSIngressoPesquisa ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
+            ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
             result.add(ingressoPesquisa);
         }
 

@@ -6,7 +6,6 @@ import br.com.infotera.common.WSDocumento;
 import br.com.infotera.common.WSTelefone;
 import br.com.infotera.common.enumerator.WSDocumentoTipoEnum;
 import br.com.infotera.common.enumerator.WSTelefoneTipoEnum;
-import br.com.infotera.it.novaxs.model.BuyToBillForRQ;
 import br.com.infotera.it.novaxs.model.Person;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.junit.jupiter.api.Assertions;
@@ -14,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.validation.ConstraintViolationException;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import java.util.Date;
 
 /**
  * @Author Lucas
@@ -41,6 +39,13 @@ public class TestesEmDev {
 
         Assertions.assertThrows(ErrorException.class, () -> UtilsWS.montaPersonAsStringDadosDoComprador(contato));
 
+    }
+
+    @Test
+    public void testeMontagemDataParaOInfotravel(){
+        Date date = UtilsWS.montaDataInfotravel("10/02/2022");
+
+        Assertions.assertNotNull(date);
     }
 
 

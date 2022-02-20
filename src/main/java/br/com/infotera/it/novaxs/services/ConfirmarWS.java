@@ -23,9 +23,9 @@ public class ConfirmarWS {
     @Autowired
     NovaxsClient novaxsClient;
 
-    public WSReservaRS confirmar(WSReservaRQ wsRQ) throws ErrorException {
+    public WSReservaRS confirmar(WSReservaRQ reservaRQ) throws ErrorException {
 
-        BuyToBillForRQ buyToBillForRQ = montaRequestBuytoBillForRQ(wsRQ.getIntegrador(), wsRQ.getReserva());
+        BuyToBillForRQ buyToBillForRQ = montaRequestBuytoBillForRQ(reservaRQ.getIntegrador(), reservaRQ.getReserva());
 
 
 
@@ -36,7 +36,8 @@ public class ConfirmarWS {
         SetAccessListRQ setAccessListRQ = new SetAccessListRQ();
 
 
-        return new WSReservaRS(reservaRS.getReserva(), reservaRQ.getIntegrador(), WSIntegracaoStatusEnum.OK);
+//        return new WSReservaRS(reservaRS.getReserva(), reservaRQ.getIntegrador(), WSIntegracaoStatusEnum.OK);
+        return null;
     }
 
     private BuyToBillForRQ montaRequestBuytoBillForRQ(WSIntegrador integrador, WSReserva reserva) throws ErrorException {
@@ -49,8 +50,8 @@ public class ConfirmarWS {
         BuyToBillForRQ buyToBillForRQ =
                 new BuyToBillForRQ(credenciaisNovaxsRQ)
                 .setProductsArray(productsArray)
-                .setPersonAsString(UtilsWS.montaPersonAsStringDadosDoComprador(reserva.getContato()))
-                .setCustomData();
+                .setPersonAsString(UtilsWS.montaPersonAsStringDadosDoComprador(reserva.getContato()));
+//                .setCustomData();
 
         return buyToBillForRQ;
     }

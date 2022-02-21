@@ -26,6 +26,15 @@ public class BillForRQ extends NovaxsTemplateforModels {
     @JsonProperty("bill")
     String bill;
 
+    public BillForRQ() {
+    }
+
+    public BillForRQ(CredenciaisNovaxsRQ credenciaisNovaXS) {
+        this.setLogin(credenciaisNovaXS.getLogin());
+        this.setPassword(credenciaisNovaXS.getPassword());
+        this.setToken(credenciaisNovaXS.getToken());
+    }
+
     public String getToken() {
         return token;
     }

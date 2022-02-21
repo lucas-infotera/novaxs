@@ -46,14 +46,15 @@ public class RESTClient {
 
         try {
             LogWS.convertRequest(integrador, log, objectMapper, request);
-            if (httpMethod.equals(HttpMethod.GET) && integrador.getDsMetodo().equals("voucherRQ")) {
+            if (httpMethod.equals(HttpMethod.GET) && integrador.getDsAction().equals("voucherRQ")) {
                 ResponseEntity<byte[]> voucherNovaXSResponse = null;
                 auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
                 entity = new HttpEntity(montaHeaderGET_PDF());
                 voucherNovaXSResponse = restTemplate.exchange(auxEndpoint, httpMethod, entity, byte[].class);
 
                 VoucherRS voucherRS = new VoucherRS()
-                        .setVoucher(voucherNovaXSResponse.getBody());
+                        .setVoucher(voucherNovaXSResponse.getBody())
+                        .setEndpointVoucher(auxEndpoint);
 
                 responseEntity = new ResponseEntity<String>(voucherRS.toString(), HttpStatus.OK);
             } else {

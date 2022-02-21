@@ -20,11 +20,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -127,6 +124,7 @@ public class UtilsWS {
 
 //            tarifa.setTarifaNomeList(UtilsWS.montaTarifaNome(integrador, m.getAmountsFrom(), ac.getCurrency()));
 
+            tarifa.setTarifaNomeList(montaTarifaNomeList(productsByDateRS));
             return tarifa;
 
         } catch (Exception ex) {
@@ -134,9 +132,18 @@ public class UtilsWS {
         }
     }
 
+    private static List<WSTarifaNome> montaTarifaNomeList(GetProductsByDateRS productsByDateRS) {
+        List<WSTarifaNome> wsTarifaNomes = new ArrayList<>();
+        WSTarifaNome tarifaNome = new WSTarifaNome();
+        tarifaNome.setPaxTipo(WSPaxTipoEnum.CHD);
+        tarifaNome.setTarifa(new WSTarifa(productsByDateRS.getCurrency(), Double.parseDouble(productsByDateRS.getMinAmount()), null));
+        wsTarifaNomes.add(tarifaNome);
+        return wsTarifaNomes;
+    }
+
     private static WSIngressoModalidade montaIngressoModalidade(WSTarifa tarifa, Product product) {
         List<WSIngressoUtilizacaoData> utilizacaoDatasList = null;
-        WSIngressoModalidade wsIngressoModalidade = new WSIngressoModalidade(product.getId(), product.getName(), tarifa );
+        WSIngressoModalidade wsIngressoModalidade = new WSIngressoModalidade(product.getId(), product.getName(), tarifa);
         if (product.getDates() != null) {
             if (Utils.isListNothing(product.getDates())) {
                 utilizacaoDatasList = new ArrayList<>();
@@ -144,6 +151,7 @@ public class UtilsWS {
                     WSIngressoUtilizacaoData utilizacaoData = new WSIngressoUtilizacaoData();
                     utilizacaoData.setDtInicio(montaDataInfotravel(s));
                     utilizacaoDatasList.add(utilizacaoData);
+
                 }
             }
         }
@@ -151,8 +159,8 @@ public class UtilsWS {
     }
 
     private static WSIngressoModalidade montaIngressoModalidade(WSTarifa tarifa, Schedule schedule, GetProductsByDateRS productsByDateRS) {
-        WSIngressoModalidade wsIngressoModalidade = new WSIngressoModalidade(schedule.getPath(), productsByDateRS.getName(), tarifa);
-        wsIngressoModalidade.setDsModalidade(schedule.getSchedule());
+        WSIngressoModalidade wsIngressoModalidade = new WSIngressoModalidade(schedule.getPath(), schedule.getSchedule(), tarifa);
+        wsIngressoModalidade.setDsModalidade("Ingresso com agendamento" + schedule.getSchedule());
         return wsIngressoModalidade;
     }
 
@@ -187,8 +195,8 @@ public class UtilsWS {
     private static List<WSIngressoModalidade> montaIngressoModalidade(WSTarifa tarifa, GetProductsByDateRS productsByDateRS) {
         List<WSIngressoModalidade> wsIngressoModalidade = new ArrayList<>();
         if (!Utils.isListNothing(productsByDateRS.getSchedules())) {
-            for (Schedule schdules : productsByDateRS.getSchedules()) {
-                wsIngressoModalidade.add(montaIngressoModalidade(tarifa, schdules, productsByDateRS));
+            for (Schedule schedule : productsByDateRS.getSchedules()) {
+                wsIngressoModalidade.add(montaIngressoModalidade(tarifa, schedule, productsByDateRS));
             }
         }
         return wsIngressoModalidade;
@@ -306,7 +314,6 @@ public class UtilsWS {
 
     public static ProductsArray montaProductsArray(WSReserva reserva) throws ErrorException {
         ProductsArray result = null;
-        GetProductsByDateRS getProductsByDateRS;
         List<Product> products = new ArrayList<>();
 
         if (reserva != null) {
@@ -316,9 +323,11 @@ public class UtilsWS {
                     for (WSReservaServico reservaServico : reserva.getReservaServicoList()) {
                         if (reservaServico.getDsParametro() != null) {
                             try {
-                                getProductsByDateRS = Optional.ofNullable(converterDSParametro(reservaServico.getServico().getDsParametro())).
+                                GetProductsByDateRS getProductsByDateRS = Optional.ofNullable(converterDSParametro(reservaServico.getServico().getDsParametro())).
                                         orElseThrow(() -> new ErrorException("DsParametro com GetProductsByDate esta nulo !"));
                                 Product product = montaProductBuytoBillForRQ(getProductsByDateRS, reservaServico);
+                                products.add(product);
+                                result.setProductsArray(products);
                             } catch (NullPointerException ex) {
                                 throw ex;
                             } catch (ErrorException ex) {
@@ -329,32 +338,42 @@ public class UtilsWS {
                 }
             }
         }
-
-
         return result;
     }
 
     private static Product montaProductBuytoBillForRQ(GetProductsByDateRS productsByDateRS, WSReservaServico reservaServico) throws ErrorException {
+        ArrayList<Child> children;
 
-        Product product = new Product()
-                .setPath(productsByDateRS.getPath())
-                .setAmount(productsByDateRS.getMinAmount())
-                .setDate(montaDataNovaxs(reservaServico.getServico().getDtServico()));
+        Product result = null;
+        try {
+            WSIngresso ingresso = (WSIngresso) reservaServico.getServico();
+            result = new Product()
+                    .setPath(ingresso.getCdServico())
+                    .setAmount(productsByDateRS.getMinAmount())
+                    .setDate(montaDataNovaxs(reservaServico.getServico().getDtServico()));
 
-        if (productsByDateRS.getSchedules() != null) {
-            product.setSchedule(productsByDateRS.getSchedules().get(0).getSchedule());
+            if (ingresso.getIngressoModalidadeList() != null) {
+                if (ingresso.getIngressoModalidadeList().size() > 1) {
+                    Child child = new Child();
+                    children = new ArrayList<>();
+                    for (WSIngressoModalidade modalidade : ingresso.getIngressoModalidadeList()) {
+                        result.setSchedule(modalidade.getNmModalidade());
+                        if (productsByDateRS.getName().contains("Combo") && productsByDateRS.getName().contains("dias") && productsByDateRS.getName().contains("Acesso")) {
+                            child.setDate(modalidade.getDtUtilizacaoSel());
+                            child.setPath(modalidade.getCdModalidade());
+                            children.add(child);
+                            result.setChildren(children);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ErrorException("Erro a o montar Product para fazer a requisição a NovaXS");
         }
-
-/*
-        if () {
-            product.setChildren()
-
-            Child child = new Child();
-            child.set
-        }
-*/
-        return null;
+        return Optional.ofNullable(result).
+                orElseThrow(() -> new ErrorException("Erro a o montar Product, product esta null"));
     }
+
 
     public static String montaDataNovaxs(Date date) {
         return Utils.formatData(date, "dd/MM/yyyy");
@@ -369,6 +388,12 @@ public class UtilsWS {
         }
 
         return result;
+    }
+
+    public static CustomData montaCustomData(WSContato contato) {
+        return new CustomData()
+                .setIdExterno(contato.getNome())
+                .setObs(contato.getDocumento().getNrDocumento());
     }
 
     @Autowired

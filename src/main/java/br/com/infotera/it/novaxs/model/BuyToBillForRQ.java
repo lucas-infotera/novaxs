@@ -82,6 +82,11 @@ public class BuyToBillForRQ {
         return this;
     }
 
+    public BuyToBillForRQ setCustomData(CustomData customData) {
+        this.customData = customData.toString();
+        return this;
+    }
+
     public String getPersonAsString() {
         return personAsString;
     }

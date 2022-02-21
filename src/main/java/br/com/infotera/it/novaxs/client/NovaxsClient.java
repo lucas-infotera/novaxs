@@ -39,8 +39,8 @@ public class NovaxsClient {
             requestBody.add("method", getProductsByDateRQ.getMethod());
             requestBody.add("date", getProductsByDateRQ.getDate());
 
-            result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class)).orElseThrow(()-> new ErrorException("Nenhum Ingresso encontrado")));
-            
+            result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class)).orElseThrow(() -> new ErrorException("Nenhum Ingresso encontrado")));
+
 
             if (UtilsWS.variavelTemporaria != null) {
                 result.forEach(getProductsByDateRS -> {
@@ -81,7 +81,7 @@ public class NovaxsClient {
             requestBody.add("customData", buyToBillForRQ.getCustomData());
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "buyToBillFor", BuyToBillForRS.class);
-            
+
 
         } catch (ErrorException ex) {
             throw ex;
@@ -107,7 +107,7 @@ public class NovaxsClient {
 
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "billFor", BillForRS.class);
-            
+
 
         } catch (ErrorException ex) {
             throw ex;
@@ -133,7 +133,7 @@ public class NovaxsClient {
 
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "createBillPaymentLink", CreateBillPaymentLinkRS.class);
-            
+
 
         } catch (ErrorException ex) {
             throw ex;
@@ -159,7 +159,7 @@ public class NovaxsClient {
 
 
             result = Arrays.asList(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getAccessList", GetAccessListRS[].class));
-            
+
 
         } catch (ErrorException ex) {
             throw ex;
@@ -186,7 +186,7 @@ public class NovaxsClient {
 
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "setAccessList", SetAccessListRS.class);
-            
+
 
         } catch (ErrorException ex) {
             throw ex;
@@ -203,15 +203,15 @@ public class NovaxsClient {
         integrador.setDsAction("voucherRQ");
         try {
 
+            String endpointComplemento = "voucher?" +
+                    "login=" + voucherRQ.getLogin() +
+                    "&password=" + voucherRQ.getPassword() +
+                    "&voucher=" + voucherRQ.getVoucher() +
+                    "&token=" + voucherRQ.getToken();
+//                            "&method=" + voucherRQ.getMethod()
             result = restClient.sendReceive(integrador, voucherRQ, HttpMethod.GET,
-                    "voucher?" +
-                            "login=" + voucherRQ.getLogin() +
-                            "&password=" + voucherRQ.getPassword() +
-                            "&voucher=" + voucherRQ.getVoucher() +
-                            "&token=" + voucherRQ.getToken() +
-                            "&method=" + voucherRQ.getMethod()
-                    , VoucherRS.class);
-            
+                    endpointComplemento, VoucherRS.class);
+
 
         } catch (ErrorException ex) {
             throw ex;
@@ -237,7 +237,7 @@ public class NovaxsClient {
             requestBody.add("bill", cancelRQ.getBill());
 
             result = restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "cancelBill", CancelBillRS.class);
-            
+
 
         } catch (ErrorException ex) {
             throw ex;

@@ -236,16 +236,16 @@ public class TestesDeConvercao {
 
     @Test
     public void testeConverterListAccessPerson() {
-        ArrayListAccessPerson[] accessPersonArray = null;
+        GetAccessListRS[] accessPersonArray = null;
 
         try {
-            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ArrayListAccessPerson[].class);
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), GetAccessListRS[].class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        for (ArrayListAccessPerson person : accessPersonArray) {
+        for (GetAccessListRS person : accessPersonArray) {
             System.out.println("testeConverterListAccessPerson ----> \n" + person.toString());
             assertNotNull(person.toString());
         }

@@ -22,6 +22,15 @@ public class CancelBillRQ {
     @JsonProperty("bill")
     String bill;
 
+    public CancelBillRQ() {
+    }
+
+    public CancelBillRQ(CredenciaisNovaxsRQ credenciaisNovaXS) {
+        this.setLogin(credenciaisNovaXS.getLogin());
+        this.setPassword(credenciaisNovaXS.getPassword());
+        this.setToken(credenciaisNovaXS.getToken());
+    }
+
     public String getToken() {
         return token;
     }

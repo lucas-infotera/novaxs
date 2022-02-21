@@ -108,7 +108,7 @@ public class TestesChamandoWSNovaxs {
 
         teste.setLogin("docuser")
                 .setPassword("abc1234")
-                .setCustomData(null)
+//                .setCustomData(null)
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
                 .setProductsArray(productsArray)
                 .setPersonAsString(person);
@@ -207,10 +207,10 @@ public class TestesChamandoWSNovaxs {
 
         SetAccessListRQ teste = new SetAccessListRQ();
 
-        ArrayListAccessPerson[] accessPersonArray = null;
+        GetAccessListRS[] accessPersonArray = null;
 
         try {
-            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ArrayListAccessPerson[].class);
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), GetAccessListRS[].class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -249,10 +249,10 @@ public class TestesChamandoWSNovaxs {
         WSIntegrador integrador = gson.fromJson(JsonsTeste.montaIntegrador(), WSIntegrador.class);
         SetAccessListRQ teste = new SetAccessListRQ();
 
-        ArrayListAccessPerson[] accessPersonArray = null;
+        GetAccessListRS[] accessPersonArray = null;
 
         try {
-            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), ArrayListAccessPerson[].class);
+            accessPersonArray = objectMapper.readValue(JsonsTeste.jsonListAcessPerson(), GetAccessListRS[].class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();

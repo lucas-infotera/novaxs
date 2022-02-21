@@ -12,11 +12,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class VoucherRS {
 
+    public String endpointVoucher;
 
     public byte[] voucher;
-
     @JsonProperty("erro")
     String erro;
+
+    public String getEndpointVoucher() {
+        return endpointVoucher;
+    }
+
+    public VoucherRS setEndpointVoucher(String endpointVoucher) {
+        this.endpointVoucher = endpointVoucher;
+        return this;
+    }
 
     public String getErro() {
         return erro;

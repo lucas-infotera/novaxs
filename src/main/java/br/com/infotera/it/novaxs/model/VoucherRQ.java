@@ -16,8 +16,8 @@ public class VoucherRQ {
     String password;
     @JsonProperty("voucher")
     String voucher;
-    @JsonProperty("method")
-    String method = "receiptAsByte";
+//    @JsonProperty("method")
+//    String method = "receiptAsByte";
 
     public VoucherRQ() {
     }
@@ -55,9 +55,9 @@ public class VoucherRQ {
         return this;
     }
 
-    public String getMethod() {
-        return method;
-    }
+//    public String getMethod() {
+//        return method;
+//    }
 
     public String getPassword() {
         return password;

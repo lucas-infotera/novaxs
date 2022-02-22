@@ -6,6 +6,7 @@ import br.com.infotera.common.WSReserva;
 import br.com.infotera.common.WSReservaNome;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
+import br.com.infotera.common.enumerator.WSReservaStatusEnum;
 import br.com.infotera.common.reserva.rqrs.WSReservaRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservaRS;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
@@ -31,8 +32,9 @@ public class ConfirmarWS {
     public WSReservaRS confirmar(WSReservaRQ reservaRQ) throws ErrorException {
         WSIntegrador integrador = reservaRQ.getIntegrador();
 
+        WSReserva reserva = reservaRQ.getReserva();
         try {
-            BuyToBillForRQ buyToBillForRQ = montaRequestBuytoBillForRQ(integrador, reservaRQ.getReserva());
+            BuyToBillForRQ buyToBillForRQ = montaRequestBuytoBillForRQ(integrador, reserva);
 
             BuyToBillForRS buyToBillForRS = novaxsClient.buyToBillForRQ(integrador, buyToBillForRQ);
 
@@ -52,7 +54,7 @@ public class ConfirmarWS {
                 throw new ErrorException("Erro na obtenção da Lista de acesso para preenchimento");
             }
 
-            SetAccessListRQ setAccessListRQ = montaRequestSetAccessListRQ(integrador, buyToBillForRS, getAccessListRS, reservaRQ.getReserva().getReservaServicoList().get(0).getServico().getReservaNomeList());
+            SetAccessListRQ setAccessListRQ = montaRequestSetAccessListRQ(integrador, buyToBillForRS, getAccessListRS, reserva.getReservaServicoList().get(0).getServico().getReservaNomeList());
             /* Retorno vazio não ha tratamento a fazer no metodo setAccessListRQ */
             novaxsClient.setAccessListRQ(integrador, setAccessListRQ);
 
@@ -60,6 +62,11 @@ public class ConfirmarWS {
 
             VoucherRS voucherRS = novaxsClient.voucherRQ(integrador, voucherRQ);
 
+            reserva.getReservaServicoList().forEach((reservaServico) -> {
+                reservaServico.getServico().setDsURL(voucherRS.getEndpointVoucher());
+            });
+
+            reserva.setReservaStatus(WSReservaStatusEnum.CONFIRMADO);
 
         } catch (ErrorException ex) {
             integrador.setDsMensagem(ex.getMessage());
@@ -75,8 +82,7 @@ public class ConfirmarWS {
         }
 
 
-//        return new WSReservaRS(reservaRS.getReserva(), integrador, WSIntegracaoStatusEnum.OK);
-        return null;
+        return new WSReservaRS(reserva, integrador, WSIntegracaoStatusEnum.OK);
     }
 
     private VoucherRQ montaRequestVoucherRQ(WSIntegrador integrador, BillForRS billForRS) throws ErrorException {

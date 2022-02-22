@@ -7,6 +7,7 @@ import br.com.infotera.common.servico.WSDetalheIngresso;
 import br.com.infotera.common.servico.WSIngresso;
 import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDetalheIngressoRS;
+import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,8 +49,9 @@ public class DetalheIngressoWS {
         GetProductsByDateRS products;
 
         products = UtilsWS.converterDSParametro(dsParametro);
-
-        result.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(integrador, reservaNomeList, products));
+        WSDisponibilidadeIngressoRQ wsDisponibilidadeIngressoRQ = new WSDisponibilidadeIngressoRQ();
+        wsDisponibilidadeIngressoRQ.setReservaNomeList(reservaNomeList);
+        result.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(integrador, wsDisponibilidadeIngressoRQ, products));
         result.setIngresso(UtilsWS.montaIngresso(integrador, reservaNomeList, products));
 
         return result;

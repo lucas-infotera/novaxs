@@ -90,7 +90,7 @@ public class DisponibilidadeWS {
     private WSIngressoPesquisa montaIngressoPesquisa(int sqPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
         WSIngressoPesquisa result = new WSIngressoPesquisa(sqPesquisa,
                 montaIngresso(dispRQ.getIntegrador(), dispRQ.getReservaNomeList(), productsByDateRS),
-                montaIngressoModalidadeList(dispRQ.getIntegrador(), dispRQ.getReservaNomeList(), productsByDateRS));
+                montaIngressoModalidadeList(dispRQ.getIntegrador(), dispRQ, productsByDateRS));
         return result;
     }
 

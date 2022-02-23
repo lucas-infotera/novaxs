@@ -50,7 +50,7 @@ public class DisponibilidadeController {
         }
 
         String variavelTemporaria = UtilsWS.variavelTemporaria;
-        WSDisponibilidadeIngressoRS referencia = gson.fromJson(testeStringModelo(), WSDisponibilidadeIngressoRS.class);
+        WSDisponibilidadeIngressoRS referencia = gson.fromJson(teste3String(), WSDisponibilidadeIngressoRS.class);
 
         String s = gson.toJson(result);
         System.out.println(s);
@@ -447,6 +447,795 @@ public class DisponibilidadeController {
                 "        \"stErro\": false,\n" +
                 "        \"stGerarLog\": true,\n" +
                 "        \"dsMetodo\": \"ActivitySearchRequest\",\n" +
+                "        \"transStMarkupTaxa\": false,\n" +
+                "        \"transStComissaoTaxa\": false,\n" +
+                "        \"idiomaEnum\": \"PT_BR\"\n" +
+                "    }\n" +
+                "}";
+    }
+
+    public String teste3String() {
+        return "{\n" +
+                "    \"ingressoPesquisaList\": [\n" +
+                "        {\n" +
+                "            \"sqPesquisa\": 1,\n" +
+                "            \"servicoTipo\": \"INGRESSO\",\n" +
+                "            \"ingresso\": {\n" +
+                "                \"servicoTipo\": \"INGRESSO\",\n" +
+                "                \"cdServico\": \"products/47841\",\n" +
+                "                \"nmServico\": \"Ingresso Individual com Formulário\",\n" +
+                "                \"dsServico\": \"VariavelDeTeste\",\n" +
+                "                \"reservaNomeList\": [\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"mediaList\": [\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"stExigeNome\": false,\n" +
+                "                \"stUnico\": false,\n" +
+                "                \"stDisponivel\": true,\n" +
+                "                \"dsParametro\": \"{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"2147483647.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/47841\\\",\\\"form\\\":[{\\\"name\\\":\\\"Nome do Cliente\\\",\\\"property\\\":\\\"client_name\\\",\\\"type\\\":\\\"text\\\",\\\"group\\\":\\\"\\\",\\\"order\\\":0,\\\"per_entry\\\":true,\\\"product\\\":\\\"Ingresso Individual com Formulário\\\",\\\"product_path\\\":\\\"products/47841\\\",\\\"required\\\":true},{\\\"name\\\":\\\"Data de Nascimento\\\",\\\"property\\\":\\\"client_birthday\\\",\\\"type\\\":\\\"date\\\",\\\"group\\\":\\\"\\\",\\\"order\\\":2,\\\"per_entry\\\":true,\\\"product\\\":\\\"Ingresso Individual com Formulário\\\",\\\"product_path\\\":\\\"products/47841\\\",\\\"required\\\":true},{\\\"name\\\":\\\"Documento do Cliente\\\",\\\"property\\\":\\\"client_document\\\",\\\"type\\\":\\\"text\\\",\\\"group\\\":\\\"\\\",\\\"order\\\":1,\\\"per_entry\\\":true,\\\"product\\\":\\\"Ingresso Individual com Formulário\\\",\\\"product_path\\\":\\\"products/47841\\\",\\\"required\\\":true},{\\\"name\\\":\\\"Tipo\\\",\\\"property\\\":\\\"type\\\",\\\"type\\\":\\\"list\\\",\\\"group\\\":\\\"\\\",\\\"order\\\":3,\\\"per_entry\\\":false,\\\"product\\\":\\\"Ingresso Individual com Formulário\\\",\\\"product_path\\\":\\\"products/47841\\\",\\\"required\\\":false,\\\"values\\\":[{\\\"show\\\":\\\"Grupo\\\",\\\"value\\\":\\\"Grupo\\\"},{\\\"show\\\":\\\"Individual\\\",\\\"value\\\":\\\"Individual\\\"}]}],\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"custo\\\":13950,\\\"schedules\\\":[],\\\"name\\\":\\\"Ingresso Individual com Formulário\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"47841\\\",\\\"shortName\\\":\\\"Ingresso Individual com Formulário\\\",\\\"value\\\":\\\"13950\\\",\\\"token\\\":\\\"NNefS+VpzJ6dPVxVVMCkE8gtkHizQj1qzvHs1DEGpO9o3E/FllCldts+MNHipysWIB8pUl50/Bs6NJZvs5Nqf6aBhunFggi98sSfQv7z9F3klTBpaG/70S1JyaMofo6aP0IUNsAciENIywFIue7vUtmji1sAj+EBLSgXLYQiLu0L66OC/ysRvHlt6nCYEkeb\\\",\\\"faixaetaria\\\":\\\"ADT\\\",\\\"travelertype\\\":\\\"ADT\\\"}\",\n" +
+                "                \"stSelecionado\": false,\n" +
+                "                \"stOnRequest\": false,\n" +
+                "                \"stTransfer\": false\n" +
+                "            },\n" +
+                "            \"ingressoModalidadeList\": [\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"47841\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual com Formulário\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 139.5,\n" +
+                "                        \"vlPessoaNeto\": 69.75,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 69.75,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 139.5\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"stSelecionado\": false\n" +
+                "        },\n" +
+                "        {   \n" +
+                "            \"sqPesquisa\": 2,\n" +
+                "            \"servicoTipo\": \"INGRESSO\",\n" +
+                "            \"ingresso\": {\n" +
+                "                \"servicoTipo\": \"INGRESSO\",\n" +
+                "                \"cdServico\": \"products/46700\",\n" +
+                "                \"nmServico\": \"Ingresso Individual\",\n" +
+                "                \"dsServico\": \"VariavelDeTeste\",\n" +
+                "                \"reservaNomeList\": [\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"mediaList\": [\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"stExigeNome\": false,\n" +
+                "                \"stUnico\": false,\n" +
+                "                \"stDisponivel\": true,\n" +
+                "                \"dsParametro\": \"{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46700\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"custo\\\":9000,\\\"schedules\\\":[],\\\"name\\\":\\\"Ingresso Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46700\\\",\\\"shortName\\\":\\\"Ingresso Individual\\\",\\\"value\\\":\\\"9000\\\",\\\"token\\\":\\\"NNefS+VpzJ6dPVxVVMCkE8gtkHizQj1qzvHs1DEGpO9o3E/FllCldts+MNHipysWIB8pUl50/Bs6NJZvs5Nqf3gbEMdyBrsdiNnP0tarQyzklTBpaG/70S1JyaMofo6aP0IUNsAciENIywFIue7vUtmji1sAj+EBLSgXLYQiLu2k9yvv8v6MlMvgb2OTz2+5\\\",\\\"faixaetaria\\\":\\\"ADT\\\",\\\"travelertype\\\":\\\"ADT\\\"}\",\n" +
+                "                \"stSelecionado\": false,\n" +
+                "                \"stOnRequest\": false,\n" +
+                "                \"stTransfer\": false\n" +
+                "            },\n" +
+                "            \"ingressoModalidadeList\": [\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"46700\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 90.0,\n" +
+                "                        \"vlPessoaNeto\": 45.0,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 45.0,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 90.0\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"stSelecionado\": false\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"sqPesquisa\": 3,\n" +
+                "            \"servicoTipo\": \"INGRESSO\",\n" +
+                "            \"ingresso\": {\n" +
+                "                \"servicoTipo\": \"INGRESSO\",\n" +
+                "                \"cdServico\": \"products/46701\",\n" +
+                "                \"nmServico\": \"Ingresso com Horário\",\n" +
+                "                \"dsServico\": \"VariavelDeTeste\",\n" +
+                "                \"reservaNomeList\": [\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"mediaList\": [\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"stExigeNome\": false,\n" +
+                "                \"stUnico\": false,\n" +
+                "                \"stDisponivel\": true,\n" +
+                "                \"dsParametro\": \"{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"2147483647.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46701\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"custo\\\":8091,\\\"schedules\\\":[{\\\"path\\\":\\\"products/46701\\\",\\\"schedule\\\":\\\"11:00\\\",\\\"available\\\":\\\"2147483647.00\\\"},{\\\"path\\\":\\\"products/46701\\\",\\\"schedule\\\":\\\"13:00\\\",\\\"available\\\":\\\"2147483647.00\\\"},{\\\"path\\\":\\\"products/46701\\\",\\\"schedule\\\":\\\"15:00\\\",\\\"available\\\":\\\"2147483647.00\\\"}],\\\"name\\\":\\\"Ingresso com Horário\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46701\\\",\\\"shortName\\\":\\\"Ingresso com Horário\\\",\\\"value\\\":\\\"8091\\\",\\\"token\\\":\\\"NNefS+VpzJ6dPVxVVMCkE8gtkHizQj1qzvHs1DEGpO9o3E/FllCldts+MNHipysWIB8pUl50/Bs6NJZvs5Nqf2IGAviRhbdHsuVdt10w8i7klTBpaG/70S1JyaMofo6aP0IUNsAciENIywFIue7vUtmji1sAj+EBLSgXLYQiLu2NVAd1fIfkdbumOnoPCkOm\\\",\\\"faixaetaria\\\":\\\"ADT\\\",\\\"schedule_type\\\":\\\"code\\\",\\\"needExtraData\\\":\\\"hora\\\",\\\"travelertype\\\":\\\"ADT\\\"}\",\n" +
+                "                \"stSelecionado\": false,\n" +
+                "                \"stOnRequest\": false,\n" +
+                "                \"stTransfer\": false\n" +
+                "            },\n" +
+                "            \"ingressoModalidadeList\": [\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"products/46701\",\n" +
+                "                    \"nmModalidade\": \"11:00\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 80.91,\n" +
+                "                        \"vlPessoaNeto\": 40.455,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 40.455,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 80.91\n" +
+                "                        }\n" +
+                "                    ],\n" +
+                "                    \"dsModalidade\": \"Ingresso com agendamento11:00\"\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"products/46701\",\n" +
+                "                    \"nmModalidade\": \"13:00\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 80.91,\n" +
+                "                        \"vlPessoaNeto\": 40.455,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 40.455,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 80.91\n" +
+                "                        }\n" +
+                "                    ],\n" +
+                "                    \"dsModalidade\": \"Ingresso com agendamento13:00\"\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"products/46701\",\n" +
+                "                    \"nmModalidade\": \"15:00\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 80.91,\n" +
+                "                        \"vlPessoaNeto\": 40.455,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 40.455,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 80.91\n" +
+                "                        }\n" +
+                "                    ],\n" +
+                "                    \"dsModalidade\": \"Ingresso com agendamento15:00\"\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"stSelecionado\": false\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"sqPesquisa\": 4,\n" +
+                "            \"servicoTipo\": \"INGRESSO\",\n" +
+                "            \"ingresso\": {\n" +
+                "                \"servicoTipo\": \"INGRESSO\",\n" +
+                "                \"cdServico\": \"products/47245\",\n" +
+                "                \"nmServico\": \"Ingresso CHD Individual\",\n" +
+                "                \"dsServico\": \"VariavelDeTeste\",\n" +
+                "                \"reservaNomeList\": [\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"mediaList\": [\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"stExigeNome\": false,\n" +
+                "                \"stUnico\": false,\n" +
+                "                \"stDisponivel\": true,\n" +
+                "                \"dsParametro\": \"{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"2147483647.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/47245\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"custo\\\":5400,\\\"schedules\\\":[],\\\"name\\\":\\\"Ingresso CHD Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"47245\\\",\\\"shortName\\\":\\\"Ingresso CHD Individual\\\",\\\"value\\\":\\\"5400\\\",\\\"token\\\":\\\"NNefS+VpzJ6dPVxVVMCkE8gtkHizQj1qzvHs1DEGpO9o3E/FllCldts+MNHipysWIB8pUl50/Bs6NJZvs5Nqf/ddvjpNsatLjsGep8IV2TnklTBpaG/70S1JyaMofo6aP0IUNsAciENIywFIue7vUtmji1sAj+EBLSgXLYQiLu0ep/Z184YETscKZ5VOH0Hk\\\",\\\"faixaetaria\\\":\\\"CHD\\\",\\\"travelertype\\\":\\\"CHD\\\"}\",\n" +
+                "                \"stSelecionado\": false,\n" +
+                "                \"stOnRequest\": false,\n" +
+                "                \"stTransfer\": false\n" +
+                "            },\n" +
+                "            \"ingressoModalidadeList\": [\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"47245\",\n" +
+                "                    \"nmModalidade\": \"Ingresso CHD Individual\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 54.0,\n" +
+                "                        \"vlPessoaNeto\": 27.0,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 27.0,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 54.0\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"stSelecionado\": false\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"sqPesquisa\": 5,\n" +
+                "            \"servicoTipo\": \"INGRESSO\",\n" +
+                "            \"ingresso\": {\n" +
+                "                \"servicoTipo\": \"INGRESSO\",\n" +
+                "                \"cdServico\": \"productCombos/2111\",\n" +
+                "                \"nmServico\": \"Combo 3 Ingressos\",\n" +
+                "                \"dsServico\": \"VariavelDeTeste\",\n" +
+                "                \"reservaNomeList\": [\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"mediaList\": [\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"stExigeNome\": false,\n" +
+                "                \"stUnico\": false,\n" +
+                "                \"stDisponivel\": true,\n" +
+                "                \"dsParametro\": \"{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Combo\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"productCombos/2111\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"custo\\\":24300,\\\"schedules\\\":[],\\\"name\\\":\\\"Combo 3 Ingressos\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"2111\\\",\\\"value\\\":\\\"24300\\\",\\\"token\\\":\\\"NNefS+VpzJ6dPVxVVMCkE8gtkHizQj1qzvHs1DEGpO9o3E/FllCldts+MNHipysWIB8pUl50/Bs6NJZvs5Nqf8l4J1O+SNNXPGLQcjtmJmlf1AZzq+UBrTQQxOdwL7lNE9Qa3CXWywEbL837/gyW1EZ2xLqPMowEunmbLxXFZa10GkEIZqhfXG+vUDyRBFi2LF9WGlQE3k3+gurZxqvNAw\\u003d\\u003d\\\",\\\"faixaetaria\\\":\\\"UNICO\\\",\\\"products\\\":[{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"select_date\\\":false,\\\"amount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46700\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"schedules\\\":[],\\\"faixaetaria\\\":\\\"ADT\\\",\\\"name\\\":\\\"Ingresso Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46700\\\",\\\"shortName\\\":\\\"Ingresso Individual\\\",\\\"travelertype\\\":\\\"ADT\\\"},{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"select_date\\\":false,\\\"amount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46700\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"schedules\\\":[],\\\"faixaetaria\\\":\\\"ADT\\\",\\\"name\\\":\\\"Ingresso Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46700\\\",\\\"shortName\\\":\\\"Ingresso Individual\\\",\\\"travelertype\\\":\\\"ADT\\\"},{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"select_date\\\":false,\\\"amount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46700\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"schedules\\\":[],\\\"faixaetaria\\\":\\\"ADT\\\",\\\"name\\\":\\\"Ingresso Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46700\\\",\\\"shortName\\\":\\\"Ingresso Individual\\\",\\\"travelertype\\\":\\\"ADT\\\"}],\\\"travelertype\\\":\\\"UNICO\\\"}\",\n" +
+                "                \"stSelecionado\": false,\n" +
+                "                \"stOnRequest\": false,\n" +
+                "                \"stTransfer\": false\n" +
+                "            },\n" +
+                "            \"ingressoModalidadeList\": [\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"46700\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual 1\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 243.0,\n" +
+                "                        \"vlPessoaNeto\": 121.5,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 121.5,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 243.0\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"46700\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual 2\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 243.0,\n" +
+                "                        \"vlPessoaNeto\": 121.5,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 121.5,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 243.0\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"46700\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual 3\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 243.0,\n" +
+                "                        \"vlPessoaNeto\": 121.5,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 121.5,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"vlTotal\": 243.0\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"stSelecionado\": false\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"sqPesquisa\": 6,\n" +
+                "            \"servicoTipo\": \"INGRESSO\",\n" +
+                "            \"ingresso\": {\n" +
+                "                \"servicoTipo\": \"INGRESSO\",\n" +
+                "                \"cdServico\": \"productCombos/2112\",\n" +
+                "                \"nmServico\": \"Combo 3 Dias de Acesso\",\n" +
+                "                \"dsServico\": \"VariavelDeTeste\",\n" +
+                "                \"reservaNomeList\": [\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"documento\": {\n" +
+                "                            \"stObrigatorio\": false\n" +
+                "                        },\n" +
+                "                        \"paxTipo\": \"ADT\",\n" +
+                "                        \"qtIdade\": 30,\n" +
+                "                        \"stPrincipal\": false,\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stAplicado\": false\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"mediaList\": [\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"mediaCategoria\": \"SERVICO\",\n" +
+                "                        \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                    }\n" +
+                "                ],\n" +
+                "                \"stExigeNome\": false,\n" +
+                "                \"stUnico\": false,\n" +
+                "                \"stDisponivel\": true,\n" +
+                "                \"dsParametro\": \"{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Combo\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"productCombos/2112\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"custo\\\":14647,\\\"schedules\\\":[],\\\"name\\\":\\\"Combo 3 Dias de Acesso\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"2112\\\",\\\"value\\\":\\\"14648\\\",\\\"token\\\":\\\"NNefS+VpzJ6dPVxVVMCkE8gtkHizQj1qzvHs1DEGpO9o3E/FllCldts+MNHipysWIB8pUl50/Bs6NJZvs5Nqfydx5TXW9G42IIYCQL8Qeupf1AZzq+UBrTQQxOdwL7lNE9Qa3CXWywEbL837/gyW1EZ2xLqPMowEunmbLxXFZa0NV/jD2K//44iusssfvmgnYVWbawXsMNh+yrVpYUukvw\\u003d\\u003d\\\",\\\"faixaetaria\\\":\\\"UNICO\\\",\\\"products\\\":[{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"select_date\\\":true,\\\"amount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46700\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"schedules\\\":[],\\\"faixaetaria\\\":\\\"ADT\\\",\\\"name\\\":\\\"Ingresso Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46700\\\",\\\"shortName\\\":\\\"Ingresso Individual\\\",\\\"dates\\\":[\\\"02/07/2022\\\",\\\"03/07/2022\\\",\\\"04/07/2022\\\",\\\"05/07/2022\\\",\\\"06/07/2022\\\",\\\"07/07/2022\\\",\\\"08/07/2022\\\",\\\"09/07/2022\\\",\\\"10/07/2022\\\",\\\"11/07/2022\\\",\\\"12/07/2022\\\",\\\"13/07/2022\\\",\\\"14/07/2022\\\",\\\"15/07/2022\\\",\\\"16/07/2022\\\"],\\\"travelertype\\\":\\\"ADT\\\"},{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"select_date\\\":true,\\\"amount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46700\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"schedules\\\":[],\\\"faixaetaria\\\":\\\"ADT\\\",\\\"name\\\":\\\"Ingresso Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46700\\\",\\\"shortName\\\":\\\"Ingresso Individual\\\",\\\"dates\\\":[\\\"02/07/2022\\\",\\\"03/07/2022\\\",\\\"04/07/2022\\\",\\\"05/07/2022\\\",\\\"06/07/2022\\\",\\\"07/07/2022\\\",\\\"08/07/2022\\\",\\\"09/07/2022\\\",\\\"10/07/2022\\\",\\\"11/07/2022\\\",\\\"12/07/2022\\\",\\\"13/07/2022\\\",\\\"14/07/2022\\\",\\\"15/07/2022\\\",\\\"16/07/2022\\\"],\\\"travelertype\\\":\\\"ADT\\\"},{\\\"supplierName\\\":\\\"NXS - Operadora Demo\\\",\\\"image\\\":\\\"https://www.ifrr.edu.br/midia/teste/image\\\",\\\"minAmount\\\":\\\"1\\\",\\\"select_date\\\":true,\\\"amount\\\":\\\"1\\\",\\\"htmlMemo\\\":\\\"\\\",\\\"available\\\":\\\"100.00\\\",\\\"memo\\\":\\\"\\\",\\\"supplierPath\\\":\\\"agencies/954\\\",\\\"cancellationPolicies\\\":\\\"Cancelamento gratuito até 24 horas antes da data de uso.\\\\nCancelamento no dia do agendamento multa de 50%.\\\\nApós a data de agendamento multa de 100%.\\\",\\\"type\\\":\\\"Produto\\\",\\\"additionalLanguagesInfo\\\":[],\\\"path\\\":\\\"products/46700\\\",\\\"definePrecoNaVenda\\\":\\\"false\\\",\\\"schedules\\\":[],\\\"faixaetaria\\\":\\\"ADT\\\",\\\"name\\\":\\\"Ingresso Individual\\\",\\\"currency\\\":\\\"BRL\\\",\\\"id\\\":\\\"46700\\\",\\\"shortName\\\":\\\"Ingresso Individual\\\",\\\"dates\\\":[\\\"02/07/2022\\\",\\\"03/07/2022\\\",\\\"04/07/2022\\\",\\\"05/07/2022\\\",\\\"06/07/2022\\\",\\\"07/07/2022\\\",\\\"08/07/2022\\\",\\\"09/07/2022\\\",\\\"10/07/2022\\\",\\\"11/07/2022\\\",\\\"12/07/2022\\\",\\\"13/07/2022\\\",\\\"14/07/2022\\\",\\\"15/07/2022\\\",\\\"16/07/2022\\\"],\\\"travelertype\\\":\\\"ADT\\\"}],\\\"umaPessoaPorCombo\\\":true,\\\"travelertype\\\":\\\"UNICO\\\"}\",\n" +
+                "                \"stSelecionado\": false,\n" +
+                "                \"stOnRequest\": false,\n" +
+                "                \"stTransfer\": false\n" +
+                "            },\n" +
+                "            \"ingressoModalidadeList\": [\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"46700\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual 1\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 146.48,\n" +
+                "                        \"vlPessoaNeto\": 73.24,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 73.24,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\"\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-03T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-03T00:00:00Z\"\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"46700\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual 2\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 146.48,\n" +
+                "                        \"vlPessoaNeto\": 73.24,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 73.24,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\"\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-03T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-03T00:00:00Z\"\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"cdModalidade\": \"46700\",\n" +
+                "                    \"nmModalidade\": \"Ingresso Individual 3\",\n" +
+                "                    \"tarifa\": {\n" +
+                "                        \"sgMoedaNeto\": \"BRL\",\n" +
+                "                        \"vlNeto\": 146.48,\n" +
+                "                        \"vlPessoaNeto\": 73.24,\n" +
+                "                        \"vlComissao\": 0.0,\n" +
+                "                        \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                        \"tarifaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"tarifa\": {\n" +
+                "                                    \"sgMoedaNeto\": \"BRL\",\n" +
+                "                                    \"vlNeto\": 73.24,\n" +
+                "                                    \"vlComissao\": 0.0,\n" +
+                "                                    \"stTarifaPacote\": false,\n" +
+                "                                    \"transStMarkupTaxa\": false,\n" +
+                "                                    \"transStComissaoTaxa\": false\n" +
+                "                                },\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stTarifaPacote\": false,\n" +
+                "                        \"transStMarkupTaxa\": false,\n" +
+                "                        \"transStComissaoTaxa\": false\n" +
+                "                    },\n" +
+                "                    \"utilizacaoDatasList\": [\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-02T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-02T00:00:00Z\"\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"dtInicio\": \"2022-07-03T00:00:00Z\",\n" +
+                "                            \"dtFim\": \"2022-07-03T00:00:00Z\"\n" +
+                "                        }\n" +
+                "                    ]\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"stSelecionado\": false\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"integrador\": {\n" +
+                "        \"integradorEnum\": \"NOVAXS\",\n" +
+                "        \"id\": 6231,\n" +
+                "        \"nmIntegrador\": \"Beach Park\",\n" +
+                "        \"ambiente\": \"PRODUCAO\",\n" +
+                "        \"timeoutSegundos\": 4,\n" +
+                "        \"idParceiro\": \"113\",\n" +
+                "        \"ativo\": true,\n" +
+                "        \"qtMaximaSessao\": 2,\n" +
+                "        \"dsUrl\": \"http://192.168.15.114:8070/novaxs\",\n" +
+                "        \"stLocal\": false,\n" +
+                "        \"dsCredencialList\": [\n" +
+                "            \"docuser\",\n" +
+                "            \"abc1234\",\n" +
+                "            \"E1D779DB5D11E4C6EED41B418B53C2AC4205B843\",\n" +
+                "            null\n" +
+                "        ],\n" +
+                "        \"stSelecionado\": false,\n" +
+                "        \"idFornecedor\": 22635,\n" +
+                "        \"idEmpresa\": 1,\n" +
+                "        \"cdIntegra\": \"B0168CE82C1B0DE0C1F8B53497E23353\",\n" +
+                "        \"sgEmpresa\": \"ORITEST\",\n" +
+                "        \"nmUsuarioEmpresa\": \"Infotera\",\n" +
+                "        \"sgNacionalidade\": \"BR\",\n" +
+                "        \"stErro\": false,\n" +
+                "        \"stGerarLog\": true,\n" +
+                "        \"stLogAPI\": true,\n" +
+                "        \"stGerarLogErro\": false,\n" +
+                "        \"dsMetodo\": \"disponibilidadeIngresso\",\n" +
+                "        \"dsAction\": \"getProductsByDateRQ\",\n" +
                 "        \"transStMarkupTaxa\": false,\n" +
                 "        \"transStComissaoTaxa\": false,\n" +
                 "        \"idiomaEnum\": \"PT_BR\"\n" +

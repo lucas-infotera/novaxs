@@ -51,7 +51,7 @@ public class DetalheIngressoWS {
         products = UtilsWS.converterDSParametro(dsParametro);
         WSDisponibilidadeIngressoRQ wsDisponibilidadeIngressoRQ = new WSDisponibilidadeIngressoRQ();
         wsDisponibilidadeIngressoRQ.setReservaNomeList(reservaNomeList);
-        result.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(integrador, wsDisponibilidadeIngressoRQ, products));
+//        result.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(integrador, wsDisponibilidadeIngressoRQ, products));
         result.setIngresso(UtilsWS.montaIngresso(integrador, reservaNomeList, products));
 
         return result;

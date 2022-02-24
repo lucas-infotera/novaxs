@@ -96,24 +96,24 @@ public class DisponibilidadeWS {
             for (Date dtPesquisa : rangedatasPesquisa) {
                 WSDisponibilidadeIngressoRQ ingressoRQ = new WSDisponibilidadeIngressoRQ(integrador, reservaNomeList, dispRQ.getCdDestino(), dtPesquisa, dtPesquisa);
                 try {
-//                    List<GetProductsByDateRS> getProductsByDateRSList = novaxsClient.getProductsByDateRQ(ingressoRQ.getIntegrador(),
-//                            montaRequestGetProductsByDateRQ(ingressoRQ.getIntegrador(), ingressoRQ.getDtInicio()));
-                    if (UtilsWS.variavelTemporaria != null) {
-                        GetProductsByDateRS[] e = null;
-                        try {
-                            e = objectMapper.readValue(testeAgendamentoCOmHorario(), GetProductsByDateRS[].class);
-                        } catch (JsonProcessingException ex) {
-                            ex.printStackTrace();
-                        }
-                        result = montaPesquisarIngressoResult(result, ingressoRQ, Arrays.asList(e));
-//                                result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList);
-
-                    }
-//                    if (getProductsByDateRSList != null) {
-//                        if (!getProductsByDateRSList.isEmpty()) {
-//                            result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList);
+                    List<GetProductsByDateRS> getProductsByDateRSList = novaxsClient.getProductsByDateRQ(ingressoRQ.getIntegrador(),
+                            montaRequestGetProductsByDateRQ(ingressoRQ.getIntegrador(), ingressoRQ.getDtInicio()));
+//                    if (UtilsWS.variavelTemporaria != null) {
+//                        GetProductsByDateRS[] e = null;
+//                        try {
+//                            e = objectMapper.readValue(testeAgendamentoCOmHorario(), GetProductsByDateRS[].class);
+//                        } catch (JsonProcessingException ex) {
+//                            ex.printStackTrace();
 //                        }
+//                        result = montaPesquisarIngressoResult(result, ingressoRQ, Arrays.asList(e));
+////                                result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList);
+//
 //                    }
+                    if (getProductsByDateRSList != null) {
+                        if (!getProductsByDateRSList.isEmpty()) {
+                            result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList);
+                        }
+                    }
                 } catch (NullPointerException ex) {
                     throw new ErrorException(ingressoRQ.getIntegrador(), DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex, true);
                 } catch (ErrorException ex) {
@@ -125,7 +125,7 @@ public class DisponibilidadeWS {
         return result;
     }
 
-    public String testeAgendamentoCOmHorario() {
+    /*public String testeAgendamentoCOmHorario() {
         return "[\n" +
                 "    {\n" +
                 "        \"supplierName\": \"NXS - Operadora Demo\",\n" +
@@ -537,7 +537,8 @@ public class DisponibilidadeWS {
                 "        \"value\": \"14648\",\n" +
                 "        \"token\": \"NNefS+VpzJ6dPVxVVMCkE8gtkHizQj1qzvHs1DEGpO9o3E/FllCldts+MNHipysWIB8pUl50/Bs6NJZvs5Nqfydx5TXW9G42IIYCQL8QeupKB50QAg7OZxf5c9UzBWRQdCdb1dITk8MN3wAzToY/Ax9hiU6BLe8K9YLYkKEpvoitaNhbmpDUkTqZU5DaexGpYVWbawXsMNh+yrVpYUukvw\\u003d\\u003d\"\n" +
                 "    }\n" +
-                "]";    }
+                "]";
+    }*/
 
     public List<Date> montaRangedatasPesquisa(WSDisponibilidadeIngressoRQ dispRQ) {
         List<Date> result = new ArrayList<>();
@@ -558,35 +559,67 @@ public class DisponibilidadeWS {
         for (GetProductsByDateRS productsByDateRS : getProductsByDateRSList) {
             ingressoPesquisa = null;
             sqPesquisa++;
-            ingressoPesquisa = pesquisaList.stream()
-                    .filter(wsi -> wsi.getIngresso().getCdServico().equals(productsByDateRS.getPath()))
-                    .findFirst()
-                    .orElse(null);
-            if (ingressoPesquisa == null) {
-                ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
-                result.add(ingressoPesquisa);
-            } else {
-                ingressoPesquisa.setIngressoModalidadeList(ingressoPesquisaIngressoModalidadeList(ingressoPesquisa, dispRQ, productsByDateRS));
-                result.add(ingressoPesquisa);
+            if (!(productsByDateRS.getName().toUpperCase().contains("COMBO") && productsByDateRS.getName().toUpperCase().contains("INGRESSOS"))) {
+                ingressoPesquisa = pesquisaList.stream()
+                        .filter(wsi -> wsi.getIngresso().getCdServico().equals(productsByDateRS.getPath()))
+                        .findFirst()
+                        .orElse(null);
+                if (ingressoPesquisa == null) {
+                    ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
+                    result.add(ingressoPesquisa);
+                } else {
+                    ingressoPesquisa.setIngressoModalidadeList(ingressoPesquisaIngressoModalidadeList(ingressoPesquisa, dispRQ, productsByDateRS));
+                    result.add(ingressoPesquisa);
+                }
+                if (ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INGRESSO")
+                        && ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INDIVIDUAL")
+                        && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("FORMULÁRIO")
+                        && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("CHD")) {
+                    for (GetProductsByDateRS searchCombo : getProductsByDateRSList) {
+                        if (searchCombo.getName().toUpperCase().contains("COMBO") && searchCombo.getName().toUpperCase().contains("INGRESSOS")) {
+                            if (searchCombo.getProducts() != null && !searchCombo.getProducts().isEmpty()) {
+                                if (searchCombo.getProducts().get(0).getName().toUpperCase().contains("INGRESSO")
+                                        && searchCombo.getProducts().get(0).getName().toUpperCase().contains("INDIVIDUAL")) {
+                                    WSIngressoModalidade modalidade = ingressoPesquisa.getIngressoModalidadeList().stream()
+                                            .filter(wsm -> {
+                                                return wsm.getCdModalidade().equals(searchCombo.getPath());
+                                            })
+                                            .findFirst()
+                                            .orElse(null);
+
+                                    if (modalidade != null) {
+                                        modalidade.getUtilizacaoDatasList().add(UtilsWS.montaWSIngressoUtilizacao(dispRQ, searchCombo));
+                                    } else {
+                                        ingressoPesquisa.getIngressoModalidadeList().addAll(UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ, searchCombo));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
         }
+
 
         return result;
     }
 
     private WSIngressoPesquisa montaIngressoPesquisa(int sqPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
+
         WSIngressoPesquisa result = new WSIngressoPesquisa(sqPesquisa,
                 UtilsWS.montaIngresso(dispRQ.getIntegrador(), dispRQ.getReservaNomeList(), productsByDateRS),
                 ingressoPesquisaIngressoModalidadeList(dispRQ, productsByDateRS));
+
         return result;
     }
 
     private List<WSIngressoModalidade> ingressoPesquisaIngressoModalidadeList(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
-        return UtilsWS.montaIngressoModalidadeList(null, dispRQ.getIntegrador(), dispRQ, productsByDateRS);
+        return UtilsWS.montaIngressoModalidadeList(null, dispRQ, productsByDateRS);
     }
 
     private List<WSIngressoModalidade> ingressoPesquisaIngressoModalidadeList(WSIngressoPesquisa ingressoPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
-        return UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ.getIntegrador(), dispRQ, productsByDateRS);
+        return UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ, productsByDateRS);
     }
 
     public GetProductsByDateRQ montaRequestGetProductsByDateRQ(WSIntegrador integrador, Date dtInicialIngresso) throws ErrorException {

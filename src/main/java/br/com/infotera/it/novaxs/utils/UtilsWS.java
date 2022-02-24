@@ -156,7 +156,7 @@ public class UtilsWS {
 
     }
 
-    private static WSIngressoUtilizacaoData montaWSIngressoUtilizacao(WSDisponibilidadeIngressoRQ rq, GetProductsByDateRS productsByDateRS) {
+    public static WSIngressoUtilizacaoData montaWSIngressoUtilizacao(WSDisponibilidadeIngressoRQ rq, GetProductsByDateRS productsByDateRS) {
         WSIngressoUtilizacaoData wsIngressoUtilizacaoData = new WSIngressoUtilizacaoData();
         wsIngressoUtilizacaoData.setDtInicio(rq.getDtInicio());
         wsIngressoUtilizacaoData.setDtFim(rq.getDtInicio());
@@ -170,7 +170,7 @@ public class UtilsWS {
         return wsIngressoUtilizacaoData;
     }
 
-    private static WSIngressoUtilizacaoData montaWSIngressoUtilizacao(WSDisponibilidadeIngressoRQ rq, GetProductsByDateRS productsByDateRS, Product product) {
+    public static WSIngressoUtilizacaoData montaWSIngressoUtilizacao(WSDisponibilidadeIngressoRQ rq, GetProductsByDateRS productsByDateRS, Product product) {
         WSIngressoUtilizacaoData wsIngressoUtilizacaoData = new WSIngressoUtilizacaoData();
         wsIngressoUtilizacaoData.setDtInicio(rq.getDtInicio());
         wsIngressoUtilizacaoData.setDtFim(rq.getDtInicio());
@@ -184,7 +184,7 @@ public class UtilsWS {
         return wsIngressoUtilizacaoData;
     }
 
-    private static WSIngressoUtilizacaoData montaWSIngressoUtilizacao(WSDisponibilidadeIngressoRQ rq, GetProductsByDateRS productsByDateRS, Schedule schedule) {
+    public static WSIngressoUtilizacaoData montaWSIngressoUtilizacao(WSDisponibilidadeIngressoRQ rq, GetProductsByDateRS productsByDateRS, Schedule schedule) {
         WSIngressoUtilizacaoData wsIngressoUtilizacaoData = new WSIngressoUtilizacaoData();
         wsIngressoUtilizacaoData.setDtInicio(rq.getDtInicio());
         wsIngressoUtilizacaoData.setDtFim(rq.getDtInicio());
@@ -203,18 +203,7 @@ public class UtilsWS {
         List<WSIngressoModalidade> wsIngressoModalidade = new ArrayList<>();
         int i = 0;
         if (ingressoPesquisa != null) {
-            for (WSIngressoModalidade modalidade : ingressoPesquisa.getIngressoModalidadeList()) {
-
-                for (Product product : productsByDateRS.getProducts()) {
-                    if (i == 0) {
-                        modalidade.getUtilizacaoDatasList().add(montaWSIngressoUtilizacao(dispRQ, productsByDateRS, product));
-                    }
-                    i++;
-                }
-            }
-            return ingressoPesquisa.getIngressoModalidadeList();
-        } else {
-            wsIngressoModalidade.add(montaIngressoModalidadeCombo(dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
+            ingressoPesquisa.getIngressoModalidadeList().add(montaIngressoModalidadeCombo(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
         }
         return wsIngressoModalidade;
     }
@@ -241,13 +230,53 @@ public class UtilsWS {
         return wsIngressoModalidade;
     }
 
-    private static WSIngressoModalidade montaIngressoModalidadeCombo(WSDisponibilidadeIngressoRQ ingressoRQ, WSTarifa tarifa, Product product, GetProductsByDateRS productsByDateRS) {
-        WSIngressoModalidade modalidade = new WSIngressoModalidade(product.getPath(), productsByDateRS.getName(), tarifa);
-        modalidade.setDsModalidade("Combo Ingresso" + product.getName());
-        WSIngressoUtilizacaoData wsIngressoUtilizacaoData = montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS);
-        List<WSIngressoUtilizacaoData> ingressoUtilizacaoDataList = new ArrayList<>();
-        ingressoUtilizacaoDataList.add(wsIngressoUtilizacaoData);
-        modalidade.setUtilizacaoDatasList(ingressoUtilizacaoDataList);
+    public static WSIngressoModalidade montaIngressoModalidadeCombo(WSIngressoPesquisa ingressoPesquisa, WSDisponibilidadeIngressoRQ ingressoRQ, WSTarifa tarifa, Product product, GetProductsByDateRS productsByDateRS) {
+        WSIngressoModalidade modalidade = null;
+        if (ingressoPesquisa != null) {
+            if (ingressoPesquisa.getIngressoModalidadeList() != null) {
+                for (WSIngressoModalidade m : ingressoPesquisa.getIngressoModalidadeList()) {
+                    if (!m.getCdModalidade().equals(productsByDateRS.getPath())) {
+                        modalidade = new WSIngressoModalidade(productsByDateRS.getPath(), productsByDateRS.getName(), tarifa);
+                        modalidade.setDsModalidade("Combo Ingresso" + product.getName());
+                        WSIngressoUtilizacaoData wsIngressoUtilizacaoData = montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS);
+                        List<WSIngressoUtilizacaoData> ingressoUtilizacaoDataList = new ArrayList<>();
+                        ingressoUtilizacaoDataList.add(wsIngressoUtilizacaoData);
+                        modalidade.setUtilizacaoDatasList(ingressoUtilizacaoDataList);
+                    } else {
+                        m.getUtilizacaoDatasList().add(montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS));
+                    }
+                }
+
+            }
+        }
+        return modalidade;
+    }
+
+    public static WSIngressoModalidade montaIngressoModalidadeComboDiasDeAcesso(WSIngressoPesquisa ingressoPesquisa, WSDisponibilidadeIngressoRQ ingressoRQ, WSTarifa tarifa, Product product, GetProductsByDateRS productsByDateRS) {
+        WSIngressoModalidade modalidade = null;
+        if (ingressoPesquisa != null) {
+            if (ingressoPesquisa.getIngressoModalidadeList() != null &&  ingressoPesquisa.getIngressoModalidadeList().isEmpty()) {
+                for (WSIngressoModalidade m : ingressoPesquisa.getIngressoModalidadeList()) {
+                    if (!m.getCdModalidade().equals(productsByDateRS.getPath())) {
+                        modalidade = new WSIngressoModalidade(productsByDateRS.getPath(), productsByDateRS.getName(), tarifa);
+                        modalidade.setDsModalidade("Combo Ingresso" + product.getName());
+                        WSIngressoUtilizacaoData wsIngressoUtilizacaoData = montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS);
+                        List<WSIngressoUtilizacaoData> ingressoUtilizacaoDataList = new ArrayList<>();
+                        ingressoUtilizacaoDataList.add(wsIngressoUtilizacaoData);
+                        modalidade.setUtilizacaoDatasList(ingressoUtilizacaoDataList);
+                    } else {
+                        m.getUtilizacaoDatasList().add(montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS));
+                    }
+                }
+            } else {
+                modalidade = new WSIngressoModalidade(productsByDateRS.getPath(), productsByDateRS.getName(), tarifa);
+                modalidade.setDsModalidade("Combo Ingresso" + product.getName());
+                WSIngressoUtilizacaoData wsIngressoUtilizacaoData = montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS);
+                List<WSIngressoUtilizacaoData> ingressoUtilizacaoDataList = new ArrayList<>();
+                ingressoUtilizacaoDataList.add(wsIngressoUtilizacaoData);
+                modalidade.setUtilizacaoDatasList(ingressoUtilizacaoDataList);
+            }
+        }
         return modalidade;
     }
 
@@ -261,15 +290,15 @@ public class UtilsWS {
         return modalidade;
     }
 
-    public static List<WSIngressoModalidade> montaIngressoModalidadeList(WSIngressoPesquisa ingressoPesquisa, WSIntegrador integrador, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
+    public static List<WSIngressoModalidade> montaIngressoModalidadeList(WSIngressoPesquisa ingressoPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
         List<WSIngressoModalidade> ingressoModalidadeList = new ArrayList<>();
         try {
-            ingressoModalidadeList.addAll(montaIngressoModalidadeComTarifa(ingressoPesquisa, dispRQ, montaWSTarifa(integrador, dispRQ.getReservaNomeList(), productsByDateRS), productsByDateRS));
+            ingressoModalidadeList.addAll(montaIngressoModalidadeComTarifa(ingressoPesquisa, dispRQ, montaWSTarifa(dispRQ.getIntegrador(), dispRQ.getReservaNomeList(), productsByDateRS), productsByDateRS));
 
         } catch (NullPointerException ex) {
-            throw new ErrorException(integrador, DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade" + ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade" + ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         } catch (ErrorException ex) {
-            throw new ErrorException(integrador, DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex, false);
+            throw new ErrorException(dispRQ.getIntegrador(), DisponibilidadeWS.class, "montaIngressoModalidadeList", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex, false);
         }
         return ingressoModalidadeList;
     }
@@ -300,8 +329,14 @@ public class UtilsWS {
             }
         } else if (productsByDateRS.getName().toUpperCase().contains("INDIVIDUAL")) {
             wsIngressoModalidade.addAll(montaIngressoModalidadeComTarifaGetProductsByDateRS(ingressoPesquisa, dispRQ, tarifa, productsByDateRS));
-        } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")) {
+        } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
+                && productsByDateRS.getName().toUpperCase().contains("INGRESSO")) {
             return montaIngressoModalidadeCombo(ingressoPesquisa, dispRQ, tarifa, productsByDateRS);
+        } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
+                && productsByDateRS.getName().toUpperCase().contains("DIAS")
+                && productsByDateRS.getName().toUpperCase().contains("ACESSO")
+        ) {
+            wsIngressoModalidade.add(montaIngressoModalidadeComboDiasDeAcesso(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
         }
 
         return wsIngressoModalidade;

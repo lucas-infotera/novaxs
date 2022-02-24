@@ -61,6 +61,7 @@ public class RESTClient {
                 auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
                 entity = new HttpEntity(request, montaHeader());
                 responseEntity = restTemplate.exchange(auxEndpoint, httpMethod, entity, String.class);
+                System.out.println("response --------------------------------------------> \n" + responseEntity.getBody());
             }
 
             if (responseEntity.getBody().equals("true") && integrador.getDsMetodo().equals("cancelBillRQ")) {

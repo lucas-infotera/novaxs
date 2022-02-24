@@ -156,7 +156,7 @@ public class ConfirmarWS {
         BuyToBillForRQ buyToBillForRQ =
                 new BuyToBillForRQ(credenciaisNovaxsRQ)
                         .setProductsArray(UtilsWS.montaProductsArray(reserva))
-                        .setPersonAsString(UtilsWS.montaPersonAsStringDadosDoComprador(reserva.getContato()))
+                        .setPersonAsString(UtilsWS.montaPersonAsStringDadosDoComprador(reserva))
                         .setCustomData(UtilsWS.montaCustomData(reserva.getContato()));
 
         return buyToBillForRQ;

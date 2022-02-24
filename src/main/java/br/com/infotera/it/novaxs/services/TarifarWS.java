@@ -58,7 +58,7 @@ public class TarifarWS {
     }
 
     private WSReservaServico montaWSReservaServico(WSTarifarServicoRQ tarifarServicoRQ, GetProductsByDateRS product) throws ErrorException {
-        WSIngresso servico = UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList(), product);
+
 
         WSDisponibilidadeIngressoRQ dispRQ = new WSDisponibilidadeIngressoRQ();
         dispRQ.setIntegrador(tarifarServicoRQ.getIntegrador());
@@ -66,6 +66,8 @@ public class TarifarWS {
         dispRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServicoFim());
         dispRQ.setReservaNomeList(tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList());
 
+        WSIngresso servico = UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), dispRQ, product);
+        servico.setDsParametro(tarifarServicoRQ.getReservaServico().getDsParametro());
         servico.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(null, dispRQ, product));
 
         WSReservaServico reservaServico = new WSReservaServico(tarifarServicoRQ.getIntegrador(),
@@ -97,19 +99,19 @@ public class TarifarWS {
     }
 
     private Parametro montaProdutoReferencia(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
-        Parametro produtoReferencia;
+        Parametro result;
         String parametro;
         try {
             parametro = (tarifarServicoRQ.getReservaServico().getDsParametro() != null ?
                     tarifarServicoRQ.getReservaServico().getDsParametro() :
                     tarifarServicoRQ.getReservaServico().getServico().getDsParametro());
 
-            produtoReferencia = UtilsWS.converterDSParametro(parametro);
+            result = UtilsWS.converterDSParametro(parametro);
 
         } catch (NullPointerException ex) {
             throw ex;
         }
-        return produtoReferencia;
+        return result;
     }
 
     public List<GetProductsByDateRS> chamaWebServiceNovaxsGetProductsByDateRQ(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {

@@ -1,9 +1,6 @@
 package br.com.infotera.it.novaxs;
 
-import br.com.infotera.common.ErrorException;
-import br.com.infotera.common.WSContato;
-import br.com.infotera.common.WSDocumento;
-import br.com.infotera.common.WSTelefone;
+import br.com.infotera.common.*;
 import br.com.infotera.common.enumerator.WSDocumentoTipoEnum;
 import br.com.infotera.common.enumerator.WSTelefoneTipoEnum;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
@@ -43,9 +40,10 @@ public class TestesEmDev {
 
         WSContato contato = new WSContato("lucas", "teste@gmalil", new WSTelefone("11", "tsaedfad", WSTelefoneTipoEnum.CELULAR));
         contato.setDocumento(new WSDocumento(WSDocumentoTipoEnum.CPF));
+        WSReserva reserva = new WSReserva();
+        reserva.setContato(contato);
 
-
-        Assertions.assertThrows(ErrorException.class, () -> UtilsWS.montaPersonAsStringDadosDoComprador(contato));
+        Assertions.assertThrows(ErrorException.class, () -> UtilsWS.montaPersonAsStringDadosDoComprador(reserva));
 
     }
 

@@ -255,7 +255,7 @@ public class UtilsWS {
     public static WSIngressoModalidade montaIngressoModalidadeComboDiasDeAcesso(WSIngressoPesquisa ingressoPesquisa, WSDisponibilidadeIngressoRQ ingressoRQ, WSTarifa tarifa, Product product, GetProductsByDateRS productsByDateRS) {
         WSIngressoModalidade modalidade = null;
         if (ingressoPesquisa != null) {
-            if (ingressoPesquisa.getIngressoModalidadeList() != null &&  ingressoPesquisa.getIngressoModalidadeList().isEmpty()) {
+            if (ingressoPesquisa.getIngressoModalidadeList() != null && ingressoPesquisa.getIngressoModalidadeList().isEmpty()) {
                 for (WSIngressoModalidade m : ingressoPesquisa.getIngressoModalidadeList()) {
                     if (!m.getCdModalidade().equals(productsByDateRS.getPath())) {
                         modalidade = new WSIngressoModalidade(productsByDateRS.getPath(), productsByDateRS.getName(), tarifa);
@@ -342,7 +342,7 @@ public class UtilsWS {
         return wsIngressoModalidade;
     }
 
-    public static WSIngresso montaIngresso(WSIntegrador integrador, List<WSReservaNome> reservaNomeList, GetProductsByDateRS productsByDateRS) {
+    public static WSIngresso montaIngresso(WSIntegrador integrador, WSDisponibilidadeIngressoRQ ingressoRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
         String dsParamTarifar = productsByDateRS.toString();
         List<WSMedia> mediaList = null;
         if (!productsByDateRS.getType().equals("Combo")) {
@@ -350,7 +350,17 @@ public class UtilsWS {
         } else {
             mediaList = montaMediaList(productsByDateRS.getProducts());
         }
-        WSIngresso result = new WSIngresso(productsByDateRS.getPath(), productsByDateRS.getName(), UtilsWS.variavelTemporaria, null, null, null, reservaNomeList, null, mediaList, dsParamTarifar, null);
+        WSIngresso result = new WSIngresso(productsByDateRS.getPath(),
+                productsByDateRS.getName(),
+                UtilsWS.variavelTemporaria,
+                null,
+                null,
+                null,
+                ingressoRQ.getReservaNomeList(),
+                montaWSTarifa(integrador, ingressoRQ.getReservaNomeList(), productsByDateRS),
+                mediaList,
+                dsParamTarifar,
+                null);
 
         result.setDsParametro(productsByDateRS.toString());
 
@@ -423,23 +433,26 @@ public class UtilsWS {
     }
 
 
-    public static Person montaPersonAsStringDadosDoComprador(WSContato contato) throws ErrorException {
-        Person result = null;
+    public static Person montaPersonAsStringDadosDoComprador(WSReserva reserva) throws ErrorException {
+        Person result;
+        WSContato contato = reserva.getContato();
         try {
             result = new Person()
-                    .setName(contato.getNome())
                     .setCellPhone(contato.getTelefone().getTransNrTelefone())
                     .setHomePhone(contato.getTelefone().getNrTelefone())
                     .setEmail(contato.getEmail());
 
-            if (contato.getDocumento().getDocumentoTipo().equals(WSDocumentoTipoEnum.CPF)) {
-                result.setCpf(contato.getDocumento().getNrDocumento());
-            } else {
-                throw new ErrorException("CPF é obrigatorio !");
-            }
+            reserva.getReservaServicoList().get(0)
+                    .getServico().getReservaNomeList().forEach(reservaNome -> {
+                        if (reservaNome.isStPrincipal()) {
+                            if (reservaNome.getDocumento().getDocumentoTipo().equals(WSDocumentoTipoEnum.CPF.getId())) {
+                                result.setCpf(reservaNome.getDocumento().getNrDocumento());
+                            }
+                            result.setName(reservaNome.getNmNomeCompleto());
+                        }
+                    });
+
             validator(result);
-        } catch (ErrorException ex) {
-            throw ex;
         } catch (ConstraintViolationException ex) {
             throw new ErrorException(ex.getMessage());
         }
@@ -456,25 +469,30 @@ public class UtilsWS {
 
     public static ProductsArray montaProductsArray(WSReserva reserva) throws ErrorException {
         ProductsArray result = null;
-        List<Product> products = new ArrayList<>();
+        List<Product> productList = new ArrayList<>();
+        Product product;
 
         if (reserva != null) {
             result = new ProductsArray();
+
             if (reserva.getReservaServicoList() != null) {
                 if (!Utils.isListNothing(reserva.getReservaServicoList())) {
                     for (WSReservaServico reservaServico : reserva.getReservaServicoList()) {
-                        if (reservaServico.getDsParametro() != null) {
+                        Parametro dsParametro = UtilsWS.converterDSParametro(reservaServico.getDsParametro());
+                        if (dsParametro != null) {
                             try {
-//                                GetProductsByDateRS getProductsByDateRS = Optional.ofNullable(converterDSParametro(reservaServico.getServico().getDsParametro())).
-//                                        orElseThrow(() -> new ErrorException("DsParametro com GetProductsByDate esta nulo !"));
-//                                Product product = montaProductBuytoBillForRQ(getProductsByDateRS, reservaServico);
-//                                products.add(product);
-//                                result.setProductsArray(products);
+                                product = new Product()
+                                        .setPath(reservaServico.getNrLocalizador())
+                                        .setAmount("1")
+                                        .setDate(UtilsWS.montaDataNovaxs(montaDataInfotravel(dsParametro.getDt())));
+
+                                if (dsParametro.getHorario() != null){
+                                    product.setSchedule(dsParametro.getHorario());
+                                }
+
                             } catch (NullPointerException ex) {
                                 throw ex;
-                            }/* catch (ErrorException ex) {
-                                throw ex;
-                            }*/
+                            }
                         }
                     }
                 }

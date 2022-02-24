@@ -22,6 +22,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -484,14 +485,19 @@ public class UtilsWS {
                                 product = new Product()
                                         .setPath(reservaServico.getNrLocalizador())
                                         .setAmount("1")
-                                        .setDate(UtilsWS.montaDataNovaxs(montaDataInfotravel(dsParametro.getDt())));
+                                        .setDate(UtilsWS.montaDataNovaxs(dsParametro.getDt()));
 
-                                if (dsParametro.getHorario() != null){
+                                if (dsParametro.getHorario() != null
+                                        && !dsParametro.getHorario().equals("")
+                                        && !dsParametro.getHorario().equals(" ")) {
                                     product.setSchedule(dsParametro.getHorario());
                                 }
-
+                                productList.add(product);
+                                result.setProductsArray(productList);
                             } catch (NullPointerException ex) {
                                 throw ex;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -539,12 +545,12 @@ public class UtilsWS {
         return Utils.formatData(date, "dd/MM/yyyy");
     }
 
-    public static Date montaDataInfotravel(String date) {
+    public static Date montaDataInfotravel(String date) throws ErrorException {
         Date result = null;
         try {
             result = new SimpleDateFormat("dd/MM/yyyy").parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new ErrorException("Erro a o converter data para o infotravel");
         }
 
         return result;
@@ -552,8 +558,8 @@ public class UtilsWS {
 
     public static CustomData montaCustomData(WSContato contato) {
         return new CustomData()
-                .setIdExterno(contato.getNome())
-                .setObs(contato.getDocumento().getNrDocumento());
+                .setIdExterno("1")
+                .setObs("Integração");
     }
 
     @Autowired

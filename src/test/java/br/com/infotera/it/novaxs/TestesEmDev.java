@@ -3,11 +3,15 @@ package br.com.infotera.it.novaxs;
 import br.com.infotera.common.*;
 import br.com.infotera.common.enumerator.WSDocumentoTipoEnum;
 import br.com.infotera.common.enumerator.WSTelefoneTipoEnum;
+import br.com.infotera.common.reserva.rqrs.WSReservaRQ;
+import br.com.infotera.common.reserva.rqrs.WSReservaRS;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.model.Person;
+import br.com.infotera.it.novaxs.services.ConfirmarWS;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,12 @@ public class TestesEmDev {
 
     @Autowired
     private DisponibilidadeWS disponibilidadeWS;
+
+    @Autowired
+    private ConfirmarWS confirmarWS;
+
+    @Autowired
+    private Gson gson;
 
     @Test
     public void teste1DeAnotacoesNotNullValid() {
@@ -49,7 +59,12 @@ public class TestesEmDev {
 
     @Test
     public void testeMontagemDataParaOInfotravel() {
-        Date date = UtilsWS.montaDataInfotravel("10/02/2022");
+        Date date = null;
+        try {
+            date = UtilsWS.montaDataInfotravel("10/02/2022");
+        } catch (ErrorException e) {
+            e.printStackTrace();
+        }
 
         Assertions.assertNotNull(date);
     }
@@ -67,6 +82,19 @@ public class TestesEmDev {
         for (Date date : dates) {
             System.out.println(date.toString());
         }
+
+    }
+
+    @Test
+    public void testaConfirmarRQ(){
+        WSReservaRQ wsRQ = gson.fromJson(JsonsTeste.montaConfirmarRQ(), WSReservaRQ.class);
+
+        try {
+            WSReservaRS confirmar = confirmarWS.confirmar(wsRQ);
+        } catch (ErrorException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

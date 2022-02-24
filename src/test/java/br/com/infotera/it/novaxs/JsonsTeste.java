@@ -840,4 +840,192 @@ public class JsonsTeste {
                 "    }\n" +
                 "]";
     }
+
+    public static String montaConfirmarRQ(){
+        return "{\n" +
+                "    \"integrador\": {\n" +
+                "        \"integradorEnum\": \"NOVAXS\",\n" +
+                "        \"id\": 6231,\n" +
+                "        \"nmIntegrador\": \"Beach Park\",\n" +
+                "        \"ambiente\": \"PRODUCAO\",\n" +
+                "        \"timeoutSegundos\": 120,\n" +
+                "        \"idParceiro\": \"113\",\n" +
+                "        \"ativo\": true,\n" +
+                "        \"qtMaximaSessao\": 2,\n" +
+                "        \"dsUrl\": \"http://192.168.15.114:8070/novaxs\",\n" +
+                "        \"stLocal\": false,\n" +
+                "        \"dsCredencialList\": [\n" +
+                "            \"docuser\",\n" +
+                "            \"abc1234\",\n" +
+                "            \"E1D779DB5D11E4C6EED41B418B53C2AC4205B843\",\n" +
+                "            \"23456\"\n" +
+                "        ],\n" +
+                "        \"stSelecionado\": false,\n" +
+                "        \"idFornecedor\": 22635,\n" +
+                "        \"idEmpresa\": 1,\n" +
+                "        \"cdIntegra\": \"3E2CB8034285C1B644B1C81EDD5E7F38\",\n" +
+                "        \"sgEmpresa\": \"ORITEST\",\n" +
+                "        \"nmUsuarioEmpresa\": \"Infotera\",\n" +
+                "        \"sgNacionalidade\": \"BR\",\n" +
+                "        \"stErro\": false,\n" +
+                "        \"stGerarLog\": false,\n" +
+                "        \"transStMarkupTaxa\": false,\n" +
+                "        \"transStComissaoTaxa\": false,\n" +
+                "        \"idiomaEnum\": \"PT_BR\"\n" +
+                "    },\n" +
+                "    \"reserva\": {\n" +
+                "        \"contato\": {\n" +
+                "            \"nome\": \"Infotravel\",\n" +
+                "            \"email\": \"teste@infotera.com.br\",\n" +
+                "            \"telefone\": {\n" +
+                "                \"nrDDD\": \"11\",\n" +
+                "                \"nrTelefone\": \"974645774\",\n" +
+                "                \"telefoneTipo\": \"COMERCIAL\"\n" +
+                "            },\n" +
+                "            \"endereco\": {\n" +
+                "                \"dsEndereco\": \"RUA CORONEL VIDAL RAMOS, N1 - Cep: 89010330\",\n" +
+                "                \"nrCep\": \"89010330\",\n" +
+                "                \"municipio\": {\n" +
+                "                    \"nmMunicipio\": \"BLUMENAU\",\n" +
+                "                    \"sgEstado\": \"SC\",\n" +
+                "                    \"sgPais\": \"BR\",\n" +
+                "                    \"nmPais\": \"BRASIL\"\n" +
+                "                },\n" +
+                "                \"nmBairro\": \"\"\n" +
+                "            },\n" +
+                "            \"documento\": {\n" +
+                "                \"documentoTipo\": \"CNPJ\",\n" +
+                "                \"nrDocumento\": \"72179291999129\",\n" +
+                "                \"stObrigatorio\": false\n" +
+                "            }\n" +
+                "        },\n" +
+                "        \"id\": \"292321\",\n" +
+                "        \"reservaServicoList\": [\n" +
+                "            {\n" +
+                "                \"nrLocalizador\": \"products/46700\",\n" +
+                "                \"id\": 1984804,\n" +
+                "                \"servico\": {\n" +
+                "                    \"type\": \"WSIngresso\",\n" +
+                "                    \"properties\": {\n" +
+                "                        \"ingressoModalidade\": {},\n" +
+                "                        \"servicoTipo\": \"INGRESSO\",\n" +
+                "                        \"cdServico\": \"products/46700\",\n" +
+                "                        \"nmServico\": \"Ingresso Individual\",\n" +
+                "                        \"dsServico\": \"VariavelDeTeste\",\n" +
+                "                        \"fornecedor\": {\n" +
+                "                            \"id\": 22635,\n" +
+                "                            \"nmFornecedor\": \"BEACH PARK\",\n" +
+                "                            \"idExterno\": \"\"\n" +
+                "                        },\n" +
+                "                        \"reservaNomeList\": [\n" +
+                "                            {\n" +
+                "                                \"id\": 1929942,\n" +
+                "                                \"nmNome\": \"SELENE\",\n" +
+                "                                \"nmSobrenome\": \"NOVAES\",\n" +
+                "                                \"dtNascimento\": \"1980-07-01T00:00:00Z\",\n" +
+                "                                \"sexo\": \"FEMININO\",\n" +
+                "                                \"documento\": {\n" +
+                "                                    \"documentoTipo\": \"CPF\",\n" +
+                "                                    \"nrDocumento\": \"277.691.217-01\",\n" +
+                "                                    \"stObrigatorio\": false\n" +
+                "                                },\n" +
+                "                                \"paxTipo\": \"ADT\",\n" +
+                "                                \"qtIdade\": 30,\n" +
+                "                                \"sqNome\": 1929942,\n" +
+                "                                \"stPrincipal\": true,\n" +
+                "                                \"stSelecionado\": false,\n" +
+                "                                \"stAplicado\": false\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"tarifa\": {\n" +
+                "                            \"sgMoedaNeto\": \"BRL\",\n" +
+                "                            \"vlDiaria\": 0.0,\n" +
+                "                            \"vlDiariaTotal\": 0.0,\n" +
+                "                            \"vlNeto\": 90.0,\n" +
+                "                            \"vlPessoaNeto\": 0.0,\n" +
+                "                            \"vlVenda\": 125.0,\n" +
+                "                            \"idMarkup\": 412,\n" +
+                "                            \"tpMarkup\": \"P\",\n" +
+                "                            \"vlMarkup\": 72.0,\n" +
+                "                            \"idComissao\": 147,\n" +
+                "                            \"tpComissao\": \"P\",\n" +
+                "                            \"pcComissao\": 12.0,\n" +
+                "                            \"sgMoeda\": \"BRL\",\n" +
+                "                            \"sgSimbolo\": \"R$\",\n" +
+                "                            \"vlPessoa\": 0.0,\n" +
+                "                            \"vlTotal\": 125.0,\n" +
+                "                            \"vlCambio\": 1.0,\n" +
+                "                            \"vlPagamento\": 125.0,\n" +
+                "                            \"vlComissao\": 15.0,\n" +
+                "                            \"dtVencimento\": \"2022-02-24T00:00:00Z\",\n" +
+                "                            \"tarifaAdicionalList\": [],\n" +
+                "                            \"descontoList\": [],\n" +
+                "                            \"pagtoFornecedorTipo\": \"FATURADO\",\n" +
+                "                            \"stTarifaPacote\": false\n" +
+                "                        },\n" +
+                "                        \"mediaList\": [\n" +
+                "                            {\n" +
+                "                                \"dsUrl\": \"https://www.ifrr.edu.br/midia/teste/image\"\n" +
+                "                            }\n" +
+                "                        ],\n" +
+                "                        \"stExigeNome\": false,\n" +
+                "                        \"stUnico\": false,\n" +
+                "                        \"stDisponivel\": true,\n" +
+                "                        \"dsParametro\": \"null~90.0#{\\\"cd\\\":\\\"products/46700\\\",\\\"dt\\\":\\\"Sun Jun 05 00:00:00 UTC 2022\\\"}\",\n" +
+                "                        \"servicoParametro\": {\n" +
+                "                            \"idIntegrador\": 6231,\n" +
+                "                            \"cdIntegra\": \"3E2CB8034285C1B644B1C81EDD5E7F38\",\n" +
+                "                            \"idMarkup\": 412,\n" +
+                "                            \"tpMarkup\": \"P\",\n" +
+                "                            \"vlMarkup\": 72.0,\n" +
+                "                            \"sgMoedaVenda\": \"BRL\",\n" +
+                "                            \"idFornecedor\": -22635,\n" +
+                "                            \"idDestino\": 141231,\n" +
+                "                            \"idReservaTipo\": 5,\n" +
+                "                            \"idComissao\": 147,\n" +
+                "                            \"tpComissao\": \"P\",\n" +
+                "                            \"vlComissao\": 12.0,\n" +
+                "                            \"servicoTipo\": \"INGRESSO\",\n" +
+                "                            \"idServicoInclusoTipo\": 1,\n" +
+                "                            \"stMarkupTaxa\": \"N\",\n" +
+                "                            \"stComissaoTaxa\": \"N\",\n" +
+                "                            \"stTarifaCalculada\": false,\n" +
+                "                            \"sgNacionalidade\": \"BR\"\n" +
+                "                        },\n" +
+                "                        \"stSelecionado\": false,\n" +
+                "                        \"stOnRequest\": false,\n" +
+                "                        \"stTransfer\": false\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                \"integrador\": {\n" +
+                "                    \"integradorEnum\": \"NOVAXS\",\n" +
+                "                    \"id\": 6231,\n" +
+                "                    \"nmIntegrador\": \"Beach Park\",\n" +
+                "                    \"ambiente\": \"PRODUCAO\",\n" +
+                "                    \"timeoutSegundos\": 0,\n" +
+                "                    \"ativo\": true,\n" +
+                "                    \"qtMaximaSessao\": 2,\n" +
+                "                    \"sgMoeda\": \"\",\n" +
+                "                    \"stLocal\": false,\n" +
+                "                    \"stSelecionado\": false,\n" +
+                "                    \"cdIntegra\": \"3E2CB8034285C1B644B1C81EDD5E7F38\",\n" +
+                "                    \"stErro\": false,\n" +
+                "                    \"stGerarLog\": false,\n" +
+                "                    \"transStMarkupTaxa\": false,\n" +
+                "                    \"transStComissaoTaxa\": false\n" +
+                "                },\n" +
+                "                \"reservaStatus\": \"RESERVADO\",\n" +
+                "                \"dsParametro\": \"null~90.0#{\\\"cd\\\":\\\"products/46700\\\",\\\"dt\\\":\\\"Sun Jun 05 00:00:00 UTC 2022\\\"}\",\n" +
+                "                \"stSelecionado\": false,\n" +
+                "                \"stManual\": false,\n" +
+                "                \"stTarifar\": true,\n" +
+                "                \"transStAlterarPeriodo\": false\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"stVirtual\": false,\n" +
+                "        \"vlComissaoAjuste\": 0.0\n" +
+                "    }\n" +
+                "}";
+    }
+
 }

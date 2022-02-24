@@ -12,6 +12,7 @@ import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.model.CancelBillRS;
 import br.com.infotera.it.novaxs.model.VoucherRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;

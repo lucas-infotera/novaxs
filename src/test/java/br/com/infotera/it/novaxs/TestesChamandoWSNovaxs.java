@@ -108,7 +108,7 @@ public class TestesChamandoWSNovaxs {
 
         teste.setLogin("docuser")
                 .setPassword("abc1234")
-//                .setCustomData(null)
+                .setCustomData("")
                 .setToken("E1D779DB5D11E4C6EED41B418B53C2AC4205B843")
                 .setProductsArray(productsArray)
                 .setPersonAsString(person);

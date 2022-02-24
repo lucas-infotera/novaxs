@@ -58,6 +58,7 @@ public class Parametro {
         try {
             return new ObjectMapper()
                     .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
                     .deactivateDefaultTyping()
                     .writeValueAsString(this);
         } catch (JsonProcessingException e) {

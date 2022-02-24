@@ -224,9 +224,6 @@ public class Product extends NovaxsTemplateforModels {
     }
 
     public List<Schedule> getSchedules() {
-        if (this.schedules == null) {
-            this.schedules = new ArrayList<>();
-        }
         return schedules;
     }
 

@@ -67,7 +67,7 @@ public class TarifarWS {
         dispRQ.setReservaNomeList(tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList());
 
         WSIngresso servico = UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), dispRQ, product);
-        servico.setDsParametro(tarifarServicoRQ.getReservaServico().getDsParametro());
+        servico.setDsParametro(tarifarServicoRQ.getReservaServico().getServico().getDsParametro());
         servico.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(null, dispRQ, product));
 
         WSReservaServico reservaServico = new WSReservaServico(tarifarServicoRQ.getIntegrador(),

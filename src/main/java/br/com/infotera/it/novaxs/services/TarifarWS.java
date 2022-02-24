@@ -5,11 +5,14 @@ import br.com.infotera.common.WSReservaServico;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.enumerator.WSServicoTipoEnum;
+import br.com.infotera.common.servico.WSIngresso;
+import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSTarifarServicoRQ;
 import br.com.infotera.common.servico.rqrs.WSTarifarServicoRS;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
+import br.com.infotera.it.novaxs.utils.Parametro;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +38,12 @@ public class TarifarWS {
 
 
     public WSTarifarServicoRS tarifar(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
-        GetProductsByDateRS produtoReferencia;
-        Optional<GetProductsByDateRS> product;
-
         WSReservaServico reservaServico = null;
         try {
-            produtoReferencia = montaProdutoReferencia(tarifarServicoRQ);
 
-            product = montaProdutoTarifado(tarifarServicoRQ, produtoReferencia);
-
-            reservaServico = montaWSReservaServico(tarifarServicoRQ, product
-                    .orElseThrow(() -> new ErrorException("Product não encontrado")));
+            reservaServico = montaWSReservaServico(tarifarServicoRQ,
+                    montaProdutoTarifado(tarifarServicoRQ, montaProdutoReferencia(tarifarServicoRQ))
+                            .orElseThrow(() -> new ErrorException("Ingresso não encontrado")));
 
         } catch (ErrorException ex) {
             tarifarServicoRQ.getIntegrador().setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
@@ -60,29 +58,46 @@ public class TarifarWS {
     }
 
     private WSReservaServico montaWSReservaServico(WSTarifarServicoRQ tarifarServicoRQ, GetProductsByDateRS product) throws ErrorException {
+        WSIngresso servico = UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList(), product);
+
+        WSDisponibilidadeIngressoRQ dispRQ = new WSDisponibilidadeIngressoRQ();
+        dispRQ.setIntegrador(tarifarServicoRQ.getIntegrador());
+        dispRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServico());
+        dispRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServicoFim());
+        dispRQ.setReservaNomeList(tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList());
+
+        servico.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(null, dispRQ, product));
+
         WSReservaServico reservaServico = new WSReservaServico(tarifarServicoRQ.getIntegrador(),
                 WSServicoTipoEnum.INGRESSO,
-                UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList(), product),
-                null,
+                servico,
+                product.getPath(),
                 null,
                 tarifarServicoRQ.getReservaServico().getDsParametro());
         return reservaServico;
     }
 
-    private Optional<GetProductsByDateRS> montaProdutoTarifado(WSTarifarServicoRQ tarifarServicoRQ, GetProductsByDateRS produtoReferencia) throws ErrorException {
-        Optional<GetProductsByDateRS> product;
-        Predicate<GetProductsByDateRS> isIdEquals = e -> e.getId().equals(produtoReferencia.getId());
-        Predicate<GetProductsByDateRS> isScheduleTypeEquals = e -> e.getSchedule_type().equals(produtoReferencia.getSchedule_type());
-        Predicate<GetProductsByDateRS> isTypeEquals = e -> e.getType().equals(produtoReferencia.getType());
+    private Optional<GetProductsByDateRS> montaProdutoTarifado(WSTarifarServicoRQ tarifarServicoRQ, Parametro produtoReferencia) throws ErrorException {
+        Optional<GetProductsByDateRS> product = null;
 
-        product = chamaWebServiceNovaxsGetProductsByDateRQ(tarifarServicoRQ).stream()
-                .filter(isIdEquals.and(isIdEquals).and(isScheduleTypeEquals).and(isTypeEquals))
-                .findFirst();
+        if (tarifarServicoRQ.getReservaServico().getServico().getDtServico().toString().equals(produtoReferencia.getDt())) {
+            Predicate<GetProductsByDateRS> isPathEquals = e -> e.getPath().equals(produtoReferencia.getCd());
+            Predicate<GetProductsByDateRS> isScheduleTypeEquals = null;
+            if (produtoReferencia.getHorario() != null) {
+                isScheduleTypeEquals = e -> e.getSchedule_type().equals(produtoReferencia.getHorario());
+                product = chamaWebServiceNovaxsGetProductsByDateRQ(tarifarServicoRQ).stream()
+                        .filter(isPathEquals.and(isPathEquals).and(isScheduleTypeEquals))
+                        .findFirst();
+            }
+            product = chamaWebServiceNovaxsGetProductsByDateRQ(tarifarServicoRQ).stream()
+                    .filter(isPathEquals.and(isPathEquals))
+                    .findFirst();
+        }
         return product;
     }
 
-    private GetProductsByDateRS montaProdutoReferencia(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
-        GetProductsByDateRS produtoReferencia;
+    private Parametro montaProdutoReferencia(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
+        Parametro produtoReferencia;
         String parametro;
         try {
             parametro = (tarifarServicoRQ.getReservaServico().getDsParametro() != null ?

@@ -34,38 +34,6 @@ public class DisponibilidadeWS {
     @Autowired
     private NovaxsClient novaxsClient;
 
-    public static String montaIntegrador() {
-        return "{\n" +
-                "        \"integradorEnum\": \"NOVAXS\",\n" +
-                "        \"id\": 6231,\n" +
-                "        \"nmIntegrador\": \"Beach Park\",\n" +
-                "        \"ambiente\": \"PRODUCAO\",\n" +
-                "        \"timeoutSegundos\": 40,\n" +
-                "        \"idParceiro\": \"113\",\n" +
-                "        \"ativo\": true,\n" +
-                "        \"qtMaximaSessao\": 2,\n" +
-                "        \"dsUrl\": \"http://10.0.0.28:8070/novaxs\",\n" +
-                "        \"stLocal\": false,\n" +
-                "        \"dsCredencialList\": [\n" +
-                "            \"docuser\",\n" +
-                "            \"abc1234\",\n" +
-                "            \"E1D779DB5D11E4C6EED41B418B53C2AC4205B843\",\n" +
-                "            null\n" +
-                "        ],\n" +
-                "        \"stSelecionado\": false,\n" +
-                "        \"idFornecedor\": 22635,\n" +
-                "        \"idEmpresa\": 1,\n" +
-                "        \"sgEmpresa\": \"ORITEST\",\n" +
-                "        \"nmUsuarioEmpresa\": \"Infotera\",\n" +
-                "        \"sgNacionalidade\": \"BR\",\n" +
-                "        \"stErro\": false,\n" +
-                "        \"stGerarLog\": false,\n" +
-                "        \"transStMarkupTaxa\": false,\n" +
-                "        \"transStComissaoTaxa\": false,\n" +
-                "        \"dsMetodo\":  \"disponibilidadeIngresso\",\n" +
-                "        \"idiomaEnum\": \"PT_BR\"\n" +
-                "    }";
-    }
 
     public WSDisponibilidadeIngressoRS disponibilidade(WSDisponibilidadeIngressoRQ dispRQ) throws ErrorException {
         WSDisponibilidadeIngressoRS result = null;
@@ -98,17 +66,6 @@ public class DisponibilidadeWS {
                 try {
                     List<GetProductsByDateRS> getProductsByDateRSList = novaxsClient.getProductsByDateRQ(ingressoRQ.getIntegrador(),
                             montaRequestGetProductsByDateRQ(ingressoRQ.getIntegrador(), ingressoRQ.getDtInicio()));
-//                    if (UtilsWS.variavelTemporaria != null) {
-//                        GetProductsByDateRS[] e = null;
-//                        try {
-//                            e = objectMapper.readValue(testeAgendamentoCOmHorario(), GetProductsByDateRS[].class);
-//                        } catch (JsonProcessingException ex) {
-//                            ex.printStackTrace();
-//                        }
-//                        result = montaPesquisarIngressoResult(result, ingressoRQ, Arrays.asList(e));
-////                                result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList);
-//
-//                    }
                     if (getProductsByDateRSList != null) {
                         if (!getProductsByDateRSList.isEmpty()) {
                             result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList);

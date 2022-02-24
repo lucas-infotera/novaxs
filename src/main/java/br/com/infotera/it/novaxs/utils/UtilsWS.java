@@ -378,10 +378,12 @@ public class UtilsWS {
         return null;
     }
 
-    public static GetProductsByDateRS converterDSParametro(String dsParametro) throws ErrorException {
-        GetProductsByDateRS result = null;
+    public static Parametro converterDSParametro(String dsParametro) throws ErrorException {
+        Parametro result = null;
+        String parametroTratado;
         try {
-            result = montaRetorno(dsParametro, GetProductsByDateRS.class);
+            parametroTratado = dsParametro.replaceAll("[a-z][a-z][a-z][a-z][~][0-9][0-9][.][0-9][#]", "");
+            result = montaRetorno(parametroTratado, Parametro.class);
         } catch (ErrorException ex) {
             throw ex;
         }
@@ -463,16 +465,16 @@ public class UtilsWS {
                     for (WSReservaServico reservaServico : reserva.getReservaServicoList()) {
                         if (reservaServico.getDsParametro() != null) {
                             try {
-                                GetProductsByDateRS getProductsByDateRS = Optional.ofNullable(converterDSParametro(reservaServico.getServico().getDsParametro())).
-                                        orElseThrow(() -> new ErrorException("DsParametro com GetProductsByDate esta nulo !"));
-                                Product product = montaProductBuytoBillForRQ(getProductsByDateRS, reservaServico);
-                                products.add(product);
-                                result.setProductsArray(products);
+//                                GetProductsByDateRS getProductsByDateRS = Optional.ofNullable(converterDSParametro(reservaServico.getServico().getDsParametro())).
+//                                        orElseThrow(() -> new ErrorException("DsParametro com GetProductsByDate esta nulo !"));
+//                                Product product = montaProductBuytoBillForRQ(getProductsByDateRS, reservaServico);
+//                                products.add(product);
+//                                result.setProductsArray(products);
                             } catch (NullPointerException ex) {
                                 throw ex;
-                            } catch (ErrorException ex) {
+                            }/* catch (ErrorException ex) {
                                 throw ex;
-                            }
+                            }*/
                         }
                     }
                 }

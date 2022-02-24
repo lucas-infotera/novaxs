@@ -48,11 +48,11 @@ public class DetalheIngressoWS {
         WSDetalheIngresso result = new WSDetalheIngresso();
         GetProductsByDateRS products;
 
-        products = UtilsWS.converterDSParametro(dsParametro);
+//        products = UtilsWS.converterDSParametro(dsParametro);
         WSDisponibilidadeIngressoRQ wsDisponibilidadeIngressoRQ = new WSDisponibilidadeIngressoRQ();
         wsDisponibilidadeIngressoRQ.setReservaNomeList(reservaNomeList);
 //        result.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(integrador, wsDisponibilidadeIngressoRQ, products));
-        result.setIngresso(UtilsWS.montaIngresso(integrador, reservaNomeList, products));
+//        result.setIngresso(UtilsWS.montaIngresso(integrador, reservaNomeList, products));
 
         return result;
     }

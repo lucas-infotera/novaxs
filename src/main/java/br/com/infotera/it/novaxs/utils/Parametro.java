@@ -15,6 +15,17 @@ public class Parametro {
 
     public String horario;
 
+    public String nomeIngresso;
+
+    public String getNomeIngresso() {
+        return nomeIngresso;
+    }
+
+    public Parametro setNomeIngresso(String nomeIngresso) {
+        this.nomeIngresso = nomeIngresso;
+        return this;
+    }
+
     public String getHorario() {
         return horario;
     }

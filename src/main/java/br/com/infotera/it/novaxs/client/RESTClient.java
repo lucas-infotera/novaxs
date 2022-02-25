@@ -65,13 +65,13 @@ public class RESTClient {
 
             }
 
-            if (responseEntity.getBody().equals("true") && integrador.getDsMetodo().equals("cancelBillRQ")) {
+            if (responseEntity.getBody().contains("true") && integrador.getDsAction().equals("cancelBillRQ")) {
                 CancelBillRS cancelBillRS = new CancelBillRS()
                         .setSuccess(Boolean.TRUE);
                 responseEntity = new ResponseEntity<String>(cancelBillRS.toString(), HttpStatus.OK);
             }
 
-            result = LogWS.convertResponse(integrador, log, objectMapper, responseEntity, retorno);
+            result = convertResponse(integrador, log, objectMapper, responseEntity, retorno);
             UtilsWS.verificaErro(integrador, result);
 
         } catch (RestClientException ex) {
@@ -89,6 +89,27 @@ public class RESTClient {
         return (T) result;
     }
 
+    public static <T> T convertResponse(WSIntegrador integrador, WSIntegradorLog log, ObjectMapper objectMapper, ResponseEntity<String> responseEntity, Class<T> retorno) throws ErrorException {
+        Object result = null;
+
+        try {
+            if (log.getDsResponse() == null ) {
+                log.setDsResponse(((String)responseEntity.getBody()).getBytes());
+            }
+
+            result = objectMapper.readValue((String)responseEntity.getBody(), retorno);
+        } catch (Exception var7) {
+            var7.printStackTrace();
+        }
+
+        if (responseEntity != null && responseEntity.getStatusCodeValue() != 200) {
+            integrador.setDsMensagem("Erro " + responseEntity.getStatusCode().toString());
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, Utils.class, "verificaErro", WSMensagemErroEnum.GENCONEC, responseEntity.getStatusCode() + " - " + responseEntity.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.NEGADO, (Throwable)null, false);
+        } else {
+            return (T) result;
+        }
+    }
 
     private MultiValueMap<String, String> montaHeaderGET_PDF() {
         HttpHeaders result = new HttpHeaders();

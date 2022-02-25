@@ -15,6 +15,7 @@ import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.utils.Parametro;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,6 @@ import java.util.function.Predicate;
 @Service
 public class TarifarWS {
 
-
     @Autowired
     private NovaxsClient novaxsClient;
     @Autowired
@@ -36,11 +36,9 @@ public class TarifarWS {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     public WSTarifarServicoRS tarifar(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
         WSReservaServico reservaServico = null;
         try {
-
             reservaServico = montaWSReservaServico(tarifarServicoRQ,
                     montaProdutoTarifado(tarifarServicoRQ, montaProdutoReferencia(tarifarServicoRQ))
                             .orElseThrow(() -> new ErrorException("Ingresso não encontrado")));
@@ -63,7 +61,7 @@ public class TarifarWS {
         WSDisponibilidadeIngressoRQ dispRQ = new WSDisponibilidadeIngressoRQ();
         dispRQ.setIntegrador(tarifarServicoRQ.getIntegrador());
         dispRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServico());
-        dispRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServicoFim());
+        dispRQ.setDtFim(tarifarServicoRQ.getReservaServico().getServico().getDtServicoFim());
         dispRQ.setReservaNomeList(tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList());
 
         WSIngresso servico = UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), dispRQ, product);

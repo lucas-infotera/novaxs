@@ -36,6 +36,7 @@ public class DisponibilidadeController {
         WSDisponibilidadeIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDisponibilidadeIngressoRQ.class);
         WSDisponibilidadeIngressoRS result = null;
         wsRQ.getIntegrador().setDsMetodo("disponibilidadeIngresso");
+        wsRQ.getIntegrador().setDsMetodo("Disp");
         if (UtilsWS.variavelTemporaria != null) {
             wsRQ.getIntegrador().setCdIntegra("B0168CE82C1B0DE0C1F8B53497E23353");
         }

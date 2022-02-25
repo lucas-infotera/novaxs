@@ -1,8 +1,11 @@
 package br.com.infotera.it.novaxs;
 
 import br.com.infotera.common.ErrorException;
+import br.com.infotera.common.WSIntegrador;
+import br.com.infotera.common.WSIntegradorLog;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRS;
+import br.com.infotera.common.util.LogWS;
 import br.com.infotera.it.novaxs.model.*;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +14,8 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -261,6 +266,17 @@ public class TestesDeConvercao {
 
 
     }
+    @Test
+    public void  teste1ConversaoItCOmmon(){
+        BuyToBillForRS buyToBillForRS;
 
+        try {
+            ResponseEntity<String> responseEntity = new ResponseEntity<>(JsonsTeste.fluxo1_montaJsonBuyToBillForRSTesteRetorno(), HttpStatus.OK);
+            buyToBillForRS = LogWS.convertResponse(new WSIntegrador(), new WSIntegradorLog(),objectMapper, responseEntity , BuyToBillForRS.class);
+            assertNotNull(buyToBillForRS);
+        } catch (ErrorException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

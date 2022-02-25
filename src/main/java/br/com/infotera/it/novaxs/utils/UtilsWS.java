@@ -22,7 +22,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -142,7 +141,7 @@ public class UtilsWS {
         WSTarifaNome tarifaNome = new WSTarifaNome();
         tarifaNome.setPaxTipo(WSPaxTipoEnum.ADT);
         tarifaNome.setQtIdade(30);
-        tarifaNome.setTarifa(new WSTarifa(productsByDateRS.getCurrency(), tarifa.getVlPessoaNeto(), null));
+        tarifaNome.setTarifa(new WSTarifa(productsByDateRS.getCurrency(), tarifa.getVlNeto(), null));
         wsTarifaNomes.add(tarifaNome);
         return wsTarifaNomes;
     }
@@ -165,7 +164,8 @@ public class UtilsWS {
                 .setDt(rq.getDtInicio().toString())
                 .setCd(productsByDateRS.getPath());
         if (productsByDateRS.getValue() != null) {
-            wsIngressoUtilizacaoData.setVlTotal(Double.parseDouble(productsByDateRS.getValue()) / 100);
+            double vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * rq.getReservaNomeList().size();
+            wsIngressoUtilizacaoData.setVlTotal(vlTotal);
         }
         wsIngressoUtilizacaoData.setDsTarifa("null~" + wsIngressoUtilizacaoData.getVlTotal().toString() + "#" + parametro.toString());
         return wsIngressoUtilizacaoData;
@@ -179,7 +179,8 @@ public class UtilsWS {
                 .setDt(rq.getDtInicio().toString())
                 .setCd(productsByDateRS.getPath());
         if (productsByDateRS.getValue() != null) {
-            wsIngressoUtilizacaoData.setVlTotal(Double.parseDouble(productsByDateRS.getValue()) / 100);
+            double vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * rq.getReservaNomeList().size();
+            wsIngressoUtilizacaoData.setVlTotal(vlTotal);
         }
         wsIngressoUtilizacaoData.setDsTarifa("null~" + wsIngressoUtilizacaoData.getVlTotal().toString() + "#" + parametro.toString());
         return wsIngressoUtilizacaoData;
@@ -194,7 +195,8 @@ public class UtilsWS {
                 .setCd(productsByDateRS.getPath())
                 .setHorario(schedule.getSchedule());
         if (productsByDateRS.getValue() != null) {
-            wsIngressoUtilizacaoData.setVlTotal(Double.parseDouble(productsByDateRS.getValue()) / 100);
+            double vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * rq.getReservaNomeList().size();
+            wsIngressoUtilizacaoData.setVlTotal(vlTotal);
         }
         wsIngressoUtilizacaoData.setDsTarifa("null~" + wsIngressoUtilizacaoData.getVlTotal().toString() + "#" + parametro.toString());
         return wsIngressoUtilizacaoData;
@@ -358,7 +360,7 @@ public class UtilsWS {
                 null,
                 null,
                 ingressoRQ.getReservaNomeList(),
-                montaWSTarifa(integrador, ingressoRQ.getReservaNomeList(), productsByDateRS),
+                        montaWSTarifa(integrador, ingressoRQ.getReservaNomeList(), productsByDateRS),
                 mediaList,
                 dsParamTarifar,
                 null);
@@ -393,7 +395,8 @@ public class UtilsWS {
         Parametro result = null;
         String parametroTratado;
         try {
-            parametroTratado = dsParametro.replaceAll("[a-z][a-z][a-z][a-z][~][0-9][0-9][.][0-9][#]", "");
+            parametroTratado = dsParametro.replaceAll("[a-z][a-z][a-z][a-z][~][0-9][0-9][0-9][.][0-9][#]", "")
+                    .replaceAll("[a-z][a-z][a-z][a-z][~][0-9][0-9][0-9][0-9][.][0-9][#]", "");
             result = montaRetorno(parametroTratado, Parametro.class);
         } catch (ErrorException ex) {
             throw ex;
@@ -485,7 +488,7 @@ public class UtilsWS {
                                 product = new Product()
                                         .setPath(reservaServico.getNrLocalizador())
                                         .setAmount("1")
-                                        .setDate(UtilsWS.montaDataNovaxs(dsParametro.getDt()));
+                                        .setDate(UtilsWS.montaDataNovaxs(montaStringToDate(dsParametro.getDt())));
 
                                 if (dsParametro.getHorario() != null
                                         && !dsParametro.getHorario().equals("")
@@ -505,6 +508,10 @@ public class UtilsWS {
             }
         }
         return result;
+    }
+
+    private static Date montaStringToDate(String data) throws ParseException {
+        return new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(data);
     }
 
     private static Product montaProductBuytoBillForRQ(GetProductsByDateRS productsByDateRS, WSReservaServico reservaServico) throws ErrorException {
@@ -556,7 +563,7 @@ public class UtilsWS {
         return result;
     }
 
-    public static CustomData montaCustomData(WSContato contato) {
+    public static CustomData montaCustomData() {
         return new CustomData()
                 .setIdExterno("1")
                 .setObs("Integração");

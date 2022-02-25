@@ -34,39 +34,25 @@ public class ConfirmarWS {
 
         WSReserva reserva = reservaRQ.getReserva();
         try {
-            BuyToBillForRQ buyToBillForRQ = montaRequestBuytoBillForRQ(integrador, reserva);
+            BuyToBillForRS buyToBillForRS = chamaBloqueioParaReservaBuytoBillForRQ(integrador, reserva);
 
-            BuyToBillForRS buyToBillForRS = novaxsClient.buyToBillForRQ(integrador, buyToBillForRQ);
+            BillForRS billForRS = chamaReservarBillForRQ(integrador, buyToBillForRS);
 
-            BillForRQ billForRQ = montaRequestBillforRQ(integrador, Optional.ofNullable(buyToBillForRS)
-                    .orElseThrow(() -> new ErrorException("Bloqueio não foi realizado")));
+            List<GetAccessListRS> getAccessListRS = chamaObtencaoDeListaDeAcessoGetAccessListRQ(integrador, buyToBillForRS);
 
-            BillForRS billForRS = novaxsClient.billForRQ(integrador, billForRQ);
-            if (billForRS == null || billForRS.getLocalizador() == null) {
-                throw new ErrorException("Erro na confirmação de venda");
-            }
+            SetAccessListRS setAccessListRS = chamaMontagemListaDeAcessoSetAccessListRQ(integrador, reserva, buyToBillForRS, getAccessListRS);
 
-            GetAccessListRQ getAccessListRQ = montaRequestGetAccessListRQ(integrador, buyToBillForRS);
+            String erro = setAccessListRS.getErro();
 
-            List<GetAccessListRS> getAccessListRS = novaxsClient.getAccessListRQ(integrador, getAccessListRQ);
-
-            if (getAccessListRS == null || getAccessListRS.isEmpty()) {
-                throw new ErrorException("Erro na obtenção da Lista de acesso para preenchimento");
-            }
-
-            SetAccessListRQ setAccessListRQ = montaRequestSetAccessListRQ(integrador, buyToBillForRS, getAccessListRS, reserva.getReservaServicoList().get(0).getServico().getReservaNomeList());
-            /* Retorno vazio não ha tratamento a fazer no metodo setAccessListRQ */
-            novaxsClient.setAccessListRQ(integrador, setAccessListRQ);
-
-            VoucherRQ voucherRQ = montaRequestVoucherRQ(integrador, billForRS);
-
-            VoucherRS voucherRS = novaxsClient.voucherRQ(integrador, voucherRQ);
+            VoucherRS voucherRS = chamaObtencaodeVoucherVoucherRQ(integrador, billForRS);
 
             reserva.getReservaServicoList().forEach((reservaServico) -> {
                 reservaServico.getServico().setDsURL(voucherRS.getEndpointVoucher());
             });
 
-            reserva.setReservaStatus(WSReservaStatusEnum.CONFIRMADO);
+            reserva.getReservaServicoList().get(0).setReservaStatus(WSReservaStatusEnum.CONFIRMADO);
+            reserva.getReservaServicoList().get(0).setNrLocalizador(buyToBillForRS.getId().toString());
+            reserva.getReservaServicoList().get(0).setNrLocalizadorFornecedor(buyToBillForRS.getLocalizador());
 
         } catch (ErrorException ex) {
             integrador.setDsMensagem(ex.getMessage());
@@ -85,10 +71,53 @@ public class ConfirmarWS {
         return new WSReservaRS(reserva, integrador, WSIntegracaoStatusEnum.OK);
     }
 
-    private VoucherRQ montaRequestVoucherRQ(WSIntegrador integrador, BillForRS billForRS) throws ErrorException {
+    public VoucherRS chamaObtencaodeVoucherVoucherRQ(WSIntegrador integrador, BillForRS billForRS) throws ErrorException {
+        VoucherRQ voucherRQ = montaRequestVoucherRQ(integrador, billForRS);
+
+        VoucherRS voucherRS = novaxsClient.voucherRQ(integrador, voucherRQ);
+        return voucherRS;
+    }
+
+    public SetAccessListRS chamaMontagemListaDeAcessoSetAccessListRQ(WSIntegrador integrador, WSReserva reserva, BuyToBillForRS buyToBillForRS, List<GetAccessListRS> getAccessListRS) throws ErrorException {
+        SetAccessListRQ setAccessListRQ = montaRequestSetAccessListRQ(integrador, buyToBillForRS, getAccessListRS, reserva.getReservaServicoList().get(0).getServico().getReservaNomeList());
+        /* Retorno vazio não ha tratamento a fazer no metodo setAccessListRQ */
+        SetAccessListRS setAccessListRS = novaxsClient.setAccessListRQ(integrador, setAccessListRQ);
+        return setAccessListRS;
+    }
+
+    public List<GetAccessListRS> chamaObtencaoDeListaDeAcessoGetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
+        GetAccessListRQ getAccessListRQ = montaRequestGetAccessListRQ(integrador, buyToBillForRS);
+
+        List<GetAccessListRS> getAccessListRS = novaxsClient.getAccessListRQ(integrador, getAccessListRQ);
+
+        if (getAccessListRS == null || getAccessListRS.isEmpty()) {
+            throw new ErrorException("Erro na obtenção da Lista de acesso para preenchimento");
+        }
+        return getAccessListRS;
+    }
+
+    public BillForRS chamaReservarBillForRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
+        BillForRQ billForRQ = montaRequestBillforRQ(integrador, buyToBillForRS);
+
+        BillForRS billForRS = novaxsClient.billForRQ(integrador, billForRQ);
+        if (billForRS == null || billForRS.getLocalizador() == null) {
+            throw new ErrorException("Erro na confirmação de venda");
+        }
+        return billForRS;
+    }
+
+    public BuyToBillForRS chamaBloqueioParaReservaBuytoBillForRQ(WSIntegrador integrador, WSReserva reserva) throws ErrorException {
+        BuyToBillForRQ buyToBillForRQ = montaRequestBuytoBillForRQ(integrador, reserva);
+
+        BuyToBillForRS buyToBillForRS = Optional.ofNullable((novaxsClient.buyToBillForRQ(integrador, buyToBillForRQ)))
+                .orElseThrow(() -> new ErrorException("Bloqueio não foi realizado"));
+        return buyToBillForRS;
+    }
+
+    public VoucherRQ montaRequestVoucherRQ(WSIntegrador integrador, BillForRS billForRS) throws ErrorException {
         VoucherRQ voucherRQ = null;
         if (billForRS.getVoucher() != null) {
-            voucherRQ = new VoucherRQ(UtilsWS.montaCredenciaisNovaXS(integrador))
+            voucherRQ = new VoucherRQ(UtilsWS.montaCredenciaisNovaXS(integrador, billForRS.getToken()))
                     .setVoucher(billForRS.getVoucher());
         } else {
             throw new ErrorException("Valor do voucher retornado no metodo BillForRS esta null");
@@ -96,11 +125,11 @@ public class ConfirmarWS {
         return voucherRQ;
     }
 
-    private SetAccessListRQ montaRequestSetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS, List<GetAccessListRS> getAccessListRS, List<WSReservaNome> reservaNomeList) throws ErrorException {
+    public SetAccessListRQ montaRequestSetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS, List<GetAccessListRS> getAccessListRS, List<WSReservaNome> reservaNomeList) throws ErrorException {
         SetAccessListRQ setAccessListRQ = null;
         if (buyToBillForRS.getLocalizador() != null) {
             setAccessListRQ = new SetAccessListRQ(UtilsWS.montaCredenciaisNovaXS(integrador));
-            setAccessListRQ.setBill(buyToBillForRS.getLocalizador());
+            setAccessListRQ.setBill(buyToBillForRS.getId().toString());
 
             setAccessListRQ.setList(montaListSetAccessListRQ(getAccessListRS, reservaNomeList));
 
@@ -108,7 +137,7 @@ public class ConfirmarWS {
         return setAccessListRQ;
     }
 
-    private ListSetAccessListRQ montaListSetAccessListRQ(List<GetAccessListRS> getAccessListRS, List<WSReservaNome> reservaNomeList) {
+    public ListSetAccessListRQ montaListSetAccessListRQ(List<GetAccessListRS> getAccessListRS, List<WSReservaNome> reservaNomeList) {
         ListSetAccessListRQ listSetAccessListRQ = null;
         if (getAccessListRS != null && !reservaNomeList.isEmpty()) {
             if (getAccessListRS.size() == reservaNomeList.size()) {
@@ -128,20 +157,20 @@ public class ConfirmarWS {
 
 
 
-    private GetAccessListRQ montaRequestGetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
+    public GetAccessListRQ montaRequestGetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
         GetAccessListRQ getAccessListRQ = null;
         if (buyToBillForRS.getLocalizador() != null) {
             getAccessListRQ = new GetAccessListRQ(UtilsWS.montaCredenciaisNovaXS(integrador));
-            getAccessListRQ.setBill(buyToBillForRS.getLocalizador());
+            getAccessListRQ.setBill(buyToBillForRS.getId().toString());
         }
         return getAccessListRQ;
     }
 
-    private BillForRQ montaRequestBillforRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
+    public BillForRQ montaRequestBillforRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
         BillForRQ billForRQ = null;
         if (buyToBillForRS.getLocalizador() != null) {
             billForRQ = new BillForRQ(UtilsWS.montaCredenciaisNovaXS(integrador));
-            billForRQ.setBill(buyToBillForRS.getLocalizador());
+            billForRQ.setBill(buyToBillForRS.getId().toString());
         } else {
             throw new ErrorException("Localizador do bloqueio no metodo buyToBillFor não foi retornado pela Novaxs");
         }
@@ -149,7 +178,7 @@ public class ConfirmarWS {
         return billForRQ;
     }
 
-    private BuyToBillForRQ montaRequestBuytoBillForRQ(WSIntegrador integrador, WSReserva reserva) throws ErrorException {
+    public BuyToBillForRQ montaRequestBuytoBillForRQ(WSIntegrador integrador, WSReserva reserva) throws ErrorException {
         CredenciaisNovaxsRQ credenciaisNovaxsRQ = UtilsWS.montaCredenciaisNovaXS(integrador);
 //        CredenciaisNovaxsRQ credenciaisNovaxsRQ = UtilsWS.montaCredenciaisNovaXS(integrador, "token");
 
@@ -157,7 +186,7 @@ public class ConfirmarWS {
                 new BuyToBillForRQ(credenciaisNovaxsRQ)
                         .setProductsArray(UtilsWS.montaProductsArray(reserva))
                         .setPersonAsString(UtilsWS.montaPersonAsStringDadosDoComprador(reserva))
-                        .setCustomData(UtilsWS.montaCustomData(reserva.getContato()));
+                        .setCustomData(UtilsWS.montaCustomData());
 
         return buyToBillForRQ;
     }

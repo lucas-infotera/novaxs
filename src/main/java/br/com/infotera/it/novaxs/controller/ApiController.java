@@ -92,7 +92,7 @@ public class ApiController {
         WSPreReservarRS result = null;
         wsRQ.getIntegrador().setDsMetodo("preReservar");
         try {
-            result = preReservarWS.preReservar(wsRQ);
+                result = preReservarWS.preReservar(wsRQ);
         } catch (ErrorException ex) {
             result = new WSPreReservarRS(null, ex.getIntegrador());
         } catch (Exception ex) {
@@ -188,10 +188,8 @@ public class ApiController {
         try {
             result = preCancelarWS.preCancelar(wsRQ);
         } catch (ErrorException ex) {
-            
             result = new WSReservaRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-            
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preCancelar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
             LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);

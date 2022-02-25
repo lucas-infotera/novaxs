@@ -59,8 +59,8 @@ public class NovaxsClient {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "getProductsByDateRQ", WSMensagemErroEnum.SDI, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "getProductsByDateRQ", WSMensagemErroEnum.SDI, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
     }
@@ -87,8 +87,8 @@ public class NovaxsClient {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "buyToBillForRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "buyToBillForRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
     }
@@ -113,8 +113,8 @@ public class NovaxsClient {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "billForRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "billForRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
     }
@@ -139,8 +139,8 @@ public class NovaxsClient {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "createBillPaymentLinkRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "createBillPaymentLinkRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
     }
@@ -158,15 +158,15 @@ public class NovaxsClient {
             requestBody.add("bill", getAccessListRQ.getBill());
 
 
-            result = Arrays.asList(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getAccessList", GetAccessListRS[].class));
+            result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getAccessList", GetAccessListRS[].class)).orElseThrow(()-> new ErrorException("Erro a o obter lista de acesso da NovaXS")));
 
 
         } catch (ErrorException ex) {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "getAccessListRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "getAccessListRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
     }
@@ -192,8 +192,8 @@ public class NovaxsClient {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "setAccessListRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "setAccessListRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
     }
@@ -217,8 +217,8 @@ public class NovaxsClient {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "voucherRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "voucherRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
 
@@ -243,8 +243,8 @@ public class NovaxsClient {
             throw ex;
         } catch (Exception ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.OK);
-            throw new ErrorException(integrador, NovaxsClient.class, "cancelBillRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.OK, ex);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, NovaxsClient.class, "cancelBillRQ", WSMensagemErroEnum.SRE, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         }
         return result;
 

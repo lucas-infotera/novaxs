@@ -47,11 +47,12 @@ public class BuyToBillForRS {
     @JsonProperty("currency")
     public String currency;
     @JsonProperty("token")
-    public String token;
+    public String tokenRs;
     @JsonProperty("localizador")
     public String localizador;
     @JsonProperty("erro")
     public String erro;
+
 
     public String getErro() {
         return erro;
@@ -224,12 +225,12 @@ public class BuyToBillForRS {
         return this;
     }
 
-    public String getToken() {
-        return token;
+    public String getTokenRs() {
+        return tokenRs;
     }
 
-    public BuyToBillForRS setToken(String token) {
-        this.token = token;
+    public BuyToBillForRS setTokenRs(String tokenRs) {
+        this.tokenRs = tokenRs;
         return this;
     }
 

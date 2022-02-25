@@ -841,7 +841,7 @@ public class JsonsTeste {
                 "]";
     }
 
-    public static String montaConfirmarRQ(){
+    public static String fluxo1_montaConfirmarRQ() {
         return "{\n" +
                 "    \"integrador\": {\n" +
                 "        \"integradorEnum\": \"NOVAXS\",\n" +
@@ -1028,4 +1028,37 @@ public class JsonsTeste {
                 "}";
     }
 
+    public static String fluxo1_montaJsonBuyToBillForRSTesteRetorno() {
+        return "{\n" +
+                "    \"id\": 1579238,\n" +
+                "    \"path\": \"bills/1579238\",\n" +
+                "    \"periodo\": \"05/06/2022\",\n" +
+                "    \"created\": 1645795575668,\n" +
+                "    \"dataVenda\": \"25/02/2022\",\n" +
+                "    \"descritivo\": \"1 Ingresso Individual\",\n" +
+                "    \"agencia\": \"Agência Teste B2B\",\n" +
+                "    \"amount\": 1,\n" +
+                "    \"usuario\": \"docuser\",\n" +
+                "    \"status\": \"Aguardando pagamento\",\n" +
+                "    \"clientId\": \"4332710\",\n" +
+                "    \"clientName\": \"SELENE NOVAES\",\n" +
+                "    \"email\": \"teste@infotera.com.br\",\n" +
+                "    \"cancelar\": \"false\",\n" +
+                "    \"pagamento\": \"não pago\",\n" +
+                "    \"valorPago\": 0,\n" +
+                "    \"valor\": 9000,\n" +
+                "    \"currency\": \"BRL\",\n" +
+                "    \"token\": \"812A8C27B40890ADE62CEF20D9FA6C743F0FC7CA\",\n" +
+                "    \"localizador\": \"TMQ1HS2H\"\n" +
+                "}";
+    }
+
+    public static String fluxo1_montaJsonReturnBillForTesteConfirmar() {
+        return "{\"valorFaturado\":\"9000\",\"voucher\":\"2791850\",\"localizador\":\"F0D2E275\",\"token\":\"48625982BC9F0D0DE784BE6C5C0ABEBFA9EF59DD\"}";
+    }
+
+
+    public static String fluxo1_montaGetAcessListRS() {
+        return "[{\"accessPersons\":[{\"internalId\":0,\"name\":\"SELENE NOVAES\",\"document\":\"27769121701\",\"birth\":\"\",\"itemIdentificator\":\"46700\"}],\"id\":0,\"internalId\":0,\"trash\":false,\"frozen\":false,\"inHistory\":false,\"lastVersion\":true,\"customData\":{\"ProductName\":\"Ingresso Individual\",\"productId\":46700,\"entryId\":\"39969726\"},\"lazy\":false}]";
+    }
 }

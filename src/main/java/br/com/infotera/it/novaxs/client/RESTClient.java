@@ -12,7 +12,6 @@ import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.model.CancelBillRS;
 import br.com.infotera.it.novaxs.model.VoucherRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -36,6 +35,28 @@ public class RESTClient {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    public static <T> T convertResponse(WSIntegrador integrador, WSIntegradorLog log, ObjectMapper objectMapper, ResponseEntity<String> responseEntity, Class<T> retorno) throws ErrorException {
+        Object result = null;
+
+        try {
+            if (log.getDsResponse() == null) {
+                log.setDsResponse(((String) responseEntity.getBody()).getBytes());
+            }
+
+            result = objectMapper.readValue((String) responseEntity.getBody(), retorno);
+        } catch (Exception var7) {
+            var7.printStackTrace();
+        }
+
+        if (responseEntity != null && responseEntity.getStatusCodeValue() != 200) {
+            integrador.setDsMensagem("Erro " + responseEntity.getStatusCode().toString());
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            throw new ErrorException(integrador, Utils.class, "verificaErro", WSMensagemErroEnum.GENCONEC, responseEntity.getStatusCode() + " - " + responseEntity.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.NEGADO, (Throwable) null, false);
+        } else {
+            return (T) result;
+        }
+    }
 
     public <T> T sendReceive(WSIntegrador integrador, Object request, HttpMethod httpMethod, String method, Class<T> retorno) throws ErrorException {
         Object result = null;
@@ -89,28 +110,6 @@ public class RESTClient {
         return (T) result;
     }
 
-    public static <T> T convertResponse(WSIntegrador integrador, WSIntegradorLog log, ObjectMapper objectMapper, ResponseEntity<String> responseEntity, Class<T> retorno) throws ErrorException {
-        Object result = null;
-
-        try {
-            if (log.getDsResponse() == null ) {
-                log.setDsResponse(((String)responseEntity.getBody()).getBytes());
-            }
-
-            result = objectMapper.readValue((String)responseEntity.getBody(), retorno);
-        } catch (Exception var7) {
-            var7.printStackTrace();
-        }
-
-        if (responseEntity != null && responseEntity.getStatusCodeValue() != 200) {
-            integrador.setDsMensagem("Erro " + responseEntity.getStatusCode().toString());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
-            throw new ErrorException(integrador, Utils.class, "verificaErro", WSMensagemErroEnum.GENCONEC, responseEntity.getStatusCode() + " - " + responseEntity.getStatusCode().getReasonPhrase(), WSIntegracaoStatusEnum.NEGADO, (Throwable)null, false);
-        } else {
-            return (T) result;
-        }
-    }
-
     private MultiValueMap<String, String> montaHeaderGET_PDF() {
         HttpHeaders result = new HttpHeaders();
         result.setAccept(Arrays.asList(MediaType.APPLICATION_PDF));
@@ -126,17 +125,21 @@ public class RESTClient {
 
     private String montaEnvironmentUri(WSIntegrador integrador) throws ErrorException {
         String result = null;
+        String clientIdentification;
         if (integrador != null) {
             try {
-                if (integrador.getDsCredencialList().get(2) != null) {
+                if (integrador.getDsCredencialList().get(3) != null) {
+                    clientIdentification = integrador.getDsCredencialList().get(3).replace(" ", "");
                     if (WSAmbienteEnum.PRODUCAO.equals(integrador.getAmbiente())) {
                         if (integrador.getDsAction().equals("voucherRQ")) {
+                            result = clientIdentification + "/api";
                             result = "https://travel3.novaxs.com.br/api";
                         } else {
+                            result = clientIdentification + "/api/v1/2059";
                             result = "https://travel3.novaxs.com.br/api/v1/2059";
                         }
                     } else {
-                        result = "https://travel3.novaxs.com.br/api/v1/2059";
+                        result = clientIdentification + "/api/v1/2059";
                     }
                 }
             } catch (Exception ex) {

@@ -52,7 +52,7 @@ public class ConfirmarWS {
 
             reserva.getReservaServicoList().get(0).setReservaStatus(WSReservaStatusEnum.CONFIRMADO);
             reserva.getReservaServicoList().get(0).setNrLocalizador(buyToBillForRS.getId().toString());
-            reserva.getReservaServicoList().get(0).setNrLocalizadorFornecedor(buyToBillForRS.getLocalizador());
+//            reserva.getReservaServicoList().get(0).setNrLocalizadorFornecedor(buyToBillForRS.getLocalizador());
 
         } catch (ErrorException ex) {
             integrador.setDsMensagem(ex.getMessage());

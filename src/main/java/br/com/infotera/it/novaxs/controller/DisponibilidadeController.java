@@ -36,10 +36,7 @@ public class DisponibilidadeController {
         WSDisponibilidadeIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDisponibilidadeIngressoRQ.class);
         WSDisponibilidadeIngressoRS result = null;
         wsRQ.getIntegrador().setDsMetodo("disponibilidadeIngresso");
-        wsRQ.getIntegrador().setDsMetodo("Disp");
-        if (UtilsWS.variavelTemporaria != null) {
-            wsRQ.getIntegrador().setCdIntegra("B0168CE82C1B0DE0C1F8B53497E23353");
-        }
+
         try {
             result = disponibilidadeWS.disponibilidade(wsRQ);
         } catch (ErrorException ex) {
@@ -50,12 +47,7 @@ public class DisponibilidadeController {
             LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
 
-        String variavelTemporaria = UtilsWS.variavelTemporaria;
-        WSDisponibilidadeIngressoRS referencia = gson.fromJson(teste3String(), WSDisponibilidadeIngressoRS.class);
-
-        String s = gson.toJson(result);
-        System.out.println(s);
-        return s;
+        return gson.toJson(result);
     }
 
     @RequestMapping(value = "/teste", method = RequestMethod.GET)

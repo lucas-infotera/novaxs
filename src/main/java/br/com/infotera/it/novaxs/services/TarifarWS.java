@@ -6,22 +6,20 @@ import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.common.enumerator.WSServicoTipoEnum;
 import br.com.infotera.common.servico.WSIngresso;
+import br.com.infotera.common.servico.WSIngressoModalidade;
+import br.com.infotera.common.servico.WSIngressoPesquisa;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
 import br.com.infotera.common.servico.rqrs.WSTarifarServicoRQ;
 import br.com.infotera.common.servico.rqrs.WSTarifarServicoRS;
 import br.com.infotera.it.novaxs.client.NovaxsClient;
-import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
-import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.utils.Parametro;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * @Author Lucas
@@ -39,61 +37,93 @@ public class TarifarWS {
     public WSTarifarServicoRS tarifar(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
         WSReservaServico reservaServico = null;
         try {
-            reservaServico = montaWSReservaServico(tarifarServicoRQ,
-                    montaProdutoTarifado(tarifarServicoRQ, montaProdutoReferencia(tarifarServicoRQ))
-                            .orElseThrow(() -> new ErrorException("Ingresso não encontrado")));
-
+            reservaServico = montaProdutoTarifado(tarifarServicoRQ, montaProdutoReferencia(tarifarServicoRQ));
         } catch (ErrorException ex) {
             tarifarServicoRQ.getIntegrador().setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
             tarifarServicoRQ.getIntegrador().setDsMensagem(ex.getMessage());
             ex.setIntegrador(tarifarServicoRQ.getIntegrador());
             throw ex;
         } catch (NullPointerException ex) {
-            throw new ErrorException(tarifarServicoRQ.getIntegrador(), TarifarWS.class, "tarifar", WSMensagemErroEnum.SPR, "Erro no processo de tarifar : NullpointerException " + ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
+            throw new ErrorException(tarifarServicoRQ.getIntegrador(), TarifarWS.class, "tarifar", WSMensagemErroEnum.SPR, "Erro no processo de tarifar : NullpointerException", WSIntegracaoStatusEnum.NEGADO, ex);
         }
 
         return new WSTarifarServicoRS(reservaServico, tarifarServicoRQ.getIntegrador(), WSIntegracaoStatusEnum.OK);
     }
 
-    private WSReservaServico montaWSReservaServico(WSTarifarServicoRQ tarifarServicoRQ, GetProductsByDateRS product) throws ErrorException {
+    private WSReservaServico montaProdutoTarifado(WSTarifarServicoRQ tarifarServicoRQ, Parametro produtoReferencia) throws ErrorException {
+        WSReservaServico result = null;
+        WSIngressoPesquisa ingressoDisp;
+        WSIngresso ingressoTarifado;
+        if (tarifarServicoRQ.getReservaServico().getServico().getDtServico().toString().equals(produtoReferencia.getDt())) {
+            WSDisponibilidadeIngressoRQ ingressoRQ = new WSDisponibilidadeIngressoRQ();
+            ingressoRQ.setIntegrador(tarifarServicoRQ.getIntegrador());
+            ingressoRQ.setReservaNomeList(tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList());
+            ingressoRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServico());
+            ingressoRQ.setDtFim(tarifarServicoRQ.getReservaServico().getServico().getDtServico());
 
+            String[] cdReferencia = produtoReferencia.getCd().split("-");
+            List<WSIngressoPesquisa> listIngressosDisp = disponibilidadeWS.pesquisarIngresso(ingressoRQ);
+            ingressoDisp = listIngressosDisp.stream()
+                    .filter(ingressoPesquisa -> {
+                        if (cdReferencia.length > 1) {
+                            if (ingressoPesquisa.getIngresso().getCdServico().contains(cdReferencia[0])) {
+                                for (WSIngressoModalidade m :ingressoPesquisa.getIngressoModalidadeList()){
+                                    if (m.getCdModalidade().contains(cdReferencia[1])){
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        } else {
+                            return ingressoPesquisa.getIngresso().getCdServico().contains(cdReferencia[0]);
+                        }
+                    })
+                    .findFirst()
+                    .orElseThrow(() -> new ErrorException("Nenhum Ingresso encontrado para realizar o tarifar "));
 
-        WSDisponibilidadeIngressoRQ dispRQ = new WSDisponibilidadeIngressoRQ();
-        dispRQ.setIntegrador(tarifarServicoRQ.getIntegrador());
-        dispRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServico());
-        dispRQ.setDtFim(tarifarServicoRQ.getReservaServico().getServico().getDtServicoFim());
-        dispRQ.setReservaNomeList(tarifarServicoRQ.getReservaServico().getServico().getReservaNomeList());
+            ingressoTarifado = ingressoDisp.getIngresso();
 
-        WSIngresso servico = UtilsWS.montaIngresso(tarifarServicoRQ.getIntegrador(), dispRQ, product);
-        servico.setDsParametro(tarifarServicoRQ.getReservaServico().getServico().getDsParametro());
-        servico.setIngressoModalidadeList(UtilsWS.montaIngressoModalidadeList(null, dispRQ, product));
+            if (ingressoTarifado != null) {
+                String[] cdReferenciaModalidade = produtoReferencia.getCdModalidade().split("-");
+                ingressoTarifado.setIngressoModalidade(ingressoDisp.getIngressoModalidadeList().stream()
+                        .filter(wsIngressoModalidade -> {
+                            if (wsIngressoModalidade.getNmModalidade().contains(produtoReferencia.getNomeModalidade())) {
+                                if (cdReferenciaModalidade.length > 1){
+                                     return wsIngressoModalidade.getCdModalidade().contains(cdReferenciaModalidade[1]);
+                                } else {
+                                    return wsIngressoModalidade.getCdModalidade().contains(cdReferenciaModalidade[0]);
+                                }
+                            }
+                            return false;
+                        })
+                        .findFirst()
+                        .orElseThrow(() -> new ErrorException("Modalidade do Ingresso não encontrada para realizar a tarifa ")));
 
-        WSReservaServico reservaServico = new WSReservaServico(tarifarServicoRQ.getIntegrador(),
-                WSServicoTipoEnum.INGRESSO,
-                servico,
-                product.getPath(),
-                null,
-                tarifarServicoRQ.getReservaServico().getDsParametro());
-        return reservaServico;
+            }
+
+            ingressoTarifado.setDsParametro(montaDsParametroTarifado(ingressoTarifado, ingressoRQ));
+            ingressoTarifado.setNmServico(ingressoTarifado.getIngressoModalidade().getNmModalidade());
+            ingressoTarifado.setTarifa(ingressoTarifado.getIngressoModalidade().getTarifa());
+
+            result = new WSReservaServico(tarifarServicoRQ.getIntegrador(),
+                    WSServicoTipoEnum.INGRESSO,
+                    ingressoTarifado,
+                    null,
+                    null,
+                    montaDsParametroTarifado(ingressoTarifado, ingressoRQ));
+
+        }
+        return result;
     }
 
-    private Optional<GetProductsByDateRS> montaProdutoTarifado(WSTarifarServicoRQ tarifarServicoRQ, Parametro produtoReferencia) throws ErrorException {
-        Optional<GetProductsByDateRS> product = null;
+    private String montaDsParametroTarifado(WSIngresso ingressoTarifado, WSDisponibilidadeIngressoRQ ingressoRQ) {
+        return new Parametro()
+                .setCd(ingressoTarifado.getCdServico())
+                .setCdModalidade(ingressoTarifado.getIngressoModalidade().getCdModalidade())
+                .setNomeModalidade(ingressoTarifado.getIngressoModalidade().getNmModalidade())
+                .setDt(ingressoRQ.getDtInicio().toString())
+                .toString();
 
-        if (tarifarServicoRQ.getReservaServico().getServico().getDtServico().toString().equals(produtoReferencia.getDt())) {
-            Predicate<GetProductsByDateRS> isPathEquals = e -> e.getPath().equals(produtoReferencia.getCd());
-            Predicate<GetProductsByDateRS> isScheduleTypeEquals = null;
-            if (produtoReferencia.getHorario() != null) {
-                isScheduleTypeEquals = e -> e.getSchedule_type().equals(produtoReferencia.getHorario());
-                product = chamaWebServiceNovaxsGetProductsByDateRQ(tarifarServicoRQ).stream()
-                        .filter(isPathEquals.and(isPathEquals).and(isScheduleTypeEquals))
-                        .findFirst();
-            }
-            product = chamaWebServiceNovaxsGetProductsByDateRQ(tarifarServicoRQ).stream()
-                    .filter(isPathEquals.and(isPathEquals))
-                    .findFirst();
-        }
-        return product;
     }
 
     private Parametro montaProdutoReferencia(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
@@ -104,20 +134,15 @@ public class TarifarWS {
                     tarifarServicoRQ.getReservaServico().getDsParametro() :
                     tarifarServicoRQ.getReservaServico().getServico().getDsParametro());
 
-            result = UtilsWS.converterDSParametro(parametro);
+            result = Optional.ofNullable(UtilsWS.converterDSParametro(parametro))
+                    .orElseThrow(() -> new ErrorException("Conversão do parametro para tarifar esta null"));
 
         } catch (NullPointerException ex) {
             throw ex;
+        } catch (ErrorException ex) {
+            throw new ErrorException("Erro a o converter o dsParametro para o produto Referência");
         }
         return result;
-    }
-
-    public List<GetProductsByDateRS> chamaWebServiceNovaxsGetProductsByDateRQ(WSTarifarServicoRQ tarifarServicoRQ) throws ErrorException {
-        GetProductsByDateRQ montaGetProductsByDateRQ = disponibilidadeWS.montaRequestGetProductsByDateRQ(tarifarServicoRQ.getIntegrador(), tarifarServicoRQ.getReservaServico().getServico().getDtServico());
-        return Optional.ofNullable(novaxsClient.
-                        getProductsByDateRQ(tarifarServicoRQ.getIntegrador(),
-                                montaGetProductsByDateRQ)).
-                orElseThrow(() -> new ErrorException("Ingressos indisponiveis para a data selecionada no processo de tarifar"));
     }
 
 

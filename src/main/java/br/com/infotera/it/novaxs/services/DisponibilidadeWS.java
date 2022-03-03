@@ -14,12 +14,14 @@ import br.com.infotera.it.novaxs.client.NovaxsClient;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRQ;
 import br.com.infotera.it.novaxs.model.GetProductsByDateRS;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -61,8 +63,16 @@ public class DisponibilidadeWS {
         List<Date> rangedatasPesquisa = montaRangedatasPesquisa(dispRQ);
 
         if (rangedatasPesquisa != null) {
+            if (rangedatasPesquisa.size() > 14){
+                throw new ErrorException("Range de datas na pesquisa invalido: Numero máximo permitido é 14 dias");
+            }
             for (Date dtPesquisa : rangedatasPesquisa) {
-                WSDisponibilidadeIngressoRQ ingressoRQ = new WSDisponibilidadeIngressoRQ(integrador, reservaNomeList, dispRQ.getCdDestino(), dtPesquisa, dtPesquisa);
+                WSDisponibilidadeIngressoRQ ingressoRQ = new WSDisponibilidadeIngressoRQ();
+                ingressoRQ.setIntegrador(integrador);
+                ingressoRQ.setReservaNomeList(reservaNomeList);
+                ingressoRQ.setDtInicio(dtPesquisa);
+                ingressoRQ.setDtFim(dtPesquisa);
+
                 try {
                     List<GetProductsByDateRS> getProductsByDateRSList = novaxsClient.getProductsByDateRQ(ingressoRQ.getIntegrador(),
                             montaRequestGetProductsByDateRQ(ingressoRQ.getIntegrador(), ingressoRQ.getDtInicio()));
@@ -124,14 +134,18 @@ public class DisponibilidadeWS {
                                         && searchCombo.getProducts().get(0).getName().toUpperCase().contains("INDIVIDUAL")) {
                                     WSIngressoModalidade modalidade = ingressoPesquisa.getIngressoModalidadeList().stream()
                                             .filter(wsm -> {
-                                                return wsm.getCdModalidade().equals(searchCombo.getPath());
+                                                return wsm.getCdModalidade().contains(searchCombo.getPath());
                                             })
                                             .findFirst()
                                             .orElse(null);
 
                                     if (modalidade != null) {
+                                        String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
+                                        searchCombo.setPath(path);
                                         modalidade.getUtilizacaoDatasList().add(UtilsWS.montaWSIngressoUtilizacao(dispRQ, searchCombo));
                                     } else {
+                                        String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
+                                        searchCombo.setPath(path);
                                         ingressoPesquisa.getIngressoModalidadeList().addAll(UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ, searchCombo));
                                     }
                                 }

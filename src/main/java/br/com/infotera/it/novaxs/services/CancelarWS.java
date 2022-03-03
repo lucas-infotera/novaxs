@@ -32,7 +32,7 @@ public class CancelarWS {
         try {
             cancelBillRQ = montaRequestCancelBillRQ(integrador, wsRQ.getReserva().getReservaServicoList().get(0).getNrLocalizador());
 
-            cancelBillRS = novaxsClient.cancelBillRQ(integrador, cancelBillRQ);
+                cancelBillRS = novaxsClient.cancelBillRQ(integrador, cancelBillRQ);
             if (cancelBillRS.getSuccess()) {
                 wsRQ.getReserva().setReservaStatus(WSReservaStatusEnum.CANCELADO);
                 wsRQ.getReserva().getReservaServicoList().get(0).setReservaStatus(WSReservaStatusEnum.CANCELADO);

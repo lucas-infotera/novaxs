@@ -56,15 +56,15 @@ public class ConfirmarWS {
 
         } catch (ErrorException ex) {
             integrador.setDsMensagem(ex.getMessage());
-            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
+            integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.INCONSISTENTE);
             if (ex.getIntegrador() == null) {
                 ex.setIntegrador(integrador);
             }
             throw ex;
         } catch (NullPointerException ex) {
-            throw new ErrorException(integrador, ConfirmarWS.class, "confirmar", WSMensagemErroEnum.SCF, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
+            throw new ErrorException(integrador, ConfirmarWS.class, "confirmar", WSMensagemErroEnum.SCF, ex.getMessage(), WSIntegracaoStatusEnum.INCONSISTENTE, ex);
         } catch (Exception ex) {
-            throw new ErrorException(integrador, ConfirmarWS.class, "confirmar", WSMensagemErroEnum.SCF, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
+            throw new ErrorException(integrador, ConfirmarWS.class, "confirmar", WSMensagemErroEnum.SCF, ex.getMessage(), WSIntegracaoStatusEnum.INCONSISTENTE, ex);
         }
 
 
@@ -80,7 +80,7 @@ public class ConfirmarWS {
 
     public SetAccessListRS chamaMontagemListaDeAcessoSetAccessListRQ(WSIntegrador integrador, WSReserva reserva, BuyToBillForRS buyToBillForRS, List<GetAccessListRS> getAccessListRS) throws ErrorException {
         SetAccessListRQ setAccessListRQ = montaRequestSetAccessListRQ(integrador, buyToBillForRS, getAccessListRS, reserva.getReservaServicoList().get(0).getServico().getReservaNomeList());
-        /* Retorno vazio não ha tratamento a fazer no metodo setAccessListRQ */
+            /* Retorno vazio não ha tratamento a fazer no metodo setAccessListRQ */
         SetAccessListRS setAccessListRS = novaxsClient.setAccessListRQ(integrador, setAccessListRQ);
         return setAccessListRS;
     }
@@ -140,21 +140,20 @@ public class ConfirmarWS {
     public ListSetAccessListRQ montaListSetAccessListRQ(List<GetAccessListRS> getAccessListRS, List<WSReservaNome> reservaNomeList) {
         ListSetAccessListRQ listSetAccessListRQ = null;
         if (getAccessListRS != null && !reservaNomeList.isEmpty()) {
-            if (getAccessListRS.size() == reservaNomeList.size()) {
                 listSetAccessListRQ = new ListSetAccessListRQ();
                 int indexGetAccessListrs = 0;
-                for (WSReservaNome rn : reservaNomeList) {
-                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
-                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
-                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
-                    indexGetAccessListrs++;
-                }
-            }
+                do {
+                    for (WSReservaNome rn : reservaNomeList) {
+                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
+                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
+                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
+                        indexGetAccessListrs++;
+                    }
+                } while (indexGetAccessListrs < getAccessListRS.size());
         }
         listSetAccessListRQ.setAccessPersonList(getAccessListRS);
         return listSetAccessListRQ;
     }
-
 
 
     public GetAccessListRQ montaRequestGetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {

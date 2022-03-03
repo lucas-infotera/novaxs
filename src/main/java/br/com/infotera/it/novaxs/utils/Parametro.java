@@ -17,6 +17,28 @@ public class Parametro {
 
     public String nomeIngresso;
 
+    public String cdModalidade;
+
+    public String nomeModalidade;
+
+    public String getCdModalidade() {
+        return cdModalidade;
+    }
+
+    public Parametro setCdModalidade(String cdModalidade) {
+        this.cdModalidade = cdModalidade;
+        return this;
+    }
+
+    public String getNomeModalidade() {
+        return nomeModalidade;
+    }
+
+    public Parametro setNomeModalidade(String nomeModalidade) {
+        this.nomeModalidade = nomeModalidade;
+        return this;
+    }
+
     public String getNomeIngresso() {
         return nomeIngresso;
     }

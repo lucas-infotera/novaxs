@@ -2,6 +2,8 @@ package br.com.infotera.it.novaxs;
 
 import br.com.infotera.common.*;
 import br.com.infotera.common.enumerator.WSDocumentoTipoEnum;
+import br.com.infotera.common.enumerator.WSPaxTipoEnum;
+import br.com.infotera.common.enumerator.WSSexoEnum;
 import br.com.infotera.common.enumerator.WSTelefoneTipoEnum;
 import br.com.infotera.common.reserva.rqrs.WSReservaRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservaRS;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -191,6 +194,24 @@ public class TestesEmDev {
         } catch (ErrorException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testemontaListSetAccessListRQ() {
+        List<GetAccessListRS> getAccessListRS = null;
+        try {
+            getAccessListRS = Arrays.asList(objectMapper.readValue(JsonsTeste.json_TesteListAcessPersonsRS(), GetAccessListRS[].class));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        List<WSReservaNome> reservaNomeList = new ArrayList<>();
+
+        reservaNomeList.add(new WSReservaNome("Joao", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
+        reservaNomeList.add(new WSReservaNome("Lucas", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
+
+        ListSetAccessListRQ listSetAccessListRQ = confirmarWS.montaListSetAccessListRQ(getAccessListRS, reservaNomeList);
+
+        assertNotNull(listSetAccessListRQ);
     }
 
 }

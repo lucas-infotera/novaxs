@@ -10,7 +10,6 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class NovaxsApplication {
 
-
     public static String nrVersao = "";
 
     public static void main(String[] args) {

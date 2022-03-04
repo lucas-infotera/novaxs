@@ -4,6 +4,6 @@
  | |\  | | (_) |  \ V /  | (_| |  >  <  \__ \
  |_| \_|  \___/    \_/    \__,_| /_/\_\ |___/
 =================================================
-:: API Rest ${info.app.name}
+:: API Rest Novaxs
 :: API em Spring Boot ${spring-boot.version} ::
-:: Versão do POM ${info.app.version} ::
+:: Versão do POM 1.0.0.2 ::

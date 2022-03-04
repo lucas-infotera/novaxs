@@ -63,7 +63,7 @@ public class ApiController {
     @RequestMapping(value = "/ola", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String ola() {
-        return "Ola NovaXS" + (NovaxsApplication.nrVersao != null ? NovaxsApplication.nrVersao : "");
+        return "Ola NovaXS " + (NovaxsApplication.nrVersao != null ? NovaxsApplication.nrVersao : "");
     }
 
 
@@ -238,42 +238,6 @@ public class ApiController {
         return (gson.toJson(result));
     }
 
-    @RequestMapping(value = "/preAlterarReserva", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String preAlterarReserva(@RequestBody String jsonRQ) {
-        WSPreAlterarRS result = null;
-        WSPreAlterarRQ wsRQ = gson.fromJson(jsonRQ, WSPreAlterarRQ.class);
-        wsRQ.getIntegrador().setDsMetodo("preAlterarReserva");
-        try {
-            result = preAlterarReservaWS.preAlterarReserva(wsRQ);
-        } catch (ErrorException ex) {
-            result = new WSPreAlterarRS(null, ex.getIntegrador());
-        } catch (Exception ex) {
-            result = new WSPreAlterarRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "preAlterarReserva", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
-        }
 
-        return (gson.toJson(result));
-    }
-
-    @RequestMapping(value = "/alterarReserva", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String alterarReserva(@RequestBody String jsonRQ) {
-        WSAlteraReservaRS result = null;
-        WSAlteraReservaRQ wsRQ = gson.fromJson(jsonRQ, WSAlteraReservaRQ.class);
-        wsRQ.getIntegrador().setDsMetodo("alterarReserva");
-        try {
-            result = alterarReservaWS.alterarReserva(wsRQ);
-        } catch (ErrorException ex) {
-            result = new WSAlteraReservaRS(null, ex.getIntegrador());
-        } catch (Exception ex) {
-            result = new WSAlteraReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "alterarReserva", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
-        } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
-        }
-
-        return (gson.toJson(result));
-    }
 }
 

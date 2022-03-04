@@ -1,0 +1,6 @@
+# Expondo todos os endpoins disponíveis no actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

@@ -34,6 +34,8 @@ public class DisponibilidadeController {
     @ResponseBody
     public String disponibilidade(@RequestBody String jsonRQ) {
         WSDisponibilidadeIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDisponibilidadeIngressoRQ.class);
+        wsRQ.getIntegrador().setStGerarLog(true);
+        wsRQ.getIntegrador().setStGerarLogErro(true);
         WSDisponibilidadeIngressoRS result = null;
         wsRQ.getIntegrador().setDsMetodo("disponibilidadeIngresso");
 
@@ -44,7 +46,7 @@ public class DisponibilidadeController {
         } catch (Exception ex) {
             result = new WSDisponibilidadeIngressoRS(null, new ErrorException(wsRQ.getIntegrador(), DisponibilidadeController.class, "disponibilidade", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, null);
         }
 
         return gson.toJson(result);

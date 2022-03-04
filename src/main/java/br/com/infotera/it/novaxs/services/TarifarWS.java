@@ -105,6 +105,7 @@ public class TarifarWS {
             ingressoTarifado.setNmServico(ingressoTarifado.getIngressoModalidade().getNmModalidade());
             ingressoTarifado.setTarifa(ingressoTarifado.getIngressoModalidade().getTarifa());
 
+
             result = new WSReservaServico(tarifarServicoRQ.getIntegrador(),
                     WSServicoTipoEnum.INGRESSO,
                     ingressoTarifado,

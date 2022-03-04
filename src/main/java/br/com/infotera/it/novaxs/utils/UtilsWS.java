@@ -4,6 +4,7 @@ import br.com.infotera.common.*;
 import br.com.infotera.common.enumerator.*;
 import br.com.infotera.common.media.WSMedia;
 import br.com.infotera.common.politica.WSPolitica;
+import br.com.infotera.common.politica.WSPoliticaCancelamento;
 import br.com.infotera.common.servico.WSIngresso;
 import br.com.infotera.common.servico.WSIngressoModalidade;
 import br.com.infotera.common.servico.WSIngressoPesquisa;
@@ -117,12 +118,12 @@ public class UtilsWS {
         return vlNeto;
     }
 
-    private static WSTarifa montaWSTarifa(WSIntegrador integrador, List<WSReservaNome> reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
+    private static WSTarifa montaWSTarifa(WSDisponibilidadeIngressoRQ dispRQ, WSIntegrador integrador, List<WSReservaNome> reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
         WSTarifa tarifa = null;
         Integer qtPax = reservaNomeList.size();
         double vlNeto = montaVlNeto(productsByDateRS) * qtPax;
         try {
-            tarifa = new WSTarifa(productsByDateRS.getCurrency(), vlNeto, vlNeto / (qtPax.doubleValue()), null, null, WSPagtoFornecedorTipoEnum.FATURADO, UtilsWS.montaPoliticaList(productsByDateRS));
+            tarifa = new WSTarifa(productsByDateRS.getCurrency(), vlNeto, vlNeto / (qtPax.doubleValue()), null, null, WSPagtoFornecedorTipoEnum.FATURADO, UtilsWS.montaPoliticaList(dispRQ, productsByDateRS));
 
             tarifa.setTarifaNomeList(montaTarifaNomeList(productsByDateRS, tarifa));
 
@@ -282,7 +283,7 @@ public class UtilsWS {
     public static List<WSIngressoModalidade> montaIngressoModalidadeList(WSIngressoPesquisa ingressoPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
         List<WSIngressoModalidade> ingressoModalidadeList = new ArrayList<>();
         try {
-            WSTarifa tarifa = montaWSTarifa(dispRQ.getIntegrador(), dispRQ.getReservaNomeList(), productsByDateRS);
+            WSTarifa tarifa = montaWSTarifa(dispRQ, dispRQ.getIntegrador(), dispRQ.getReservaNomeList(), productsByDateRS);
             ingressoModalidadeList.addAll(montaIngressoModalidadeComTarifa(ingressoPesquisa, dispRQ, tarifa, productsByDateRS));
 
         } catch (NullPointerException ex) {
@@ -346,10 +347,11 @@ public class UtilsWS {
                 null,
                 null,
                 ingressoRQ.getReservaNomeList(),
-                montaWSTarifa(integrador, ingressoRQ.getReservaNomeList(), productsByDateRS),
+                montaWSTarifa(ingressoRQ, integrador, ingressoRQ.getReservaNomeList(), productsByDateRS),
                 mediaList,
                 null,
                 null);
+
 
         result.setDsParametro(
                 new Parametro()
@@ -378,8 +380,25 @@ public class UtilsWS {
         return result;
     }
 
-    public static List<WSPolitica> montaPoliticaList(GetProductsByDateRS productsByDateRS) throws ErrorException {
-        return null;
+    public static List<WSPolitica> montaPoliticaList(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
+        List<WSPolitica> result = new ArrayList<>();
+        List<WSPoliticaCancelamento> politicaCancelamentoList = new ArrayList();
+        if (productsByDateRS != null){
+            if (productsByDateRS.getCancellationPolicies() != null){
+
+                WSPoliticaCancelamento politicaCancelamento = new WSPoliticaCancelamento("Cancelamento",
+                        productsByDateRS.getCancellationPolicies(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        false);
+
+                politicaCancelamentoList.add(politicaCancelamento);
+            }
+        }
+        result.addAll(politicaCancelamentoList);
+        return result;
     }
 
     public static Parametro converterDSParametro(String dsParametro) throws ErrorException {

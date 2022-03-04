@@ -212,6 +212,7 @@ public class NovaxsClient {
             result = restClient.sendReceive(integrador, voucherRQ, HttpMethod.GET,
                     endpointComplemento, VoucherRS.class);
 
+            result.setEndpointVoucher("https://travel3.novaxs.com.br/api/" + endpointComplemento);
 
         } catch (ErrorException ex) {
             throw ex;

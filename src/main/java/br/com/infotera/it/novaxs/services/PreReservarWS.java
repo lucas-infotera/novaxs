@@ -28,9 +28,9 @@ public class PreReservarWS {
 
         WSIntegrador integrador = preReservarRQ.getIntegrador();
 
-        List<WSReservaServico> reservaServicoList = montaReservaServicoList(preReservarRQ, integrador);
+        WSReserva reserva = new WSReserva(montaReservaServicoList(preReservarRQ, integrador));
 
-        return new WSPreReservarRS(new WSReserva(reservaServicoList), preReservarRQ.getIntegrador(), WSIntegracaoStatusEnum.OK);
+        return new WSPreReservarRS(reserva, preReservarRQ.getIntegrador(), WSIntegracaoStatusEnum.OK);
     }
 
     private List<WSReservaServico> montaReservaServicoList(WSPreReservarRQ preReservarRQ, WSIntegrador integrador) throws ErrorException {
@@ -43,10 +43,14 @@ public class PreReservarWS {
 
             reservaServico = tarifar.getReservaServico();
 
-            //adiciona apenas como opção de documento o CPF
-            for (WSReservaNome rn : reservaServico.getServico().getReservaNomeList()) {
-                rn.setDocumentoList(Arrays.asList(new WSDocumento(WSDocumentoTipoEnum.CPF, true)));
-            }
+            //adiciona apenas como opção de documento o CPF a o Pax principal
+
+            reservaServico.getServico().getReservaNomeList().get(0).setDocumento(new WSDocumento(WSDocumentoTipoEnum.CPF, true));
+//            reservaServico.getServico().getReservaNomeList().get(0).setDocumentoList(Arrays.asList(new WSDocumento(WSDocumentoTipoEnum.CPF, true)));
+
+//            reservaServico.getServico().getReservaNomeList().get(1).setDocumento(null);
+//            reservaServico.getServico().getReservaNomeList().get(1).setDocumentoList(Arrays.asList(new WSDocumento(WSDocumentoTipoEnum.RG, false)));
+
             reservaServicoList.add(reservaServico);
         }
         return reservaServicoList;

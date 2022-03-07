@@ -21,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -74,11 +75,18 @@ public class RESTClient {
                 entity = new HttpEntity(montaHeaderGET_PDF());
                 voucherNovaXSResponse = restTemplate.exchange(auxEndpoint, httpMethod, entity, byte[].class);
 
+                String s = new String(voucherNovaXSResponse.getBody(), StandardCharsets.UTF_8);
+
                 VoucherRS voucherRS = new VoucherRS()
                         .setVoucher(voucherNovaXSResponse.getBody())
                         .setEndpointVoucher(auxEndpoint);
 
+                if (s.contains("cancelado")) {
+                    voucherRS.setStatus("cancelado");
+                }
+
                 responseEntity = new ResponseEntity<String>(voucherRS.toString(), HttpStatus.OK);
+
             } else {
                 auxEndpoint = montaEnvironmentUri(integrador) + "/" + method;
                 entity = new HttpEntity(request, montaHeader());
@@ -101,7 +109,9 @@ public class RESTClient {
             LogWS.convertResponse(integrador, log, objectMapper, responseEntity, retorno);
             throw ex;
         } catch (Exception ex) {
-            integrador.setDsMensagem("Erro " + responseEntity.getStatusCode().toString());
+            if (responseEntity != null) {
+                integrador.setDsMensagem("Erro " + responseEntity.getStatusCode());
+            }
             integrador.setIntegracaoStatus(WSIntegracaoStatusEnum.NEGADO);
             throw new ErrorException(integrador, RESTClient.class, "Erro no envio da Requisição", WSMensagemErroEnum.GENENDPOINT, ex.getMessage(), WSIntegracaoStatusEnum.NEGADO, ex);
         } finally {

@@ -18,6 +18,17 @@ public class VoucherRS {
     @JsonProperty("erro")
     String erro;
 
+    String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public VoucherRS setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
     public String getEndpointVoucher() {
         return endpointVoucher;
     }

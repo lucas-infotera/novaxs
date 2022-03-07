@@ -34,7 +34,6 @@ import java.util.*;
 @Component
 public class UtilsWS {
 
-    public static String variavelTemporaria = "VariavelDeTeste";
     private static ObjectMapper objectMapper;
     private static Validator validator;
 
@@ -100,7 +99,9 @@ public class UtilsWS {
                 if (voucherRS.getVoucher() != null) {
                     String s = new String(voucherRS.getVoucher(), StandardCharsets.UTF_8);
                     if (s.contains("erro")) {
-                        errorsType = montaRetorno(s, VoucherRS.class).getErro();
+                        if (!s.contains("cancelado")) {
+                            errorsType = montaRetorno(s, VoucherRS.class).getErro();
+                        }
                     }
                 }
             }
@@ -342,7 +343,7 @@ public class UtilsWS {
         }
         WSIngresso result = new WSIngresso(productsByDateRS.getPath(),
                 productsByDateRS.getName(),
-                UtilsWS.variavelTemporaria,
+                productsByDateRS.getName(),
                 null,
                 null,
                 null,

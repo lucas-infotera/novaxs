@@ -63,7 +63,7 @@ public class DisponibilidadeWS {
         List<Date> rangedatasPesquisa = montaRangedatasPesquisa(dispRQ);
 
         if (rangedatasPesquisa != null) {
-            if (rangedatasPesquisa.size() > 14){
+            if (rangedatasPesquisa.size() > 14) {
                 throw new ErrorException("Range de datas na pesquisa invalido: Numero máximo permitido é 14 dias");
             }
             for (Date dtPesquisa : rangedatasPesquisa) {
@@ -108,45 +108,57 @@ public class DisponibilidadeWS {
         int sqPesquisa = 0;
         WSIngressoPesquisa ingressoPesquisa = null;
 
+        boolean contemCriancaNaPesquisa = dispRQ.getReservaNomeList().stream()
+                .anyMatch(reservaNome -> {
+                    if (reservaNome.getQtIdade() <= 12 || reservaNome.getPaxTipo().isChd()) {
+                        return true;
+                    }
+                    return false;
+                });
         for (GetProductsByDateRS productsByDateRS : getProductsByDateRSList) {
             ingressoPesquisa = null;
             sqPesquisa++;
-            if (!(productsByDateRS.getName().toUpperCase().contains("COMBO") && productsByDateRS.getName().toUpperCase().contains("INGRESSOS"))) {
-                ingressoPesquisa = pesquisaList.stream()
-                        .filter(wsi -> wsi.getIngresso().getCdServico().equals(productsByDateRS.getPath()))
-                        .findFirst()
-                        .orElse(null);
-                if (ingressoPesquisa == null) {
-                    ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
-                    result.add(ingressoPesquisa);
-                } else {
-                    ingressoPesquisa.setIngressoModalidadeList(ingressoPesquisaIngressoModalidadeList(ingressoPesquisa, dispRQ, productsByDateRS));
-                    result.add(ingressoPesquisa);
-                }
-                if (ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INGRESSO")
-                        && ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INDIVIDUAL")
-                        && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("FORMULÁRIO")
-                        && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("CHD")) {
-                    for (GetProductsByDateRS searchCombo : getProductsByDateRSList) {
-                        if (searchCombo.getName().toUpperCase().contains("COMBO") && searchCombo.getName().toUpperCase().contains("INGRESSOS")) {
-                            if (searchCombo.getProducts() != null && !searchCombo.getProducts().isEmpty()) {
-                                if (searchCombo.getProducts().get(0).getName().toUpperCase().contains("INGRESSO")
-                                        && searchCombo.getProducts().get(0).getName().toUpperCase().contains("INDIVIDUAL")) {
-                                    WSIngressoModalidade modalidade = ingressoPesquisa.getIngressoModalidadeList().stream()
-                                            .filter(wsm -> {
-                                                return wsm.getCdModalidade().contains(searchCombo.getPath());
-                                            })
-                                            .findFirst()
-                                            .orElse(null);
 
-                                    if (modalidade != null) {
-                                        String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
-                                        searchCombo.setPath(path);
-                                        modalidade.getUtilizacaoDatasList().add(UtilsWS.montaWSIngressoUtilizacao(dispRQ, searchCombo));
-                                    } else {
-                                        String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
-                                        searchCombo.setPath(path);
-                                        ingressoPesquisa.getIngressoModalidadeList().addAll(UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ, searchCombo));
+            if (!contemCriancaNaPesquisa && productsByDateRS.getName().contains("CHD")) {
+                continue;
+            } else {
+                if (!(productsByDateRS.getName().toUpperCase().contains("COMBO") && productsByDateRS.getName().toUpperCase().contains("INGRESSOS"))) {
+                    ingressoPesquisa = pesquisaList.stream()
+                            .filter(wsi -> wsi.getIngresso().getCdServico().equals(productsByDateRS.getPath()))
+                            .findFirst()
+                            .orElse(null);
+                    if (ingressoPesquisa == null) {
+                        ingressoPesquisa = montaIngressoPesquisa(sqPesquisa, dispRQ, productsByDateRS);
+                        result.add(ingressoPesquisa);
+                    } else {
+                        ingressoPesquisa.setIngressoModalidadeList(ingressoPesquisaIngressoModalidadeList(ingressoPesquisa, dispRQ, productsByDateRS));
+                        result.add(ingressoPesquisa);
+                    }
+                    if (ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INGRESSO")
+                            && ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INDIVIDUAL")
+                            && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("FORMULÁRIO")
+                            && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("CHD")) {
+                        for (GetProductsByDateRS searchCombo : getProductsByDateRSList) {
+                            if (searchCombo.getName().toUpperCase().contains("COMBO") && searchCombo.getName().toUpperCase().contains("INGRESSOS")) {
+                                if (searchCombo.getProducts() != null && !searchCombo.getProducts().isEmpty()) {
+                                    if (searchCombo.getProducts().get(0).getName().toUpperCase().contains("INGRESSO")
+                                            && searchCombo.getProducts().get(0).getName().toUpperCase().contains("INDIVIDUAL")) {
+                                        WSIngressoModalidade modalidade = ingressoPesquisa.getIngressoModalidadeList().stream()
+                                                .filter(wsm -> {
+                                                    return wsm.getCdModalidade().contains(searchCombo.getPath());
+                                                })
+                                                .findFirst()
+                                                .orElse(null);
+
+                                        if (modalidade != null) {
+                                            String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
+                                            searchCombo.setPath(path);
+                                            modalidade.getUtilizacaoDatasList().add(UtilsWS.montaWSIngressoUtilizacao(dispRQ, searchCombo));
+                                        } else {
+                                            String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
+                                            searchCombo.setPath(path);
+                                            ingressoPesquisa.getIngressoModalidadeList().addAll(UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ, searchCombo));
+                                        }
                                     }
                                 }
                             }

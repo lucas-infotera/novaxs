@@ -21,6 +21,28 @@ public class Parametro {
 
     public String nomeModalidade;
 
+    public String voucher;
+
+    public String tokenVoucher;
+
+    public String getVoucher() {
+        return voucher;
+    }
+
+    public Parametro setVoucher(String voucher) {
+        this.voucher = voucher;
+        return this;
+    }
+
+    public String getTokenVoucher() {
+        return tokenVoucher;
+    }
+
+    public Parametro setTokenVoucher(String tokenVoucher) {
+        this.tokenVoucher = tokenVoucher;
+        return this;
+    }
+
     public String getCdModalidade() {
         return cdModalidade;
     }

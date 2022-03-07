@@ -8,8 +8,6 @@ package br.com.infotera.it.novaxs.controller;
 import br.com.infotera.common.*;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
-import br.com.infotera.common.hotel.WSAlteraReservaRQ;
-import br.com.infotera.common.hotel.WSAlteraReservaRS;
 import br.com.infotera.common.reserva.rqrs.WSReservaRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservaRS;
 import br.com.infotera.common.reserva.rqrs.WSReservarRQ;
@@ -165,12 +163,10 @@ public class ApiController {
         WSReservaRQ wsRQ = gson.fromJson(jsonRQ, WSReservaRQ.class);
         wsRQ.getIntegrador().setDsMetodo("consultar");
         try {
-            result = consultarWS.consultar(wsRQ, false);
+            result = consultarWS.consultar(wsRQ);
         } catch (ErrorException ex) {
-
             result = new WSReservaRS(null, ex.getIntegrador());
         } catch (Exception ex) {
-
             result = new WSReservaRS(null, new ErrorException(wsRQ.getIntegrador(), ApiController.class, "consultar", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.INCONSISTENTE, ex).getIntegrador());
         } finally {
             LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);

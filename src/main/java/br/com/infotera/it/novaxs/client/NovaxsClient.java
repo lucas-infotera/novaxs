@@ -5,7 +5,6 @@ import br.com.infotera.common.WSIntegrador;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.it.novaxs.model.*;
-import br.com.infotera.it.novaxs.utils.UtilsWS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -42,7 +41,8 @@ public class NovaxsClient {
             result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class)).orElseThrow(() -> new ErrorException("Nenhum Ingresso encontrado")));
 
 
-            if (UtilsWS.variavelTemporaria != null) {
+            Boolean variavelTemporaria = true;
+            if (variavelTemporaria != null) {
                 result.forEach(getProductsByDateRS -> {
                     getProductsByDateRS.setImage("https://www.ifrr.edu.br/midia/teste/image");
                     if (getProductsByDateRS.getProducts() != null) {
@@ -158,7 +158,7 @@ public class NovaxsClient {
             requestBody.add("bill", getAccessListRQ.getBill());
 
 
-            result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getAccessList", GetAccessListRS[].class)).orElseThrow(()-> new ErrorException("Erro a o obter lista de acesso da NovaXS")));
+            result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getAccessList", GetAccessListRS[].class)).orElseThrow(() -> new ErrorException("Erro a o obter lista de acesso da NovaXS")));
 
 
         } catch (ErrorException ex) {
@@ -207,8 +207,9 @@ public class NovaxsClient {
                     "login=" + voucherRQ.getLogin() +
                     "&password=" + voucherRQ.getPassword() +
                     "&voucher=" + voucherRQ.getVoucher() +
-                    "&token=" + voucherRQ.getToken();
-//                            "&method=" + voucherRQ.getMethod()
+                    "&token=" + voucherRQ.getToken() +
+                    "&method=" + voucherRQ.getMethod();
+
             result = restClient.sendReceive(integrador, voucherRQ, HttpMethod.GET,
                     endpointComplemento, VoucherRS.class);
 

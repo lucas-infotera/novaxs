@@ -16,8 +16,8 @@ public class VoucherRQ {
     String password;
     @JsonProperty("voucher")
     String voucher;
-//    @JsonProperty("method")
-//    String method = "receiptAsByte";
+    @JsonProperty("method")
+    String method = "receiptAsByte";
 
     public VoucherRQ() {
     }
@@ -26,6 +26,10 @@ public class VoucherRQ {
         this.setLogin(credenciaisNovaXS.getLogin());
         this.setPassword(credenciaisNovaXS.getPassword());
         this.setToken(credenciaisNovaXS.getToken());
+    }
+
+    public String getMethod() {
+        return method;
     }
 
     public String getVoucher() {

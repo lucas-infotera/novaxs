@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  **/
 
 @SpringBootTest
-public class TestesDeConvercao {
+public class TestesDeConvercaoDeObjetosNovaxs {
 
     @Autowired
     DisponibilidadeWS disponibilidadeWS;

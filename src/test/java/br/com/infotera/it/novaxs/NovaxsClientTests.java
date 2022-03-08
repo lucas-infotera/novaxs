@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  **/
 
 @SpringBootTest()
-public class TestesChamandoWSNovaxs {
+public class NovaxsClientTests {
 
     @Autowired
     DisponibilidadeWS disponibilidadeWS;

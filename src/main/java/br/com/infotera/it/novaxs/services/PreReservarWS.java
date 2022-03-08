@@ -45,11 +45,18 @@ public class PreReservarWS {
 
             //adiciona apenas como opção de documento o CPF a o Pax principal
 
-            reservaServico.getServico().getReservaNomeList().get(0).setDocumento(new WSDocumento(WSDocumentoTipoEnum.CPF, true));
-//            reservaServico.getServico().getReservaNomeList().get(0).setDocumentoList(Arrays.asList(new WSDocumento(WSDocumentoTipoEnum.CPF, true)));
+            int i = 0;
+            for (WSReservaNome reservaNome : reservaServico.getServico().getReservaNomeList()) {
+                if (i == 0) {
+                    reservaNome.setDocumento(new WSDocumento(WSDocumentoTipoEnum.CPF, true));
+                    reservaNome.setDocumentoList(Arrays.asList(new WSDocumento(WSDocumentoTipoEnum.CPF, true)));
+                } else {
+                    reservaNome.setDocumento(null);
+                    reservaNome.setDocumentoList(null);
+                }
+                i++;
+            }
 
-//            reservaServico.getServico().getReservaNomeList().get(1).setDocumento(null);
-//            reservaServico.getServico().getReservaNomeList().get(1).setDocumentoList(Arrays.asList(new WSDocumento(WSDocumentoTipoEnum.RG, false)));
 
             reservaServicoList.add(reservaServico);
         }

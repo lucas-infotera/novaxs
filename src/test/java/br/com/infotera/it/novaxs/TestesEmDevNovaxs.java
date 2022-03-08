@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @Author Lucas
  **/
 @SpringBootTest
-public class TestesEmDev {
+public class TestesEmDevNovaxs {
 
     @Autowired
     private DisponibilidadeWS disponibilidadeWS;

@@ -121,8 +121,15 @@ public class UtilsWS {
 
     private static WSTarifa montaWSTarifa(WSDisponibilidadeIngressoRQ dispRQ, WSIntegrador integrador, List<WSReservaNome> reservaNomeList, GetProductsByDateRS productsByDateRS) throws ErrorException {
         WSTarifa tarifa = null;
-        Integer qtPax = reservaNomeList.size();
+
+        Integer qtPax = 0;
+        if (productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {
+            qtPax = 1;
+        } else {
+            qtPax = montaQtAdultos_QtCriancas(reservaNomeList).get(WSPaxTipoEnum.ADT);
+        }
         double vlNeto = montaVlNeto(productsByDateRS) * qtPax;
+
         try {
             tarifa = new WSTarifa(productsByDateRS.getCurrency(), vlNeto, vlNeto / (qtPax.doubleValue()), null, null, WSPagtoFornecedorTipoEnum.FATURADO, UtilsWS.montaPoliticaList(dispRQ, productsByDateRS));
 
@@ -133,6 +140,25 @@ public class UtilsWS {
         } catch (Exception ex) {
             throw new ErrorException(integrador, DisponibilidadeWS.class, "montaPesquisa", WSMensagemErroEnum.SDI, "Erro ao armazenar tarifa/modalidade", WSIntegracaoStatusEnum.NEGADO, ex);
         }
+    }
+
+    public static Map<WSPaxTipoEnum, Integer> montaQtAdultos_QtCriancas(List<WSReservaNome> reservaNomeList) {
+        Map<WSPaxTipoEnum, Integer> qtAdultos_qtCriancas = new HashMap<>();
+        int qtCrianca = 0;
+        int qtAdulto = 0;
+        for (WSReservaNome reservaNome : reservaNomeList) {
+            if (reservaNome.getPaxTipo().equals(WSPaxTipoEnum.CHD)) {
+                qtCrianca++;
+            }
+            if (reservaNome.getPaxTipo().equals(WSPaxTipoEnum.ADT)) {
+                qtAdulto++;
+            }
+        }
+
+        qtAdultos_qtCriancas.put(WSPaxTipoEnum.ADT, qtAdulto);
+        qtAdultos_qtCriancas.put(WSPaxTipoEnum.CHD, qtCrianca);
+
+        return qtAdultos_qtCriancas;
     }
 
     private static List<WSTarifaNome> montaTarifaNomeList(GetProductsByDateRS productsByDateRS, WSTarifa tarifa) {
@@ -166,7 +192,12 @@ public class UtilsWS {
                 .setCdModalidade(productsByDateRS.getPath());
 
         if (productsByDateRS.getValue() != null) {
-            double vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * rq.getReservaNomeList().size();
+            double vlTotal = 0;
+            if (productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {
+                vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100);
+            } else {
+                vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * montaQtAdultos_QtCriancas(rq.getReservaNomeList()).get(WSPaxTipoEnum.ADT);
+            }
             wsIngressoUtilizacaoData.setVlTotal(vlTotal);
         }
         wsIngressoUtilizacaoData.setDsTarifa("null~" + wsIngressoUtilizacaoData.getVlTotal().toString() + "#" + parametro.toString());
@@ -251,12 +282,12 @@ public class UtilsWS {
         if (ingressoPesquisa != null) {
             if (ingressoPesquisa.getIngressoModalidadeList() != null) {
                 for (WSIngressoModalidade m : ingressoPesquisa.getIngressoModalidadeList()) {
-                        WSIngressoUtilizacaoData wsIngressoUtilizacaoData = montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS);
-                        List<WSIngressoUtilizacaoData> ingressoUtilizacaoDataList = new ArrayList<>();
-                        ingressoUtilizacaoDataList.add(wsIngressoUtilizacaoData);
-                        m.setUtilizacaoDatasList(ingressoUtilizacaoDataList);
-                        m.getUtilizacaoDatasList().add(montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS));
-                        return ingressoPesquisa.getIngressoModalidadeList();
+                    WSIngressoUtilizacaoData wsIngressoUtilizacaoData = montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS);
+                    List<WSIngressoUtilizacaoData> ingressoUtilizacaoDataList = new ArrayList<>();
+                    ingressoUtilizacaoDataList.add(wsIngressoUtilizacaoData);
+                    m.setUtilizacaoDatasList(ingressoUtilizacaoDataList);
+                    m.getUtilizacaoDatasList().add(montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS));
+                    return ingressoPesquisa.getIngressoModalidadeList();
                 }
             }
         } else {
@@ -315,32 +346,41 @@ public class UtilsWS {
 
     public static List<WSIngressoModalidade> montaIngressoModalidadeComTarifa(WSIngressoPesquisa ingressoPesquisa, WSDisponibilidadeIngressoRQ dispRQ, WSTarifa tarifa, GetProductsByDateRS productsByDateRS) throws ErrorException {
         List<WSIngressoModalidade> wsIngressoModalidade = new ArrayList<>();
-        if (productsByDateRS.getName().contains("Horário")) {
-            if (!Utils.isListNothing(productsByDateRS.getSchedules())) {
-                return montaIngressoModalidadeComHorario(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getSchedules(), productsByDateRS);
+        if (!productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {
+            if (productsByDateRS.getName().contains("Horário")) {
+                if (!Utils.isListNothing(productsByDateRS.getSchedules())) {
+                    return montaIngressoModalidadeComHorario(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getSchedules(), productsByDateRS);
+                }
+            } else if (productsByDateRS.getName().toUpperCase().contains("INDIVIDUAL")) {
+                wsIngressoModalidade.addAll(montaIngressoModalidadeComTarifaGetProductsByDateRS(ingressoPesquisa, dispRQ, tarifa, productsByDateRS));
+            } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
+                    && productsByDateRS.getName().toUpperCase().contains("INGRESSO")) {
+                return montaIngressoModalidadeCombo(ingressoPesquisa, dispRQ, tarifa, productsByDateRS);
+            } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
+                    && productsByDateRS.getName().toUpperCase().contains("DIAS")
+                    && productsByDateRS.getName().toUpperCase().contains("ACESSO")
+            ) {
+                wsIngressoModalidade.addAll(montaIngressoModalidadeComboDiasDeAcesso(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
             }
-        } else if (productsByDateRS.getName().toUpperCase().contains("INDIVIDUAL")) {
+        } else {
             wsIngressoModalidade.addAll(montaIngressoModalidadeComTarifaGetProductsByDateRS(ingressoPesquisa, dispRQ, tarifa, productsByDateRS));
-        } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
-                && productsByDateRS.getName().toUpperCase().contains("INGRESSO")) {
-            return montaIngressoModalidadeCombo(ingressoPesquisa, dispRQ, tarifa, productsByDateRS);
-        } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
-                && productsByDateRS.getName().toUpperCase().contains("DIAS")
-                && productsByDateRS.getName().toUpperCase().contains("ACESSO")
-        ) {
-            wsIngressoModalidade.addAll(montaIngressoModalidadeComboDiasDeAcesso(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
         }
 
         return wsIngressoModalidade;
     }
 
     public static WSIngresso montaIngresso(WSIntegrador integrador, WSDisponibilidadeIngressoRQ ingressoRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
-        List<WSMedia> mediaList = null;
-        if (!productsByDateRS.getType().equals("Combo")) {
-            mediaList = montaMediaList(productsByDateRS);
-        } else {
-            mediaList = montaMediaList(productsByDateRS.getProducts());
+        List<WSMedia> mediaList = new ArrayList<>();
+        if (productsByDateRS != null) {
+            mediaList.addAll(montaMediaList(productsByDateRS));
+            if (productsByDateRS.getProducts() != null) {
+                mediaList.addAll(montaMediaList(productsByDateRS.getProducts()));
+            }
+            if (mediaList.isEmpty()){
+                mediaList = null;
+            }
         }
+
         WSIngresso result = new WSIngresso(productsByDateRS.getPath(),
                 productsByDateRS.getName(),
                 productsByDateRS.getName(),
@@ -384,8 +424,8 @@ public class UtilsWS {
     public static List<WSPolitica> montaPoliticaList(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {
         List<WSPolitica> result = new ArrayList<>();
         List<WSPoliticaCancelamento> politicaCancelamentoList = new ArrayList();
-        if (productsByDateRS != null){
-            if (productsByDateRS.getCancellationPolicies() != null){
+        if (productsByDateRS != null) {
+            if (productsByDateRS.getCancellationPolicies() != null) {
 
                 WSPoliticaCancelamento politicaCancelamento = new WSPoliticaCancelamento("Cancelamento",
                         productsByDateRS.getCancellationPolicies(),
@@ -507,8 +547,8 @@ public class UtilsWS {
                                     .setDate(UtilsWS.montaDataNovaxs(montaStringToDate(dsParametro.getDt())));
 
                             path = dsParametro.getCdModalidade().split("-");
-                            if (path.length > 1){
-                                if (dsParametro.getNomeModalidade().contains("Combo")){
+                            if (path.length > 1) {
+                                if (dsParametro.getNomeModalidade().contains("Combo")) {
                                     product.setPath(path[1]);
                                 }
                             } else {

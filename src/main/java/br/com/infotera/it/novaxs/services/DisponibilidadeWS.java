@@ -5,6 +5,7 @@ import br.com.infotera.common.WSIntegrador;
 import br.com.infotera.common.WSReservaNome;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
+import br.com.infotera.common.enumerator.WSPaxTipoEnum;
 import br.com.infotera.common.servico.WSIngressoModalidade;
 import br.com.infotera.common.servico.WSIngressoPesquisa;
 import br.com.infotera.common.servico.rqrs.WSDisponibilidadeIngressoRQ;
@@ -78,7 +79,13 @@ public class DisponibilidadeWS {
                             montaRequestGetProductsByDateRQ(ingressoRQ.getIntegrador(), ingressoRQ.getDtInicio()));
                     if (getProductsByDateRSList != null) {
                         if (!getProductsByDateRSList.isEmpty()) {
-                            result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList);
+                            if (isContemCriancaNaPesquisa(dispRQ)) {
+                                List<GetProductsByDateRS> combosAdultoCrianca = montaCombosAdultoCrianca(dispRQ, getProductsByDateRSList);
+                                result = montaPesquisarIngressoResult(result, ingressoRQ, combosAdultoCrianca, true);
+                            } else {
+                                result = montaPesquisarIngressoResult(result, ingressoRQ, getProductsByDateRSList, false);
+                            }
+
                         }
                     }
                 } catch (NullPointerException ex) {
@@ -103,22 +110,14 @@ public class DisponibilidadeWS {
         return result;
     }
 
-    private List<WSIngressoPesquisa> montaPesquisarIngressoResult(List<WSIngressoPesquisa> pesquisaList, WSDisponibilidadeIngressoRQ dispRQ, List<GetProductsByDateRS> getProductsByDateRSList) throws ErrorException {
+    private List<WSIngressoPesquisa> montaPesquisarIngressoResult(List<WSIngressoPesquisa> pesquisaList, WSDisponibilidadeIngressoRQ dispRQ, List<GetProductsByDateRS> getProductsByDateRSList, boolean contemCriancaNaPesquisa) throws ErrorException {
         List<WSIngressoPesquisa> result = new ArrayList<>();
         int sqPesquisa = 0;
         WSIngressoPesquisa ingressoPesquisa = null;
 
-        boolean contemCriancaNaPesquisa = dispRQ.getReservaNomeList().stream()
-                .anyMatch(reservaNome -> {
-                    if (reservaNome.getQtIdade() <= 12 || reservaNome.getPaxTipo().isChd()) {
-                        return true;
-                    }
-                    return false;
-                });
         for (GetProductsByDateRS productsByDateRS : getProductsByDateRSList) {
             ingressoPesquisa = null;
             sqPesquisa++;
-
             if (!contemCriancaNaPesquisa && productsByDateRS.getName().contains("CHD")) {
                 continue;
             } else {
@@ -171,6 +170,52 @@ public class DisponibilidadeWS {
 
 
         return result;
+    }
+
+    private boolean isContemCriancaNaPesquisa(WSDisponibilidadeIngressoRQ dispRQ) {
+        boolean contemCriancaNaPesquisa = dispRQ.getReservaNomeList().stream()
+                .anyMatch(reservaNome -> {
+                    if (reservaNome.getQtIdade() <= 12 || reservaNome.getPaxTipo().isChd()) {
+                        return true;
+                    }
+                    return false;
+                });
+        return contemCriancaNaPesquisa;
+    }
+
+    private List<GetProductsByDateRS> montaCombosAdultoCrianca(WSDisponibilidadeIngressoRQ dispRQ, List<GetProductsByDateRS> resultadoPesquisaNovaXS) {
+        List<GetProductsByDateRS> result = new ArrayList<>();
+        GetProductsByDateRS crianca = null;
+        if (resultadoPesquisaNovaXS != null) {
+            for (GetProductsByDateRS rs : resultadoPesquisaNovaXS) {
+                if (rs.getName().toUpperCase().contains("CHD")) {
+                    crianca = rs;
+                }
+            }
+            if (crianca != null) {
+                for (GetProductsByDateRS rs : resultadoPesquisaNovaXS) {
+                    if (!rs.getName().toUpperCase().contains("CHD")) {
+                        result.add(montaComboAdultoCrianca(dispRQ, crianca, rs));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private GetProductsByDateRS montaComboAdultoCrianca(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS crianca, GetProductsByDateRS rs) {
+        GetProductsByDateRS comboAdultoCrianca = new GetProductsByDateRS()
+                .setPath(rs.getPath() + "-" + crianca.getPath())
+                .setCancellationPolicies(rs.getCancellationPolicies() + "\n Politicas de cancelamento Ingresso criança: " + crianca.getCancellationPolicies())
+                .setImage(rs.getImage())
+                .setValue(String.valueOf(Double.parseDouble(rs.getValue()) + Double.parseDouble(crianca.getValue())))
+                .setId(rs.getId() + "-" + crianca.getId())
+                .setType(rs.getType())
+                .setShortName("COMBO INFOTERA " + rs.getName() +" "+ UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.ADT) + "x Adulto "
+                        + UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.CHD) + "x Crianca")
+                .setName("COMBO INFOTERA " +  rs.getName() +" "+ UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.ADT) + "x Adulto "
+                        + UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.CHD) + "x Crianca");
+        return comboAdultoCrianca;
     }
 
     private WSIngressoPesquisa montaIngressoPesquisa(int sqPesquisa, WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS productsByDateRS) throws ErrorException {

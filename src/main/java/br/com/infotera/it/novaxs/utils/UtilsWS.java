@@ -559,7 +559,7 @@ public class UtilsWS {
 
                         try {
                             /*Quando o mesmo conter Infotera sabemos que ser refere a Combo de ingressos com adultos e crianças */
-                            /*Primeiro produto sempre é o do Adulto */
+                            /*Primeiro produto sempre é o do Adulto  */
                             if (reservaServico.getServico().getNmServico().contains("infotera".toUpperCase())) {
                                 pathArray = dsParametro.getCdModalidade().split("-");
                                 int i = 0;

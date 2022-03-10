@@ -48,7 +48,6 @@ public class DisponibilidadeController {
         } finally {
             LogWS.gerarLog(result.getIntegrador(), jsonRQ, null);
         }
-
         return gson.toJson(result);
     }
 

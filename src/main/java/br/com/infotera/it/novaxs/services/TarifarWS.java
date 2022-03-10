@@ -61,16 +61,21 @@ public class TarifarWS {
             ingressoRQ.setDtInicio(tarifarServicoRQ.getReservaServico().getServico().getDtServico());
             ingressoRQ.setDtFim(tarifarServicoRQ.getReservaServico().getServico().getDtServico());
 
-            String[] cdReferencia = produtoReferencia.getCd().split("-");
+
             List<WSIngressoPesquisa> listIngressosDisp = disponibilidadeWS.pesquisarIngresso(ingressoRQ);
             ingressoDisp = listIngressosDisp.stream()
                     .filter(ingressoPesquisa -> {
-                        if (cdReferencia.length > 1) {
-                            if (ingressoPesquisa.getIngresso().getCdServico().contains(cdReferencia[0])) {
-                                for (WSIngressoModalidade m :ingressoPesquisa.getIngressoModalidadeList()){
-                                    if (m.getCdModalidade().contains(cdReferencia[1])){
-                                        return true;
-                                    }
+                        String[] cdReferencia = new String[2];
+                        if (!produtoReferencia.getNomeIngresso().toUpperCase().contains("INFOTERA")) {
+                            cdReferencia = produtoReferencia.getCd().split("-");
+                        } else {
+                            cdReferencia[0] = produtoReferencia.getCd();
+                            cdReferencia[1] = produtoReferencia.getCdModalidade();
+                        }
+                        if (ingressoPesquisa.getIngresso().getCdServico().contains(cdReferencia[0])) {
+                            for (WSIngressoModalidade m : ingressoPesquisa.getIngressoModalidadeList()) {
+                                if (m.getCdModalidade().contains(produtoReferencia.getCdModalidade())) {
+                                    return true;
                                 }
                             }
                             return false;
@@ -88,8 +93,8 @@ public class TarifarWS {
                 ingressoTarifado.setIngressoModalidade(ingressoDisp.getIngressoModalidadeList().stream()
                         .filter(wsIngressoModalidade -> {
                             if (wsIngressoModalidade.getNmModalidade().contains(produtoReferencia.getNomeModalidade())) {
-                                if (cdReferenciaModalidade.length > 1){
-                                     return wsIngressoModalidade.getCdModalidade().contains(cdReferenciaModalidade[1]);
+                                if (cdReferenciaModalidade.length > 1) {
+                                    return wsIngressoModalidade.getCdModalidade().contains(cdReferenciaModalidade[1]);
                                 } else {
                                     return wsIngressoModalidade.getCdModalidade().contains(cdReferenciaModalidade[0]);
                                 }

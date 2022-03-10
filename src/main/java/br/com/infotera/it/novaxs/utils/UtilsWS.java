@@ -186,6 +186,7 @@ public class UtilsWS {
         wsIngressoUtilizacaoData.setDtInicio(rq.getDtInicio());
         wsIngressoUtilizacaoData.setDtFim(rq.getDtInicio());
         Parametro parametro = new Parametro()
+                .setNomeIngresso(productsByDateRS.getName())
                 .setDt(rq.getDtInicio().toString())
                 .setCd(productsByDateRS.getPath())
                 .setNomeModalidade(productsByDateRS.getName())
@@ -196,7 +197,11 @@ public class UtilsWS {
             if (productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {
                 vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100);
             } else {
-                vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * montaQtAdultos_QtCriancas(rq.getReservaNomeList()).get(WSPaxTipoEnum.ADT);
+                if (!productsByDateRS.getName().toUpperCase().contains("COMBO")) {
+                    vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * montaQtAdultos_QtCriancas(rq.getReservaNomeList()).get(WSPaxTipoEnum.ADT);
+                } else{
+                    vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100);
+                }
             }
             wsIngressoUtilizacaoData.setVlTotal(vlTotal);
         }
@@ -209,6 +214,7 @@ public class UtilsWS {
         wsIngressoUtilizacaoData.setDtInicio(rq.getDtInicio());
         wsIngressoUtilizacaoData.setDtFim(rq.getDtInicio());
         Parametro parametro = new Parametro()
+                .setNomeIngresso(productsByDateRS.getName())
                 .setDt(rq.getDtInicio().toString())
                 .setCd(productsByDateRS.getPath())
                 .setHorario(schedule.getSchedule())
@@ -216,7 +222,12 @@ public class UtilsWS {
                 .setNomeModalidade(schedule.getSchedule());
 
         if (productsByDateRS.getValue() != null) {
-            double vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * rq.getReservaNomeList().size();
+            double vlTotal = 0;
+            if (productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {
+                vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100);
+            } else {
+                vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * montaQtAdultos_QtCriancas(rq.getReservaNomeList()).get(WSPaxTipoEnum.ADT);
+            }
             wsIngressoUtilizacaoData.setVlTotal(vlTotal);
         }
         wsIngressoUtilizacaoData.setDsTarifa("null~" + wsIngressoUtilizacaoData.getVlTotal().toString() + "#" + parametro.toString());
@@ -238,7 +249,8 @@ public class UtilsWS {
         if (ingressoPesquisa != null) {
             for (WSIngressoModalidade modalidade : ingressoPesquisa.getIngressoModalidadeList()) {
                 for (Schedule schedule : schedules) {
-                    if (modalidade.getNmModalidade().equals(schedule.getSchedule())) {
+                    String cdReferenciaSchedule = schedule.getPath() + "-" + schedule.getSchedule();
+                    if (modalidade.getCdModalidade().equals(cdReferenciaSchedule)) {
                         modalidade.getUtilizacaoDatasList().add(montaWSIngressoUtilizacao(dispRQ, productsByDateRS, schedule));
                     }
                 }
@@ -303,7 +315,7 @@ public class UtilsWS {
     }
 
     private static WSIngressoModalidade montaIngressoModalidadeComHorario(WSDisponibilidadeIngressoRQ ingressoRQ, WSTarifa tarifa, Schedule schedule, GetProductsByDateRS productsByDateRS) {
-        WSIngressoModalidade modalidade = new WSIngressoModalidade(schedule.getPath(), schedule.getSchedule(), tarifa);
+        WSIngressoModalidade modalidade = new WSIngressoModalidade(schedule.getPath() + "-" + schedule.getSchedule(), productsByDateRS.getName() + " " + schedule.getSchedule(), tarifa);
         modalidade.setDsModalidade("Ingresso com agendamento" + schedule.getSchedule());
         WSIngressoUtilizacaoData wsIngressoUtilizacaoData = montaWSIngressoUtilizacao(ingressoRQ, productsByDateRS, schedule);
         List<WSIngressoUtilizacaoData> ingressoUtilizacaoDataList = new ArrayList<>();
@@ -363,6 +375,11 @@ public class UtilsWS {
                 wsIngressoModalidade.addAll(montaIngressoModalidadeComboDiasDeAcesso(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
             }
         } else {
+            if (productsByDateRS.getName().contains("Horário")) {
+                if (!Utils.isListNothing(productsByDateRS.getSchedules())) {
+                    return montaIngressoModalidadeComHorario(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getSchedules(), productsByDateRS);
+                }
+            }
             wsIngressoModalidade.addAll(montaIngressoModalidadeComTarifaGetProductsByDateRS(ingressoPesquisa, dispRQ, tarifa, productsByDateRS));
         }
 
@@ -376,7 +393,7 @@ public class UtilsWS {
             if (productsByDateRS.getProducts() != null) {
                 mediaList.addAll(montaMediaList(productsByDateRS.getProducts()));
             }
-            if (mediaList.isEmpty()){
+            if (mediaList.isEmpty()) {
                 mediaList = null;
             }
         }
@@ -529,8 +546,8 @@ public class UtilsWS {
     public static ProductsArray montaProductsArray(WSReserva reserva) throws ErrorException {
         ProductsArray result = null;
         List<Product> productList = new ArrayList<>();
-        Product product;
-        String[] path;
+        Product product = null;
+        String[] pathArray;
 
         if (reserva != null) {
             result = new ProductsArray();
@@ -541,26 +558,32 @@ public class UtilsWS {
                                 .orElseThrow(() -> new ErrorException("Erro a o converter DsParametro para montar ProductsArray"));
 
                         try {
-                            int qtPax = reserva.getReservaServicoList().get(0).getServico().getReservaNomeList().size();
-                            product = new Product()
-                                    .setAmount(Integer.toString(qtPax))
-                                    .setDate(UtilsWS.montaDataNovaxs(montaStringToDate(dsParametro.getDt())));
-
-                            path = dsParametro.getCdModalidade().split("-");
-                            if (path.length > 1) {
-                                if (dsParametro.getNomeModalidade().contains("Combo")) {
-                                    product.setPath(path[1]);
+                            /*Quando o mesmo conter Infotera sabemos que ser refere a Combo de ingressos com adultos e crianças */
+                            /*Primeiro produto sempre é o do Adulto */
+                            if (reservaServico.getServico().getNmServico().contains("infotera".toUpperCase())) {
+                                pathArray = dsParametro.getCdModalidade().split("-");
+                                int i = 0;
+                                for (String path : pathArray) {
+                                    if (i == 0) {
+                                        product = montaProduct(reserva, dsParametro, path, WSPaxTipoEnum.ADT);
+                                    } else {
+                                        product = montaProduct(reserva, dsParametro, path, WSPaxTipoEnum.CHD);
+                                    }
+                                    i++;
+                                    productList.add(product);
                                 }
                             } else {
-                                product.setPath(reservaServico.getServico().getCdServico());
-                            }
+                                product = new Product()
+                                        .setAmount(montaQtAdultos_QtCriancas(reserva.getReservaServicoList().get(0).getServico().getReservaNomeList()).get(WSPaxTipoEnum.ADT).toString())
+                                        .setDate(UtilsWS.montaDataNovaxs(montaStringToDate(dsParametro.getDt())));
 
-                            if (dsParametro.getHorario() != null
-                                    && !dsParametro.getHorario().equals("")
-                                    && !dsParametro.getHorario().equals(" ")) {
-                                product.setSchedule(dsParametro.getHorario());
+                                pathArray = dsParametro.getCdModalidade().split("-");
+                                if (pathArray.length > 1) {
+                                    if (dsParametro.getNomeModalidade().contains("Combo")) {
+                                        product.setPath(pathArray[1]);
+                                    }
+                                }
                             }
-                            productList.add(product);
                             result.setProductsArray(productList);
                         } catch (NullPointerException ex) {
                             throw new ErrorException("Erro de nullpointer no metodo montaProductsArray ");
@@ -573,6 +596,20 @@ public class UtilsWS {
 
         }
         return result;
+    }
+
+    private static Product montaProduct(WSReserva reserva, Parametro dsParametro, String path, WSPaxTipoEnum paxTipoEnum) throws ParseException {
+        Product product = new Product()
+                .setAmount(UtilsWS.montaQtAdultos_QtCriancas(reserva.getReservaServicoList().get(0)
+                        .getServico().getReservaNomeList()).get(paxTipoEnum).toString())
+                .setDate(UtilsWS.montaDataNovaxs(montaStringToDate(dsParametro.getDt())))
+                .setPath(path);
+        if (dsParametro.getHorario() != null
+                && !dsParametro.getHorario().equals("")
+                && !dsParametro.getHorario().equals(" ")) {
+            product.setSchedule(dsParametro.getHorario());
+        }
+        return product;
     }
 
     private static Date montaStringToDate(String data) throws ParseException {

@@ -126,7 +126,11 @@ public class UtilsWS {
         if (productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {
             qtPax = 1;
         } else {
-            qtPax = montaQtAdultos_QtCriancas(reservaNomeList).get(WSPaxTipoEnum.ADT);
+            if (!productsByDateRS.getName().toUpperCase().contains("COMBO")) {
+                qtPax = montaQtAdultos_QtCriancas(reservaNomeList).get(WSPaxTipoEnum.ADT);
+            } else {
+                qtPax = 1;
+            }
         }
         double vlNeto = montaVlNeto(productsByDateRS) * qtPax;
 
@@ -199,7 +203,7 @@ public class UtilsWS {
             } else {
                 if (!productsByDateRS.getName().toUpperCase().contains("COMBO")) {
                     vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100) * montaQtAdultos_QtCriancas(rq.getReservaNomeList()).get(WSPaxTipoEnum.ADT);
-                } else{
+                } else {
                     vlTotal = (Double.parseDouble(productsByDateRS.getValue()) / 100);
                 }
             }
@@ -574,15 +578,18 @@ public class UtilsWS {
                                 }
                             } else {
                                 product = new Product()
-                                        .setAmount(montaQtAdultos_QtCriancas(reserva.getReservaServicoList().get(0).getServico().getReservaNomeList()).get(WSPaxTipoEnum.ADT).toString())
+                                        .setAmount("1")
                                         .setDate(UtilsWS.montaDataNovaxs(montaStringToDate(dsParametro.getDt())));
 
                                 pathArray = dsParametro.getCdModalidade().split("-");
-                                if (pathArray.length > 1) {
-                                    if (dsParametro.getNomeModalidade().contains("Combo")) {
+                                if (dsParametro.getNomeModalidade().contains("Combo")) {
+                                    if (pathArray.length > 1) {
                                         product.setPath(pathArray[1]);
                                     }
+                                } else {
+                                    product.setPath(pathArray[0]);
                                 }
+                                productList.add(product);
                             }
                             result.setProductsArray(productList);
                         } catch (NullPointerException ex) {

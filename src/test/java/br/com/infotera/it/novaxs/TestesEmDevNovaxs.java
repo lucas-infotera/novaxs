@@ -214,4 +214,28 @@ public class TestesEmDevNovaxs {
         assertNotNull(listSetAccessListRQ);
     }
 
+
+    @Test
+    public void teste2montaListSetAccessListRQ() {
+        List<GetAccessListRS> getAccessListRS = null;
+        try {
+            getAccessListRS = Arrays.asList(objectMapper.readValue(JsonsTeste.json2_TesteListAcessPersonRS(), GetAccessListRS[].class));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        List<WSReservaNome> reservaNomeList = new ArrayList<>();
+
+        reservaNomeList.add(new WSReservaNome("Joao", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
+        reservaNomeList.add(new WSReservaNome("Lucas", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
+
+        ListSetAccessListRQ listSetAccessListRQ = confirmarWS.montaListSetAccessListRQ(getAccessListRS, reservaNomeList);
+
+        try {
+            System.out.println(objectMapper.writeValueAsString(listSetAccessListRQ));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        assertNotNull(listSetAccessListRQ);
+    }
 }

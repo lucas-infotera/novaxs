@@ -1205,5 +1205,79 @@ public class JsonsTeste {
                 "]";
     }
 
+    public static String json2_TesteListAcessPersonRS(){
+        return "[\n" +
+                "    {\n" +
+                "        \"accessPersons\": [\n" +
+                "            {\n" +
+                "                \"birth\": \"\",\n" +
+                "                \"document\": \"33351559712\",\n" +
+                "                \"internalId\": 0,\n" +
+                "                \"itemIdentificator\": \"2111\",\n" +
+                "                \"name\": \"ARMELIM OLIVEIRA\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"customData\": {\n" +
+                "            \"ProductName\": \"Combo 3 Ingressos\",\n" +
+                "            \"entryId\": \"40159384\",\n" +
+                "            \"productId\": 2111\n" +
+                "        },\n" +
+                "        \"frozen\": false,\n" +
+                "        \"id\": 0,\n" +
+                "        \"inHistory\": false,\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"lastVersion\": true,\n" +
+                "        \"lazy\": false,\n" +
+                "        \"trash\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"accessPersons\": [\n" +
+                "            {\n" +
+                "                \"birth\": \"\",\n" +
+                "                \"document\": \"\",\n" +
+                "                \"internalId\": 0,\n" +
+                "                \"itemIdentificator\": \"2111\",\n" +
+                "                \"name\": \"\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"customData\": {\n" +
+                "            \"ProductName\": \"Combo 3 Ingressos\",\n" +
+                "            \"entryId\": \"40159385\",\n" +
+                "            \"productId\": 2111\n" +
+                "        },\n" +
+                "        \"frozen\": false,\n" +
+                "        \"id\": 0,\n" +
+                "        \"inHistory\": false,\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"lastVersion\": true,\n" +
+                "        \"lazy\": false,\n" +
+                "        \"trash\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"accessPersons\": [\n" +
+                "            {\n" +
+                "                \"birth\": \"\",\n" +
+                "                \"document\": \"\",\n" +
+                "                \"internalId\": 0,\n" +
+                "                \"itemIdentificator\": \"2111\",\n" +
+                "                \"name\": \"\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"customData\": {\n" +
+                "            \"ProductName\": \"Combo 3 Ingressos\",\n" +
+                "            \"entryId\": \"40159386\",\n" +
+                "            \"productId\": 2111\n" +
+                "        },\n" +
+                "        \"frozen\": false,\n" +
+                "        \"id\": 0,\n" +
+                "        \"inHistory\": false,\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"lastVersion\": true,\n" +
+                "        \"lazy\": false,\n" +
+                "        \"trash\": false\n" +
+                "    }\n" +
+                "]";
+    }
+
 
 }

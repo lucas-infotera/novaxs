@@ -151,18 +151,21 @@ public class ConfirmarWS {
             int indexGetAccessListrs = 0;
             do {
                 for (WSReservaNome rn : reservaNomeList) {
-                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
-                    if (rn.getDocumento() != null) {
-                        if (rn.getDocumento().getNrDocumento() != null) {
-                            getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
+                    if (indexGetAccessListrs < getAccessListRS.size()) {
+                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
+                        if (rn.getDocumento() != null) {
+                            if (rn.getDocumento().getNrDocumento() != null) {
+                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
+                            } else {
+                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
+                            }
                         } else {
                             getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
                         }
-                    } else {
-                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
+                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
+
+                        indexGetAccessListrs++;
                     }
-                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
-                    indexGetAccessListrs++;
                 }
             } while (indexGetAccessListrs < getAccessListRS.size());
         }

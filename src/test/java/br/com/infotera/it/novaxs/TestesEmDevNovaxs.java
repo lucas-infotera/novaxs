@@ -12,6 +12,7 @@ import br.com.infotera.common.util.Utils;
 import br.com.infotera.it.novaxs.model.*;
 import br.com.infotera.it.novaxs.services.ConfirmarWS;
 import br.com.infotera.it.novaxs.services.DisponibilidadeWS;
+import br.com.infotera.it.novaxs.utils.Parametro;
 import br.com.infotera.it.novaxs.utils.UtilsWS;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -223,10 +224,7 @@ public class TestesEmDevNovaxs {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        List<WSReservaNome> reservaNomeList = new ArrayList<>();
-
-        reservaNomeList.add(new WSReservaNome("Joao", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
-        reservaNomeList.add(new WSReservaNome("Lucas", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
+        List<WSReservaNome> reservaNomeList = Arrays.asList(gson.fromJson(JsonsTeste.json2_TesteListAcessPersonRS_montaReservaNomeList(), WSReservaNome[].class));
 
         ListSetAccessListRQ listSetAccessListRQ = confirmarWS.montaListSetAccessListRQ(getAccessListRS, reservaNomeList);
 

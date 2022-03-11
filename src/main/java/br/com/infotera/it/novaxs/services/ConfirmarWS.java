@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Author Lucas
@@ -152,17 +154,42 @@ public class ConfirmarWS {
             do {
                 for (WSReservaNome rn : reservaNomeList) {
                     if (indexGetAccessListrs < getAccessListRS.size()) {
-                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
-                        if (rn.getDocumento() != null) {
-                            if (rn.getDocumento().getNrDocumento() != null) {
-                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
-                            } else {
-                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
-                            }
+                        if (getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).getName().contains(rn.getNmNome())) {
+                            getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
                         } else {
-                            getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
+                            if (!getAccessListRS.get(indexGetAccessListrs).getCustomData().getProductName().toUpperCase().contains("CHD")) {
+                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
+                                if (rn.getDocumento() != null) {
+                                    if (rn.getDocumento().getNrDocumento() != null) {
+                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
+                                    } else {
+                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
+                                    }
+                                } else {
+                                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
+                                }
+                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
+                            } else {
+                                WSReservaNome crianca = reservaNomeList.stream()
+                                        .filter(rn1 -> {
+                                            return rn1.getPaxTipo().isChd();
+                                        })
+                                        .findFirst()
+                                        .orElse(null);
+
+                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(crianca.getNmNomeCompleto());
+                                if (crianca.getDocumento() != null) {
+                                    if (crianca.getDocumento().getNrDocumento() != null) {
+                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(crianca.getDocumento().getNrDocumento());
+                                    } else {
+                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
+                                    }
+                                } else {
+                                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
+                                }
+                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(crianca.getDtNascimento()));
+                            }
                         }
-                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
 
                         indexGetAccessListrs++;
                     }
@@ -207,6 +234,5 @@ public class ConfirmarWS {
 
         return buyToBillForRQ;
     }
-
 
 }

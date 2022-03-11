@@ -147,26 +147,28 @@ public class DisponibilidadeWS {
                                 && ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INDIVIDUAL")
                                 && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("FORMULÁRIO")
                                 && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("CHD")) {
-                            for (GetProductsByDateRS searchCombo : getProductsByDateRSList) {
-                                if (searchCombo.getName().toUpperCase().contains("COMBO") && searchCombo.getName().toUpperCase().contains("INGRESSOS")) {
-                                    if (searchCombo.getProducts() != null && !searchCombo.getProducts().isEmpty()) {
-                                        if (searchCombo.getProducts().get(0).getName().toUpperCase().contains("INGRESSO")
-                                                && searchCombo.getProducts().get(0).getName().toUpperCase().contains("INDIVIDUAL")) {
-                                            WSIngressoModalidade modalidade = ingressoPesquisa.getIngressoModalidadeList().stream()
-                                                    .filter(wsm -> {
-                                                        return wsm.getCdModalidade().contains(searchCombo.getPath());
-                                                    })
-                                                    .findFirst()
-                                                    .orElse(null);
+                            if (UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.ADT) >= 3 ) {
+                                for (GetProductsByDateRS searchCombo : getProductsByDateRSList) {
+                                    if (searchCombo.getName().toUpperCase().contains("COMBO") && searchCombo.getName().toUpperCase().contains("INGRESSOS")) {
+                                        if (searchCombo.getProducts() != null && !searchCombo.getProducts().isEmpty()) {
+                                            if (searchCombo.getProducts().get(0).getName().toUpperCase().contains("INGRESSO")
+                                                    && searchCombo.getProducts().get(0).getName().toUpperCase().contains("INDIVIDUAL")) {
+                                                WSIngressoModalidade modalidade = ingressoPesquisa.getIngressoModalidadeList().stream()
+                                                        .filter(wsm -> {
+                                                            return wsm.getCdModalidade().contains(searchCombo.getPath());
+                                                        })
+                                                        .findFirst()
+                                                        .orElse(null);
 
-                                            if (modalidade != null) {
-                                                String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
-                                                searchCombo.setPath(path);
-                                                modalidade.getUtilizacaoDatasList().add(UtilsWS.montaWSIngressoUtilizacao(dispRQ, searchCombo));
-                                            } else {
-                                                String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
-                                                searchCombo.setPath(path);
-                                                ingressoPesquisa.getIngressoModalidadeList().addAll(UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ, searchCombo));
+                                                if (modalidade != null) {
+                                                    String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
+                                                    searchCombo.setPath(path);
+                                                    modalidade.getUtilizacaoDatasList().add(UtilsWS.montaWSIngressoUtilizacao(dispRQ, searchCombo));
+                                                } else {
+                                                    String path = productsByDateRS.getPath() + "-" + searchCombo.getPath();
+                                                    searchCombo.setPath(path);
+                                                    ingressoPesquisa.getIngressoModalidadeList().addAll(UtilsWS.montaIngressoModalidadeList(ingressoPesquisa, dispRQ, searchCombo));
+                                                }
                                             }
                                         }
                                     }

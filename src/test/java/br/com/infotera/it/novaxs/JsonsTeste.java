@@ -1211,15 +1211,15 @@ public class JsonsTeste {
                 "        \"accessPersons\": [\n" +
                 "            {\n" +
                 "                \"birth\": \"\",\n" +
-                "                \"document\": \"33351559712\",\n" +
+                "                \"document\": \"85338138212\",\n" +
                 "                \"internalId\": 0,\n" +
                 "                \"itemIdentificator\": \"2111\",\n" +
-                "                \"name\": \"ARMELIM OLIVEIRA\"\n" +
+                "                \"name\": \"DÓLIQUE LESSA\"\n" +
                 "            }\n" +
                 "        ],\n" +
                 "        \"customData\": {\n" +
                 "            \"ProductName\": \"Combo 3 Ingressos\",\n" +
-                "            \"entryId\": \"40159384\",\n" +
+                "            \"entryId\": \"40163367\",\n" +
                 "            \"productId\": 2111\n" +
                 "        },\n" +
                 "        \"frozen\": false,\n" +
@@ -1242,7 +1242,7 @@ public class JsonsTeste {
                 "        ],\n" +
                 "        \"customData\": {\n" +
                 "            \"ProductName\": \"Combo 3 Ingressos\",\n" +
-                "            \"entryId\": \"40159385\",\n" +
+                "            \"entryId\": \"40163368\",\n" +
                 "            \"productId\": 2111\n" +
                 "        },\n" +
                 "        \"frozen\": false,\n" +
@@ -1265,7 +1265,7 @@ public class JsonsTeste {
                 "        ],\n" +
                 "        \"customData\": {\n" +
                 "            \"ProductName\": \"Combo 3 Ingressos\",\n" +
-                "            \"entryId\": \"40159386\",\n" +
+                "            \"entryId\": \"40163369\",\n" +
                 "            \"productId\": 2111\n" +
                 "        },\n" +
                 "        \"frozen\": false,\n" +
@@ -1278,6 +1278,48 @@ public class JsonsTeste {
                 "    }\n" +
                 "]";
     }
+
+    public static String json2_TesteListAcessPersonRS_montaReservaNomeList(){
+        return "[\n" +
+                "    {\n" +
+                "        \"documento\": {\n" +
+                "            \"documentoTipo\": \"CPF\",\n" +
+                "            \"nrDocumento\": \"853.381.382-12\",\n" +
+                "            \"stObrigatorio\": false\n" +
+                "        },\n" +
+                "        \"dtNascimento\": \"1980-07-01T00:00:00Z\",\n" +
+                "        \"id\": 1930949,\n" +
+                "        \"nmNome\": \"DÓLIQUE\",\n" +
+                "        \"nmSobrenome\": \"LESSA\",\n" +
+                "        \"paxTipo\": \"ADT\",\n" +
+                "        \"qtIdade\": 41,\n" +
+                "        \"sexo\": \"FEMININO\",\n" +
+                "        \"sqNome\": 1930949,\n" +
+                "        \"stAplicado\": false,\n" +
+                "        \"stPrincipal\": true,\n" +
+                "        \"stSelecionado\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"documento\": {\n" +
+                "            \"documentoTipo\": \"CPF\",\n" +
+                "            \"nrDocumento\": \"853.381.382-12\",\n" +
+                "            \"stObrigatorio\": false\n" +
+                "        },\n" +
+                "        \"dtNascimento\": \"1980-07-01T00:00:00Z\",\n" +
+                "        \"id\": 1930948,\n" +
+                "        \"nmNome\": \"VIVALDO\",\n" +
+                "        \"nmSobrenome\": \"MARTINS\",\n" +
+                "        \"paxTipo\": \"ADT\",\n" +
+                "        \"qtIdade\": 41,\n" +
+                "        \"sexo\": \"FEMININO\",\n" +
+                "        \"sqNome\": 1930948,\n" +
+                "        \"stAplicado\": false,\n" +
+                "        \"stPrincipal\": false,\n" +
+                "        \"stSelecionado\": false\n" +
+                "    }\n" +
+                "]";
+    }
+
 
 
 }

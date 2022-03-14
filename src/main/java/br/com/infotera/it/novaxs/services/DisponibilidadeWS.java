@@ -19,7 +19,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -117,6 +120,9 @@ public class DisponibilidadeWS {
             sqPesquisa++;
             if (!contemCriancaNaPesquisa && productsByDateRS.getName().contains("CHD")) {
                 continue;
+            } else if (productsByDateRS.getName().toUpperCase().contains("Dias".toUpperCase())
+                    && productsByDateRS.getName().toUpperCase().contains("acesso".toUpperCase())) {
+                continue;
             } else {
                 if (productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {
                     ingressoPesquisa = pesquisaList.stream()
@@ -147,7 +153,7 @@ public class DisponibilidadeWS {
                                 && ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("INDIVIDUAL")
                                 && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("FORMULÁRIO")
                                 && !ingressoPesquisa.getIngresso().getNmServico().toUpperCase().contains("CHD")) {
-                            if (UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.ADT) >= 3 ) {
+                            if (UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.ADT) >= 3) {
                                 for (GetProductsByDateRS searchCombo : getProductsByDateRSList) {
                                     if (searchCombo.getName().toUpperCase().contains("COMBO") && searchCombo.getName().toUpperCase().contains("INGRESSOS")) {
                                         if (searchCombo.getProducts() != null && !searchCombo.getProducts().isEmpty()) {
@@ -216,16 +222,16 @@ public class DisponibilidadeWS {
                     } else if (rs.getName().toUpperCase().contains("INGRESSO")
                             && rs.getName().toUpperCase().contains("INDIVIDUAL")
                             && !rs.getName().toUpperCase().contains("FORMULÁRIO")
-                            && UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.ADT) == 3){
+                            && UtilsWS.montaQtAdultos_QtCriancas(dispRQ.getReservaNomeList()).get(WSPaxTipoEnum.ADT) == 3) {
                         boolean pularIngressoIndividual = false;
                         for (GetProductsByDateRS productsByDateRS : resultadoPesquisaNovaXS) {
                             if (productsByDateRS.getName().toUpperCase().contains("COMBO")
                                     && productsByDateRS.getName().toUpperCase().contains("3")
                                     && productsByDateRS.getName().toUpperCase().contains("INGRESSOS")) {
-                                    pularIngressoIndividual = true;
+                                pularIngressoIndividual = true;
                             }
                         }
-                        if (pularIngressoIndividual){
+                        if (pularIngressoIndividual) {
                             continue;
                         }
                     }
@@ -239,6 +245,7 @@ public class DisponibilidadeWS {
         }
         return result;
     }
+
     /*path do objeto origem + path do objeto da criança*/
     private GetProductsByDateRS montaComboAdultoCrianca(WSDisponibilidadeIngressoRQ dispRQ, GetProductsByDateRS crianca, GetProductsByDateRS rs) {
         GetProductsByDateRS comboAdultoCrianca = new GetProductsByDateRS()
@@ -249,7 +256,7 @@ public class DisponibilidadeWS {
                 .setId(rs.getId() + "-" + crianca.getId())
                 .setType(rs.getType())
                 .setCurrency(rs.getCurrency());
-        if (rs.getSchedules() != null){
+        if (rs.getSchedules() != null) {
             comboAdultoCrianca.setSchedules(rs.getSchedules());
         }
         if (rs.getName().toUpperCase().contains("COMBO")

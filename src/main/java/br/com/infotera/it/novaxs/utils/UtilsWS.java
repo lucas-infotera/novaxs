@@ -565,7 +565,7 @@ public class UtilsWS {
                             /*Quando o mesmo conter Infotera sabemos que ser refere a Combo de ingressos com adultos e crianças */
                             /*Primeiro produto sempre é o do Adulto  */
                             if (reservaServico.getServico().getNmServico().contains("infotera".toUpperCase())) {
-                                pathArray = dsParametro.getCdModalidade().split("-");
+                                pathArray = dsParametro.getCd().split("-");
                                 int i = 0;
                                 for (String path : pathArray) {
                                     if (i == 0) {
@@ -577,17 +577,13 @@ public class UtilsWS {
                                     productList.add(product);
                                 }
                             } else {
-                                product = new Product()
-                                        .setAmount("1")
-                                        .setDate(UtilsWS.montaDataNovaxs(montaStringToDate(dsParametro.getDt())));
-
                                 pathArray = dsParametro.getCdModalidade().split("-");
                                 if (dsParametro.getNomeModalidade().contains("Combo")) {
                                     if (pathArray.length > 1) {
-                                        product.setPath(pathArray[1]);
+                                        product = montaProduct(reserva, dsParametro, pathArray[1], WSPaxTipoEnum.ADT);
                                     }
                                 } else {
-                                    product.setPath(pathArray[0]);
+                                    product = montaProduct(reserva, dsParametro, pathArray[0], WSPaxTipoEnum.ADT);
                                 }
                                 productList.add(product);
                             }
@@ -615,6 +611,11 @@ public class UtilsWS {
                 && !dsParametro.getHorario().equals("")
                 && !dsParametro.getHorario().equals(" ")) {
             product.setSchedule(dsParametro.getHorario());
+        } else if (dsParametro.getNomeModalidade().toUpperCase().contains("Horário".toUpperCase())){
+            String[] cdModalidade = dsParametro.getCdModalidade().split("-");
+            if (path.equals(cdModalidade[0])) {
+                product.setSchedule(cdModalidade[1]);
+            }
         }
         return product;
     }

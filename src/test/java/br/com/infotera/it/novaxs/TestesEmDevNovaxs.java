@@ -210,14 +210,19 @@ public class TestesEmDevNovaxs {
         reservaNomeList.add(new WSReservaNome("Joao", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
         reservaNomeList.add(new WSReservaNome("Lucas", "", WSPaxTipoEnum.ADT, new Date(), 40, WSSexoEnum.MASCULINO));
 
-        ListSetAccessListRQ listSetAccessListRQ = confirmarWS.montaListSetAccessListRQ(getAccessListRS, reservaNomeList);
+        ListSetAccessListRQ listSetAccessListRQ = null;
+        try {
+            listSetAccessListRQ = confirmarWS.montaListSetAccessListRQ(getAccessListRS, reservaNomeList);
+        } catch (ErrorException e) {
+            e.printStackTrace();
+        }
 
         assertNotNull(listSetAccessListRQ);
     }
 
 
     @Test
-    public void teste2montaListSetAccessListRQ() {
+    public void teste2montaListSetAccessListRQ() throws ErrorException {
         List<GetAccessListRS> getAccessListRS = null;
         try {
             getAccessListRS = Arrays.asList(objectMapper.readValue(JsonsTeste.json2_TesteListAcessPersonRS(), GetAccessListRS[].class));
@@ -225,6 +230,28 @@ public class TestesEmDevNovaxs {
             e.printStackTrace();
         }
         List<WSReservaNome> reservaNomeList = Arrays.asList(gson.fromJson(JsonsTeste.json2_TesteListAcessPersonRS_montaReservaNomeList(), WSReservaNome[].class));
+
+        ListSetAccessListRQ listSetAccessListRQ = confirmarWS.montaListSetAccessListRQ(getAccessListRS, reservaNomeList);
+
+        try {
+            System.out.println(objectMapper.writeValueAsString(listSetAccessListRQ));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        assertNotNull(listSetAccessListRQ);
+    }
+
+
+    @Test
+    public void teste3montaListSetAccessListRQ() throws ErrorException {
+        List<GetAccessListRS> getAccessListRS = null;
+        try {
+            getAccessListRS = Arrays.asList(objectMapper.readValue(JsonsTeste.json3_TesteListAcessPersonRS(), GetAccessListRS[].class));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        List<WSReservaNome> reservaNomeList = Arrays.asList(gson.fromJson(JsonsTeste.json3_TesteListAcessPersonRS_montaReservaNomeList(), WSReservaNome[].class));
 
         ListSetAccessListRQ listSetAccessListRQ = confirmarWS.montaListSetAccessListRQ(getAccessListRS, reservaNomeList);
 

@@ -3,6 +3,7 @@ package br.com.infotera.it.novaxs.services;
 import br.com.infotera.common.*;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
+import br.com.infotera.common.enumerator.WSPaxTipoEnum;
 import br.com.infotera.common.enumerator.WSReservaStatusEnum;
 import br.com.infotera.common.reserva.rqrs.WSReservaRQ;
 import br.com.infotera.common.reserva.rqrs.WSReservaRS;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @Author Lucas
@@ -146,62 +145,83 @@ public class ConfirmarWS {
         return setAccessListRQ;
     }
 
-    public ListSetAccessListRQ montaListSetAccessListRQ(List<GetAccessListRS> getAccessListRS, List<WSReservaNome> reservaNomeList) {
+    public ListSetAccessListRQ montaListSetAccessListRQ(List<GetAccessListRS> getAccessListRS, List<WSReservaNome> reservaNomeList) throws ErrorException {
         ListSetAccessListRQ listSetAccessListRQ = null;
         if (getAccessListRS != null && !reservaNomeList.isEmpty()) {
             listSetAccessListRQ = new ListSetAccessListRQ();
-            int indexGetAccessListrs = 0;
-            do {
-                for (WSReservaNome rn : reservaNomeList) {
-                    if (indexGetAccessListrs < getAccessListRS.size()) {
-                        if (getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).getName().contains(rn.getNmNome())) {
-                            getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
-                        } else {
-                            if (!getAccessListRS.get(indexGetAccessListrs).getCustomData().getProductName().toUpperCase().contains("CHD")) {
-                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
-                                if (rn.getDocumento() != null) {
-                                    if (rn.getDocumento().getNrDocumento() != null) {
-                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
-                                    } else {
-                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
-                                    }
-                                } else {
-                                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
-                                }
-                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
-                            } else {
-                                WSReservaNome crianca = reservaNomeList.stream()
-                                        .filter(rn1 -> {
-                                            return rn1.getPaxTipo().isChd();
-                                        })
-                                        .findFirst()
-                                        .orElse(null);
 
-                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setName(crianca.getNmNomeCompleto());
-                                if (crianca.getDocumento() != null) {
-                                    if (crianca.getDocumento().getNrDocumento() != null) {
-                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(crianca.getDocumento().getNrDocumento());
-                                    } else {
-                                        getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
-                                    }
-                                } else {
-                                    getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setDocument(null);
-                                }
-                                getAccessListRS.get(indexGetAccessListrs).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(crianca.getDtNascimento()));
-                            }
-                        }
+            /* Bug novaxs
+             * Em alguns casos API novaxs retorna um nome fora do contexto da reserva
+             * Nesses casos é feito a total sobreescrita dos dados não permitindo que exista dados incongruentes */
 
-                        indexGetAccessListrs++;
+            for (WSReservaNome rn : reservaNomeList) {
+                if (rn.getPaxTipo().equals(WSPaxTipoEnum.ADT)) {
+                    if (getAccessListRS.get(0).getAccessPersons().get(0).getName().toUpperCase().contains(rn.getNmNome().toUpperCase())
+                            && rn.isStPrincipal()) {
+                        getAccessListRS.get(0).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
+                    } else if (rn.isStPrincipal()
+                            && !getAccessListRS.get(0).getAccessPersons().get(0).getName().isBlank()
+                            && getAccessListRS.get(0).getAccessPersons().get(0).getName() != null
+                            && getAccessListRS.get(0).getAccessPersons().get(0).getName() != " ") {
+
+                        getAccessListRS.get(0).getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
+                        getAccessListRS.get(0).getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
+                        getAccessListRS.get(0).getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
+
+                    } else {
+                        getAccessListRS.stream()
+                                .filter(rs -> {
+                                    if (!rs.getAccessPersons().get(0).getName().contains(rn.getNmNome())
+                                            && !rs.getCustomData().getProductName().toUpperCase().contains("CHD")
+                                            && rs.getAccessPersons().get(0).getName().isBlank()
+                                            && rs.getAccessPersons().get(0).getDocument().isBlank()
+                                            && rs.getAccessPersons().get(0).getBirth().isBlank()) {
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                .map(rs -> {
+                                    rs.getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
+                                    rs.getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
+                                    rs.getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
+                                    return rs;
+                                })
+                                .findFirst()
+                                .orElseThrow(() -> new ErrorException("Erro a o montar lista de acesso"));
+
                     }
+                } else if (rn.getPaxTipo().equals(WSPaxTipoEnum.CHD)) {
+                    getAccessListRS.stream()
+                            .filter(rs -> {
+                                if (rs.getCustomData().getProductName().toUpperCase().contains("CHD")
+                                        && rs.getAccessPersons().get(0).getName().isBlank()
+                                        && rs.getAccessPersons().get(0).getDocument().isBlank()
+                                        && rs.getAccessPersons().get(0).getBirth().isBlank()) {
+                                    return true;
+                                }
+                                return false;
+                            })
+                            .map(rs -> {
+                                rs.getAccessPersons().get(0).setName(rn.getNmNomeCompleto());
+                                rs.getAccessPersons().get(0).setDocument(rn.getDocumento().getNrDocumento());
+                                rs.getAccessPersons().get(0).setBirth(UtilsWS.montaDataNovaxs(rn.getDtNascimento()));
+                                return rs;
+                            })
+                            .findFirst()
+                            .orElseThrow(() -> new ErrorException("Erro a o montar lista de acesso com crianças"));
                 }
-            } while (indexGetAccessListrs < getAccessListRS.size());
+
+            }
+
+
         }
         listSetAccessListRQ.setAccessPersonList(getAccessListRS);
         return listSetAccessListRQ;
     }
 
 
-    public GetAccessListRQ montaRequestGetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
+    public GetAccessListRQ montaRequestGetAccessListRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws
+            ErrorException {
         GetAccessListRQ getAccessListRQ = null;
         if (buyToBillForRS.getLocalizador() != null) {
             getAccessListRQ = new GetAccessListRQ(UtilsWS.montaCredenciaisNovaXS(integrador));
@@ -210,7 +230,8 @@ public class ConfirmarWS {
         return getAccessListRQ;
     }
 
-    public BillForRQ montaRequestBillforRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws ErrorException {
+    public BillForRQ montaRequestBillforRQ(WSIntegrador integrador, BuyToBillForRS buyToBillForRS) throws
+            ErrorException {
         BillForRQ billForRQ = null;
         if (buyToBillForRS.getLocalizador() != null) {
             billForRQ = new BillForRQ(UtilsWS.montaCredenciaisNovaXS(integrador));
@@ -222,7 +243,8 @@ public class ConfirmarWS {
         return billForRQ;
     }
 
-    public BuyToBillForRQ montaRequestBuytoBillForRQ(WSIntegrador integrador, WSReserva reserva) throws ErrorException {
+    public BuyToBillForRQ montaRequestBuytoBillForRQ(WSIntegrador integrador, WSReserva reserva) throws
+            ErrorException {
         CredenciaisNovaxsRQ credenciaisNovaxsRQ = UtilsWS.montaCredenciaisNovaXS(integrador);
 //        CredenciaisNovaxsRQ credenciaisNovaxsRQ = UtilsWS.montaCredenciaisNovaXS(integrador, "token");
 

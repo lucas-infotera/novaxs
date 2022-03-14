@@ -1278,6 +1278,79 @@ public class JsonsTeste {
                 "    }\n" +
                 "]";
     }
+    public static String json3_TesteListAcessPersonRS(){
+        return "[\n" +
+                "    {\n" +
+                "        \"accessPersons\": [\n" +
+                "            {\n" +
+                "                \"birth\": \"\",\n" +
+                "                \"document\": \"22373150603\",\n" +
+                "                \"internalId\": 0,\n" +
+                "                \"itemIdentificator\": \"46701\",\n" +
+                "                \"name\": \"EUSTÁCIO VASCONCELOS\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"customData\": {\n" +
+                "            \"ProductName\": \"Ingresso com Horário\",\n" +
+                "            \"entryId\": \"40190845\",\n" +
+                "            \"productId\": 46701\n" +
+                "        },\n" +
+                "        \"frozen\": false,\n" +
+                "        \"id\": 0,\n" +
+                "        \"inHistory\": false,\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"lastVersion\": true,\n" +
+                "        \"lazy\": false,\n" +
+                "        \"trash\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"accessPersons\": [\n" +
+                "            {\n" +
+                "                \"birth\": \"\",\n" +
+                "                \"document\": \"\",\n" +
+                "                \"internalId\": 0,\n" +
+                "                \"itemIdentificator\": \"46701\",\n" +
+                "                \"name\": \"\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"customData\": {\n" +
+                "            \"ProductName\": \"Ingresso com Horário\",\n" +
+                "            \"entryId\": \"40190846\",\n" +
+                "            \"productId\": 46701\n" +
+                "        },\n" +
+                "        \"frozen\": false,\n" +
+                "        \"id\": 0,\n" +
+                "        \"inHistory\": false,\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"lastVersion\": true,\n" +
+                "        \"lazy\": false,\n" +
+                "        \"trash\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"accessPersons\": [\n" +
+                "            {\n" +
+                "                \"birth\": \"\",\n" +
+                "                \"document\": \"\",\n" +
+                "                \"internalId\": 0,\n" +
+                "                \"itemIdentificator\": \"47245\",\n" +
+                "                \"name\": \"\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"customData\": {\n" +
+                "            \"ProductName\": \"Ingresso CHD Individual\",\n" +
+                "            \"entryId\": \"40190847\",\n" +
+                "            \"productId\": 47245\n" +
+                "        },\n" +
+                "        \"frozen\": false,\n" +
+                "        \"id\": 0,\n" +
+                "        \"inHistory\": false,\n" +
+                "        \"internalId\": 0,\n" +
+                "        \"lastVersion\": true,\n" +
+                "        \"lazy\": false,\n" +
+                "        \"trash\": false\n" +
+                "    }\n" +
+                "]";
+    }
 
     public static String json2_TesteListAcessPersonRS_montaReservaNomeList(){
         return "[\n" +
@@ -1313,6 +1386,64 @@ public class JsonsTeste {
                 "        \"qtIdade\": 41,\n" +
                 "        \"sexo\": \"FEMININO\",\n" +
                 "        \"sqNome\": 1930948,\n" +
+                "        \"stAplicado\": false,\n" +
+                "        \"stPrincipal\": false,\n" +
+                "        \"stSelecionado\": false\n" +
+                "    }\n" +
+                "]";
+    }
+    public static String json3_TesteListAcessPersonRS_montaReservaNomeList(){
+        return "[\n" +
+                "    {\n" +
+                "        \"documento\": {\n" +
+                "            \"documentoTipo\": \"CPF\",\n" +
+                "            \"nrDocumento\": \"888.888.888-88\",\n" +
+                "            \"stObrigatorio\": false\n" +
+                "        },\n" +
+                "        \"dtNascimento\": \"1980-07-01T00:00:00Z\",\n" +
+                "        \"id\": 1931157,\n" +
+                "        \"nmNome\": \"JACOBINA\",\n" +
+                "        \"nmSobrenome\": \"MEDEIROS\",\n" +
+                "        \"paxTipo\": \"ADT\",\n" +
+                "        \"qtIdade\": 41,\n" +
+                "        \"sexo\": \"FEMININO\",\n" +
+                "        \"sqNome\": 1931157,\n" +
+                "        \"stAplicado\": false,\n" +
+                "        \"stPrincipal\": true,\n" +
+                "        \"stSelecionado\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"documento\": {\n" +
+                "            \"documentoTipo\": \"CPF\",\n" +
+                "            \"nrDocumento\": \"111.111.111-11\",\n" +
+                "            \"stObrigatorio\": false\n" +
+                "        },\n" +
+                "        \"dtNascimento\": \"1980-07-01T00:00:00Z\",\n" +
+                "        \"id\": 1931159,\n" +
+                "        \"nmNome\": \"DIETER\",\n" +
+                "        \"nmSobrenome\": \"SANTANA\",\n" +
+                "        \"paxTipo\": \"ADT\",\n" +
+                "        \"qtIdade\": 41,\n" +
+                "        \"sexo\": \"FEMININO\",\n" +
+                "        \"sqNome\": 1931159,\n" +
+                "        \"stAplicado\": false,\n" +
+                "        \"stPrincipal\": false,\n" +
+                "        \"stSelecionado\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"documento\": {\n" +
+                "            \"documentoTipo\": \"CPF\",\n" +
+                "            \"nrDocumento\": \"555.555.555-55\",\n" +
+                "            \"stObrigatorio\": false\n" +
+                "        },\n" +
+                "        \"dtNascimento\": \"2011-07-01T00:00:00Z\",\n" +
+                "        \"id\": 1931158,\n" +
+                "        \"nmNome\": \"LEONETE\",\n" +
+                "        \"nmSobrenome\": \"MAIA\",\n" +
+                "        \"paxTipo\": \"CHD\",\n" +
+                "        \"qtIdade\": 10,\n" +
+                "        \"sexo\": \"FEMININO\",\n" +
+                "        \"sqNome\": 1931158,\n" +
                 "        \"stAplicado\": false,\n" +
                 "        \"stPrincipal\": false,\n" +
                 "        \"stSelecionado\": false\n" +

@@ -34,10 +34,8 @@ public class DisponibilidadeController {
     @ResponseBody
     public String disponibilidade(@RequestBody String jsonRQ) {
         WSDisponibilidadeIngressoRQ wsRQ = gson.fromJson(jsonRQ, WSDisponibilidadeIngressoRQ.class);
-        wsRQ.getIntegrador().setStGerarLog(true);
-        wsRQ.getIntegrador().setStGerarLogErro(true);
         WSDisponibilidadeIngressoRS result = null;
-        wsRQ.getIntegrador().setDsMetodo("disponibilidadeIngresso");
+        wsRQ.getIntegrador().setDsMetodo("disponibilidade");
 
         try {
             result = disponibilidadeWS.disponibilidade(wsRQ);

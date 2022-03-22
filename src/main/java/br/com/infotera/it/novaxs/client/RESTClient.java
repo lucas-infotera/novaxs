@@ -100,7 +100,7 @@ public class RESTClient {
                 responseEntity = new ResponseEntity<String>(cancelBillRS.toString(), HttpStatus.OK);
             }
 
-            result = convertResponse(integrador, log, objectMapper, responseEntity, retorno);
+            result = LogWS.convertResponse(integrador, log, objectMapper, responseEntity, retorno);
             UtilsWS.verificaErro(integrador, result);
 
         } catch (RestClientException ex) {
@@ -145,11 +145,12 @@ public class RESTClient {
                             result = clientIdentification + "/api";
                             result = "https://travel3.novaxs.com.br/api";
                         } else {
-                            result = clientIdentification + "/api/v1/2059";
+//                            result = clientIdentification + "/api/v1/2059";
                             result = "https://travel3.novaxs.com.br/api/v1/2059";
                         }
                     } else {
-                        result = clientIdentification + "/api/v1/2059";
+                        result = "https://travel3.novaxs.com.br/api/v1/2059";
+//                        result = clientIdentification + "/api/v1/2059";
                     }
                 }
             } catch (Exception ex) {

@@ -417,6 +417,10 @@ public class UtilsWS {
                 null,
                 null);
 
+        if (productsByDateRS.getHtmlMemo() != null) {
+            result.setDsServico(productsByDateRS.getHtmlMemo());
+        }
+
 
         result.setDsParametro(
                 new Parametro()

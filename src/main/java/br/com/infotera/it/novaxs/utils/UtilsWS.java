@@ -407,7 +407,7 @@ public class UtilsWS {
 
         WSIngresso result = new WSIngresso(productsByDateRS.getPath(),
                 productsByDateRS.getName(),
-                productsByDateRS.getName(),
+                (productsByDateRS.getHtmlMemo() != null ? productsByDateRS.getHtmlMemo() : null),
                 null,
                 null,
                 null,
@@ -416,11 +416,6 @@ public class UtilsWS {
                 mediaList,
                 null,
                 null);
-
-        if (productsByDateRS.getHtmlMemo() != null) {
-            result.setDsServico(productsByDateRS.getHtmlMemo());
-        }
-
 
         result.setDsParametro(
                 new Parametro()

@@ -100,7 +100,7 @@ public class RESTClient {
                 responseEntity = new ResponseEntity<String>(cancelBillRS.toString(), HttpStatus.OK);
             }
 
-            result = LogWS.convertResponse(integrador, log, objectMapper, responseEntity, retorno);
+            result = convertResponse(integrador, log, objectMapper, responseEntity, retorno);
             UtilsWS.verificaErro(integrador, result);
 
         } catch (RestClientException ex) {
@@ -138,19 +138,21 @@ public class RESTClient {
         String clientIdentification;
         if (integrador != null) {
             try {
-                if (integrador.getDsCredencialList().get(3) != null) {
-                    clientIdentification = integrador.getDsCredencialList().get(3).replace(" ", "");
+                boolean semprePassarEmTeste = true;
+                if (integrador.getDsCredencialList().get(3) != null || semprePassarEmTeste) {
+//                    clientIdentification = integrador.getDsCredencialList().get(3).replace(" ", "");
                     if (WSAmbienteEnum.PRODUCAO.equals(integrador.getAmbiente())) {
                         if (integrador.getDsAction().equals("voucherRQ")) {
-                            result = clientIdentification + "/api";
-                            result = "https://travel3.novaxs.com.br/api";
+                            result = "https://travel.beachpark.com.br/api";
                         } else {
-//                            result = clientIdentification + "/api/v1/2059";
-                            result = "https://travel3.novaxs.com.br/api/v1/2059";
+                            result = "https://travel.beachpark.com.br/api/v1/5500/";
                         }
                     } else {
-                        result = "https://travel3.novaxs.com.br/api/v1/2059";
-//                        result = clientIdentification + "/api/v1/2059";
+                        if (integrador.getDsAction().equals("voucherRQ")) {
+                            result = "https://travel3.novaxs.com.br/api";
+                        } else {
+                            result = "https://travel3.novaxs.com.br/api/v1/2059/";
+                        }
                     }
                 }
             } catch (Exception ex) {

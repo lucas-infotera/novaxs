@@ -2,6 +2,7 @@ package br.com.infotera.it.novaxs.client;
 
 import br.com.infotera.common.ErrorException;
 import br.com.infotera.common.WSIntegrador;
+import br.com.infotera.common.enumerator.WSAmbienteEnum;
 import br.com.infotera.common.enumerator.WSIntegracaoStatusEnum;
 import br.com.infotera.common.enumerator.WSMensagemErroEnum;
 import br.com.infotera.it.novaxs.model.*;
@@ -41,16 +42,18 @@ public class NovaxsClient {
             result = Arrays.asList(Optional.ofNullable(restClient.sendReceive(integrador, requestBody, HttpMethod.POST, "getProductsByDate", GetProductsByDateRS[].class)).orElseThrow(() -> new ErrorException("Nenhum Ingresso encontrado")));
 
 
-            Boolean variavelTemporaria = true;
-            if (variavelTemporaria != null) {
-                result.forEach(getProductsByDateRS -> {
-                    getProductsByDateRS.setImage("https://www.ifrr.edu.br/midia/teste/image");
-                    if (getProductsByDateRS.getProducts() != null) {
-                        getProductsByDateRS.getProducts().forEach(product -> {
-                            product.setImage("https://www.ifrr.edu.br/midia/teste/image");
-                        });
-                    }
-                });
+            if (integrador.getAmbiente().equals(WSAmbienteEnum.HOMOLOGACAO)) {
+                Boolean variavelTemporaria = true;
+                if (variavelTemporaria != null) {
+                    result.forEach(getProductsByDateRS -> {
+                        getProductsByDateRS.setImage("https://www.ifrr.edu.br/midia/teste/image");
+                        if (getProductsByDateRS.getProducts() != null) {
+                            getProductsByDateRS.getProducts().forEach(product -> {
+                                product.setImage("https://www.ifrr.edu.br/midia/teste/image");
+                            });
+                        }
+                    });
+                }
             }
 
         } catch (ErrorException ex) {

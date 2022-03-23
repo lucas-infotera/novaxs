@@ -121,7 +121,9 @@ public class DisponibilidadeWS {
             if (!contemCriancaNaPesquisa && productsByDateRS.getName().contains("CHD")) {
                 continue;
             } else if (productsByDateRS.getName().toUpperCase().contains("Dias".toUpperCase())
-                    && productsByDateRS.getName().toUpperCase().contains("acesso".toUpperCase())) {
+                    && productsByDateRS.getName().toUpperCase().contains("acesso".toUpperCase())
+                    || productsByDateRS.getName().toUpperCase().contains("Passaporte".toUpperCase())
+                    && productsByDateRS.getName().toUpperCase().contains("dias".toUpperCase())) {
                 continue;
             } else {
                 if (productsByDateRS.getName().toUpperCase().contains("INFOTERA")) {

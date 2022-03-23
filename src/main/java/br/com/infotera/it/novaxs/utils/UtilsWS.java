@@ -367,7 +367,10 @@ public class UtilsWS {
                 if (!Utils.isListNothing(productsByDateRS.getSchedules())) {
                     return montaIngressoModalidadeComHorario(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getSchedules(), productsByDateRS);
                 }
-            } else if (productsByDateRS.getName().toUpperCase().contains("INDIVIDUAL")) {
+            } else if (productsByDateRS.getName().toUpperCase().contains("INDIVIDUAL")
+                    || productsByDateRS.getName().toUpperCase().contains("ingresso".toUpperCase())
+                    &&  productsByDateRS.getName().toUpperCase().contains("Adulto".toUpperCase())
+            ) {
                 wsIngressoModalidade.addAll(montaIngressoModalidadeComTarifaGetProductsByDateRS(ingressoPesquisa, dispRQ, tarifa, productsByDateRS));
             } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
                     && productsByDateRS.getName().toUpperCase().contains("INGRESSO")) {

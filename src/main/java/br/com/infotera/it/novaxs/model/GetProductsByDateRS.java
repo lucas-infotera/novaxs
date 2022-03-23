@@ -69,6 +69,29 @@ public class GetProductsByDateRS {
     @JsonProperty("travelertype")
     public String travelertype;
 
+    @JsonProperty("oldValue")
+    public String oldValue;
+    @JsonProperty("order")
+    public String order;
+
+    public String getOldValue() {
+        return oldValue;
+    }
+
+    public GetProductsByDateRS setOldValue(String oldValue) {
+        this.oldValue = oldValue;
+        return this;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public GetProductsByDateRS setOrder(String order) {
+        this.order = order;
+        return this;
+    }
+
     public String getTravelertype() {
         return travelertype;
     }

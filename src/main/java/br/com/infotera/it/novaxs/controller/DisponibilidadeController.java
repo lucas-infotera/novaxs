@@ -44,7 +44,7 @@ public class DisponibilidadeController {
         } catch (Exception ex) {
             result = new WSDisponibilidadeIngressoRS(null, new ErrorException(wsRQ.getIntegrador(), DisponibilidadeController.class, "disponibilidade", WSMensagemErroEnum.GENNULO, "", WSIntegracaoStatusEnum.NEGADO, ex).getIntegrador());
         } finally {
-            LogWS.gerarLog(result.getIntegrador(), jsonRQ, null);
+            LogWS.gerarLog(result.getIntegrador(), jsonRQ, result);
         }
         return gson.toJson(result);
     }

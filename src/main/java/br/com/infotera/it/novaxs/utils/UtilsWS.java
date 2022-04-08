@@ -377,9 +377,10 @@ public class UtilsWS {
                 return montaIngressoModalidadeCombo(ingressoPesquisa, dispRQ, tarifa, productsByDateRS);
             } else if (productsByDateRS.getName().toUpperCase().contains("COMBO")
                     && productsByDateRS.getName().toUpperCase().contains("DIAS")
-                    && productsByDateRS.getName().toUpperCase().contains("ACESSO")
+                    && productsByDateRS.getName().toUpperCase().contains("ACESSO") || productsByDateRS.getName().matches("Passaporte[ ][0-9][ ]dias")
             ) {
-                wsIngressoModalidade.addAll(montaIngressoModalidadeComboDiasDeAcesso(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
+//                wsIngressoModalidade.addAll(montaIngressoModalidadeComboDiasDeAcesso(ingressoPesquisa, dispRQ, tarifa, productsByDateRS.getProducts().get(0), productsByDateRS));
+                wsIngressoModalidade.addAll(montaIngressoModalidadeComTarifaGetProductsByDateRS(ingressoPesquisa, dispRQ, tarifa, productsByDateRS));
             }
         } else {
             if (productsByDateRS.getName().contains("Horário")) {
@@ -582,7 +583,9 @@ public class UtilsWS {
                                 pathArray = dsParametro.getCdModalidade().split("-");
                                 if (dsParametro.getNomeModalidade().contains("Combo")) {
                                     if (pathArray.length > 1) {
-                                        product = montaProduct(reserva, dsParametro, pathArray[1], WSPaxTipoEnum.ADT);
+                                        product = montaProduct(reserva, dsParametro, pathArray[1],  WSPaxTipoEnum.ADT);
+                                    } else {
+                                        product = montaProduct(reserva, dsParametro, pathArray[0],  WSPaxTipoEnum.ADT);
                                     }
                                 } else {
                                     product = montaProduct(reserva, dsParametro, pathArray[0], WSPaxTipoEnum.ADT);

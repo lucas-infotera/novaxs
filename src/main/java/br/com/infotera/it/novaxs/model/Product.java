@@ -60,12 +60,21 @@ public class Product extends NovaxsTemplateforModels {
     public ArrayList<Child> children;
     @JsonProperty("travelertype")
     public String travelertype;
-
-
+    @JsonProperty("custo")
+    public Integer custo;
     @JsonProperty("oldValue")
     public String oldValue;
     @JsonProperty("order")
     public String order;
+
+    public Integer getCusto() {
+        return custo;
+    }
+
+    public Product setCusto(Integer custo) {
+        this.custo = custo;
+        return this;
+    }
 
     public String getOldValue() {
         return oldValue;

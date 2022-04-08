@@ -138,14 +138,13 @@ public class RESTClient {
         String clientIdentification;
         if (integrador != null) {
             try {
-                boolean semprePassarEmTeste = true;
-                if (integrador.getDsCredencialList().get(3) != null || semprePassarEmTeste) {
-//                    clientIdentification = integrador.getDsCredencialList().get(3).replace(" ", "");
+                if (integrador.getDsCredencialList().get(3) != null) {
+                    clientIdentification = integrador.getDsCredencialList().get(3).replace(" ", "");
                     if (WSAmbienteEnum.PRODUCAO.equals(integrador.getAmbiente())) {
                         if (integrador.getDsAction().equals("voucherRQ")) {
-                            result = "https://travel.beachpark.com.br/api";
+                            result = clientIdentification.replace("/v1/5500/", "");
                         } else {
-                            result = "https://travel.beachpark.com.br/api/v1/5500/";
+                            result = clientIdentification;
                         }
                     } else {
                         if (integrador.getDsAction().equals("voucherRQ")) {
